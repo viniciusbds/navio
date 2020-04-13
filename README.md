@@ -1,6 +1,6 @@
 # Navio
 
-<img src="/cargueiro.png" alt="drawing" width="120"/> 
+<img src="/cargueiro.png" alt="drawing" width="120"/>
 
 ----------------------------
 
@@ -8,11 +8,46 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 
 
+## Namespaces
+
+Limits what process can see. Created with syscalls
 
 
+https://www.infoq.com/br/articles/build-a-container-golang/
+
+https://medium.com/@lets00/namespace-14c4e64d0559
+
+https://medium.com/@teddyking/linux-namespaces-850489d3ccf
+
+https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a
+
+https://stackoverflow.com/questions/22889241/linux-understanding-the-mount-namespace-clone-clone-newns-flag
 
 
+- [ ] Unix Timesharing System
 
+- [ ] Process IDs
+
+- [ ] Mounts
+
+- [ ] Network
+
+- [ ] User IDs
+
+- [ ] InterProcess Comms
+
+
+## Cgroups
+
+What you can use
+
+- [ ] Memory
+
+- [ ] CPU
+
+- [ ] I/O
+
+- [ ] Process numbers
 
 
 
