@@ -1,5 +1,5 @@
 build:
-	go build -o navio  ./cmd
+	go build -o navio  main.go
 
 run:
 	./navio
