@@ -1,4 +1,4 @@
-package main
+package src
 
 import (
 	"fmt"
@@ -6,13 +6,14 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strconv"
 	"syscall"
 )
 
 // docker         run image <cmd> <params>
 // go run main.go run image <cmd> <params>
 
-func main() {
+func create() {
 	switch os.Args[1] {
 	case "run":
 		run()
@@ -44,7 +45,7 @@ func run() {
 func child() {
 	fmt.Printf("Running child %v as %d\n", os.Args[2:], os.Getpid())
 
-	cg()
+	configureCgroups()
 
 	syscall.Sethostname([]byte("container"))
 
@@ -65,15 +66,15 @@ func child() {
 
 }
 
-func cg() {
+func configureCgroups() {
 	cgroups := "/sys/fs/cgroup/"
 	pids := filepath.Join(cgroups, "pids")
 	os.Mkdir(filepath.Join(pids, "vini"), 0755)
 	fmt.Println(filepath.Join(pids, "vini"))
-	must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("20"), 0700))
+	must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("24"), 0700))
 	// Removes the new cgroup in place after the container exits
 	must(ioutil.WriteFile(filepath.Join(pids, "vini/notify_on_release"), []byte("1"), 0700))
-	//must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+	must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
 }
 
 func must(err error) {
