@@ -4,10 +4,10 @@
 
 ----------------------------
 
-`Navio` é um **container runtime** extremamente simples que tem por objetivo criar contêineres com base em 
+**Navio** é um **container runtime** extremamente simples que tem por objetivo criar contêineres com base em 
 recursos de namespace, cgroups e chroot do linux. O Navio sobe contêineres, ou seja, processos com isolamento 
-de namespaces (PID, MOUNT ...), limitação da quantidade de recursos usados via cgroups e um mini sistema operacional 
-que atualmente pod ser: ubuntu, alpine e arch linux.
+de namespaces (PID, MOUNT ...), possível limitação da quantidade de recursos usados via cgroups e um mini sistema operacional 
+que atualmente pode ser ubuntu, alpine ou arch linux.
 
 
 ### O que são contêineres?
