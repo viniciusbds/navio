@@ -8,6 +8,12 @@ Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem
 
 
 
+[Importing Packages in Go](https://www.digitalocean.com/community/tutorials/importing-packages-in-go)
+
+
+[Entendendo a visibilidade de pacotes em Go](https://www.digitalocean.com/community/tutorials/understanding-package-visibility-in-go-pt#visibilidade-dentro-de-m%C3%A9todos)
+
+
 ## Namespaces
 
 Limits what process can see. Created with syscalls
