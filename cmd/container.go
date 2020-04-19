@@ -1,11 +1,10 @@
 package cmd
 
 import (
-	//"github.com/viniciusbds/navio/src" m
 	"fmt"
 
 	"github.com/spf13/cobra"
-	// "github.com/viniciusbds/navio"
+	"github.com/viniciusbds/navio/src"
 )
 
 func init() {
@@ -14,13 +13,35 @@ func init() {
 
 func createContainer() *cobra.Command {
 	return &cobra.Command{
-		Use: "run",
+		Use: "container",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println(args)
-			if contains(args, "ubuntu") {
-				// do ...
+			fmt.Println("Args: ", args)
+
+			// navio run [IMAGE, "child"] COMMAND PARAMS...
+			command := args[1]
+			params := args[2:]
+
+			// if args[0] == "arch" {
+			// 	// do...
+			// }
+
+			// if args[0] == "alpine" {
+			// 	// do...
+			// }
+
+			// if args[0] == "ubuntu" {
+			// 	// do...
+			// }
+
+			if args[0] == "child" {
+				args = append([]string{"child"}, command)
+				args = append(args, params...)
+			} else {
+				args = append([]string{"run"}, command)
+				args = append(args, params...)
 			}
-			//m.cria()
+			src.CreateContainer(args)
+
 			return nil
 		},
 	}
