@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/src"
+	"github.com/viniciusbds/navio/src/container"
 )
 
 func init() {
@@ -40,7 +40,7 @@ func createContainer() *cobra.Command {
 				args = append([]string{"run"}, command)
 				args = append(args, params...)
 			}
-			src.CreateContainer(args)
+			container.CreateContainer(args)
 
 			return nil
 		},
