@@ -4,19 +4,18 @@
 
 ----------------------------
 
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+**Navio** is an extremely simple runtime container that aims to create containers based on linux namespace, cgroups and chroot resources. The ship goes up containers, that is, processes with namespace isolation (PID, MOUNT ...), possible limitation of the amount of resources used via cgroups and a mini operating system that currently can be ubuntu, alpine or arch linux.
 
-
-
-[Importing Packages in Go](https://www.digitalocean.com/community/tutorials/importing-packages-in-go)
-
-
-[Entendendo a visibilidade de pacotes em Go](https://www.digitalocean.com/community/tutorials/understanding-package-visibility-in-go-pt#visibilidade-dentro-de-m%C3%A9todos)
 
 
 ## Namespaces
 
-Limits what process can see. Created with syscalls
+a way to limit what a process can see
+
+**CLONE_NEWPID** : PID namespace isolates the process ID number space. This means that two processes running on the same host can have the same PID!
+
+**CLONE_NEWUTS** : The UTS namespace provides isolation of the hostname and domainname system identifiers
+
 
 
 https://www.infoq.com/br/articles/build-a-container-golang/
@@ -30,11 +29,11 @@ https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a
 https://stackoverflow.com/questions/22889241/linux-understanding-the-mount-namespace-clone-clone-newns-flag
 
 
-- [ ] Unix Timesharing System
+- [x] Unix Timesharing System
 
-- [ ] Process IDs
+- [x] Process IDs
 
-- [ ] Mounts
+- [x] Mounts
 
 - [ ] Network
 
