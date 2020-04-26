@@ -27,7 +27,7 @@ var (
 // Pull ...
 func Pull(imageName string) {
 
-	if checkIfImageExists(imageName) {
+	if CheckIfImageExists(imageName) {
 		msg := fmt.Sprintf("The image %s already was downloaded", imageName)
 		l.Log("WARNING", msg)
 		return
@@ -58,7 +58,8 @@ func Pull(imageName string) {
 
 }
 
-func checkIfImageExists(imageName string) bool {
+// CheckIfImageExists ...
+func CheckIfImageExists(imageName string) bool {
 	if _, err := os.Stat(fmt.Sprintf("./images/%s", imageName)); !os.IsNotExist(err) {
 		return true
 	}
