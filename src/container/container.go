@@ -15,7 +15,7 @@ import (
 	"github.com/viniciusbds/navio/src/util"
 )
 
-var l = logger.New(time.RFC3339, true)
+var l = logger.New(time.Kitchen, true)
 
 func init() {
 	reexec.Register("child", child)
@@ -58,7 +58,7 @@ func childRun(image string, command string, params []string) {
 func CreateContainer(args []string) {
 
 	if args[0] != "run" {
-		l.Log("error", "Bad command")
+		l.Log("ERROR", "Bad command")
 		os.Exit(1)
 	}
 
