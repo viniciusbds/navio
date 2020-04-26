@@ -1,6 +1,7 @@
 package container
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -10,6 +11,7 @@ import (
 	"time"
 
 	"github.com/docker/docker/pkg/reexec"
+	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/src/logger"
 	"github.com/viniciusbds/navio/src/util"
 )
@@ -32,15 +34,15 @@ func childRun(image string, command string, params []string) {
 
 	configureCgroups()
 
-	syscall.Sethostname([]byte("container"))
+	util.Must(syscall.Sethostname([]byte("container")))
 
-	syscall.Chroot("../images/ubuntu")
-	os.Chdir("/")
+	imagePath := fmt.Sprintf("./images/%s", image)
 
+	util.Must(syscall.Chroot(imagePath))
+	util.Must(os.Chdir("/"))
 	util.Must(mountProc(""))
 
 	cmd := exec.Command(command, params...)
-
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -63,16 +65,8 @@ func CreateContainer(args []string) {
 
 	image, command, params := args[1], args[2], args[3:]
 
-	switch image {
-	case "ubuntu":
-		// do ...
-	case "arch":
-		// do ...
-	case "alpine":
-		// do ...
-	default:
-		// do ...
-
+	if !images.CheckIfImageExists(image) {
+		images.Pull(image)
 	}
 
 	run(image, command, params)
