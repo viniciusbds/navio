@@ -13,45 +13,20 @@ func init() {
 
 func createContainer() *cobra.Command {
 	return &cobra.Command{
-		Use: "container",
+		Use: "run",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			fmt.Println("Args: ", args)
 
-			// navio run [IMAGE, "child"] COMMAND PARAMS...
+			// navio run IMAGE COMMAND PARAMS...
+			image := args[0]
 			command := args[1]
 			params := args[2:]
 
-			// if args[0] == "arch" {
-			// 	// do...
-			// }
+			args = append([]string{"runa", image, command}, params...)
 
-			// if args[0] == "alpine" {
-			// 	// do...
-			// }
-
-			// if args[0] == "ubuntu" {
-			// 	// do...
-			// }
-
-			if args[0] == "child" {
-				args = append([]string{"child"}, command)
-				args = append(args, params...)
-			} else {
-				args = append([]string{"run"}, command)
-				args = append(args, params...)
-			}
 			container.CreateContainer(args)
 
 			return nil
 		},
 	}
-}
-
-func contains(s []string, e string) bool {
-	for _, a := range s {
-		if a == e {
-			return true
-		}
-	}
-	return false
 }
