@@ -1,7 +1,6 @@
 package container
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -25,7 +24,7 @@ func init() {
 }
 
 func child() {
-	fmt.Printf("\n>> namespace setup code goes here <<\n\n")
+	l.Log("INFO", "Namespace setup code goes here <<\n\n")
 	childRun(os.Args[1], os.Args[2], os.Args[3:])
 }
 
@@ -90,7 +89,6 @@ func run(image string, command string, params []string) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	fmt.Println(cmd)
 	util.Must(cmd.Run())
 }
 
