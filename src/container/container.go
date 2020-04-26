@@ -38,7 +38,6 @@ func run(command string, params []string) {
 		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 		Unshareflags: syscall.CLONE_NEWNS,
 	}
-
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
@@ -56,9 +55,7 @@ func child(command string, params []string) {
 	syscall.Chroot("../images/ubuntu")
 	os.Chdir("/")
 
-	_ = os.Mkdir("proc", 0700)
-
-	must(syscall.Mount("proc", "proc", "proc", 0, ""))
+	must(mountProc(""))
 
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin
@@ -68,6 +65,18 @@ func child(command string, params []string) {
 	must(cmd.Run())
 	must(syscall.Unmount("proc", 0))
 
+}
+
+func mountProc(newroot string) error {
+	source := "proc"
+	target := filepath.Join(newroot, "/proc")
+	fstype := "proc"
+	flags := 0
+	data := ""
+
+	_ = os.Mkdir(target, 0700)
+
+	return syscall.Mount(source, target, fstype, uintptr(flags), data)
 }
 
 func configureCgroups() {
