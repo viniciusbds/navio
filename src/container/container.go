@@ -52,10 +52,6 @@ func childRun(image string, command string, params []string) {
 }
 
 // CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
-// Params: args
-//          args[0] (run, child)
-//          args[1] command
-//          args[2:]... params
 func CreateContainer(args []string) {
 
 	if args[0] != "run" {
@@ -74,7 +70,6 @@ func CreateContainer(args []string) {
 }
 
 func run(image string, command string, params []string) {
-	//cmd := exec.Command("/proc/self/exe", append([]string{"child", command}, params...)...)
 	cmd := reexec.Command(append([]string{"child", image, command}, params...)...)
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
