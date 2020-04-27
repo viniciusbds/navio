@@ -16,30 +16,34 @@ a way to limit what a process can see
 
 **CLONE_NEWUTS** : The UTS namespace provides isolation of the hostname and domainname system identifiers
 
+**CLONE_NEWNS** : The Mount namespace isolate the ...
+
 
 
 https://www.infoq.com/br/articles/build-a-container-golang/
 
-https://medium.com/@lets00/namespace-14c4e64d0559
-
-https://medium.com/@teddyking/linux-namespaces-850489d3ccf
 
 https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a
+https://escotilhalivre.wordpress.com/2015/08/12/namespaces/
 
 https://stackoverflow.com/questions/22889241/linux-understanding-the-mount-namespace-clone-clone-newns-flag
 
 
-- [x] Unix Timesharing System
 
-- [x] Process IDs
 
-- [x] Mounts
+- [x] UTS - isolate hostname and domainname
 
-- [ ] Network
+- [x] PID - isolate the PID number space
 
-- [ ] User IDs
+- [x] Mount - isolate filesystem mount points
 
-- [ ] InterProcess Comms
+- [ ] IPC - isolate interprocess communication (IPC) resources
+
+- [ ] Network - isolate network interfaces
+
+- [ ] User - isolate UID/GID number spaces
+
+- [ ] Cgroup - isolate cgroup root directory
 
 
 ## Cgroups
@@ -56,4 +60,8 @@ What you can use
 
 
 
+### Source
+
+  - [Linux Namespaces](https://medium.com/@teddyking/linux-namespaces-850489d3ccf)
+  
 <div>Ícones feitos por <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
