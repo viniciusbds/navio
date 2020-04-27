@@ -11,7 +11,10 @@ func init() {
 
 func pullImage() *cobra.Command {
 	return &cobra.Command{
-		Use: "pull",
+		Use:   "pull",
+		Short: "Download an image from its official website.",
+		Long: "Receive an [image_name] as an argument and download it from the official website." +
+			" To see all available images run: navio get images",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			image := args[0]
 			images.Pull(image)
