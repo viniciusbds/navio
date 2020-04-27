@@ -2,19 +2,13 @@ package cmd
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/src/container"
-	"github.com/viniciusbds/navio/src/logger"
 )
-
-var l = logger.New(time.Kitchen, true)
 
 func init() {
 	rootCmd.AddCommand(createContainer())
-	rootCmd.AddCommand(pullImage())
 }
 
 func createContainer() *cobra.Command {
@@ -31,17 +25,6 @@ func createContainer() *cobra.Command {
 			args = append([]string{"run", image, command}, params...)
 			container.CreateContainer(args)
 
-			return nil
-		},
-	}
-}
-
-func pullImage() *cobra.Command {
-	return &cobra.Command{
-		Use: "pull",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			image := args[0]
-			images.Pull(image)
 			return nil
 		},
 	}
