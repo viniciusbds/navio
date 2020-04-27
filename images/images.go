@@ -3,7 +3,6 @@ package images
 import (
 	"fmt"
 	"os"
-	"os/exec"
 	"time"
 
 	"github.com/mgutz/ansi"
@@ -16,14 +15,9 @@ var (
 	magenta = ansi.ColorFunc("magenta+")
 
 	// URL's
-	alpineURL      = "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz"
-	busyboxURL     = "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar"
-	ubuntuFocalURL = "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz"
-
-	// FileName's
-	alpine      = "alpine-minirootfs-3.11.6-x86_64.tar.gz"
-	busybox     = "busybox.tar"
-	ubuntuFocal = "ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz"
+	alpineURL  = "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz"
+	busyboxURL = "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar"
+	ubuntuURL  = "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz"
 )
 
 // Pull ...
@@ -35,31 +29,35 @@ func Pull(imageName string) {
 		return
 	}
 
-	var url, file string
+	var imageURL string
 	switch imageName {
 	case "alpine":
-		url = alpineURL
-		file = alpine
+		imageURL = alpineURL
 	case "busybox":
-		url = busyboxURL
-		file = busybox
+		imageURL = busyboxURL
 	case "ubuntu":
-		url = ubuntuFocalURL
-		file = ubuntuFocal
+		imageURL = ubuntuURL
 	}
+
+	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", imageName, imageURL))
 
 	imagePath := fmt.Sprintf("./images/%s", imageName)
 
-	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", file, url))
-	wgetCmd := exec.Command("wget", url)
-	mkdirCmd := exec.Command("mkdir", "-p", imagePath)
-	tarCmd := exec.Command("tar", "-C", imagePath, "-xf", file)
-	rmFileCmd := exec.Command("rm", file)
+	if err := util.Wget(imageURL, imageName+".tar"); err != nil {
+		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled", imageName))
+	}
 
-	util.Must(wgetCmd.Run())
-	util.Must(mkdirCmd.Run())
-	util.Must(tarCmd.Run())
-	util.Must(rmFileCmd.Run())
+	if err := os.Mkdir(imagePath, 0777); err != nil {
+		l.Log("ERROR", fmt.Sprintf("The directory %s was not created", imagePath))
+	}
+
+	if err := util.Tar(imagePath, imageName+".tar"); err != nil {
+		l.Log("ERROR", fmt.Sprintf("The file %s was not extracted", imageName+".tar"))
+	}
+
+	if err := os.Remove(imageName + ".tar"); err != nil {
+		l.Log("ERROR", fmt.Sprintf("The file %s was not removed", imageName))
+	}
 
 	l.Log("INFO", "Pulled successfully :)\n")
 }
