@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/images"
 )
@@ -20,5 +23,26 @@ func pullImage() *cobra.Command {
 			images.Pull(image)
 			return nil
 		},
+	}
+}
+
+func showDownloadedImages() {
+	dirname := "./images"
+
+	f, err := os.Open(dirname)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
+	files, err := f.Readdir(-1)
+	f.Close()
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			fmt.Println(magenta(file.Name()))
+		}
 	}
 }
