@@ -14,8 +14,8 @@ func init() {
 func get() *cobra.Command {
 	return &cobra.Command{
 		Use:   "get",
-		Short: "....",
-		Long:  "....",
+		Short: "Return Navio objects",
+		Long:  "i.e: navio get images show all downloaded images that are in the ./images directory.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if args[0] == "images" {
