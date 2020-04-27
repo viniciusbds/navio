@@ -26,7 +26,7 @@ func init() {
 }
 
 func child() {
-	l.Log("INFO", "Namespace setup code goes here <<\n\n")
+	l.Log("INFO", "Namespace setup code goes here <<\n")
 	childRun(os.Args[1], os.Args[2], os.Args[3:])
 }
 

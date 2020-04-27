@@ -45,9 +45,9 @@ func Pull(imageName string) {
 		file = ubuntuFocal
 	}
 
-	imagePath := fmt.Sprintf("images/%s", imageName)
+	imagePath := fmt.Sprintf("./images/%s", imageName)
 
-	l.Log("INFO", fmt.Sprintf("Downloading %s  from %s ...", file, url))
+	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", file, url))
 	wgetCmd := exec.Command("wget", url)
 	mkdirCmd := exec.Command("mkdir", "-p", imagePath)
 	tarCmd := exec.Command("tar", "-C", imagePath, "-xf", file)
@@ -58,6 +58,7 @@ func Pull(imageName string) {
 	util.Must(tarCmd.Run())
 	util.Must(rmFileCmd.Run())
 
+	l.Log("INFO", "Pulled successfully :)\n")
 }
 
 // CheckIfImageExists ...
