@@ -89,3 +89,14 @@ func ShowDownloadedImages() {
 		}
 	}
 }
+
+// RemoveDownloadedImages ...
+func RemoveDownloadedImages(image string) {
+	if CheckIfImageExists(image) {
+		if err := os.RemoveAll("./images/" + image); err != nil {
+			l.Log("ERROR", err.Error())
+		}
+	} else {
+		l.Log("WARNING", fmt.Sprintf("The image %s doesn't exist, therefore will not be removed", image))
+	}
+}
