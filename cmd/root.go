@@ -3,9 +3,13 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/viniciusbds/navio/src/logger"
 )
+
+var l = logger.New(time.Kitchen, true)
 
 var (
 	rootCmd = &cobra.Command{
