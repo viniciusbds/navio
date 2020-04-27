@@ -6,12 +6,14 @@ import (
 	"os/exec"
 	"time"
 
+	"github.com/mgutz/ansi"
 	"github.com/viniciusbds/navio/src/logger"
 	"github.com/viniciusbds/navio/src/util"
 )
 
 var (
-	l = logger.New(time.Kitchen, true)
+	l       = logger.New(time.Kitchen, true)
+	magenta = ansi.ColorFunc("magenta+")
 
 	// URL's
 	alpineURL      = "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz"
@@ -64,4 +66,26 @@ func CheckIfImageExists(imageName string) bool {
 		return true
 	}
 	return false
+}
+
+// ShowDownloadedImages ...
+func ShowDownloadedImages() {
+	dirname := "./images"
+
+	f, err := os.Open(dirname)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
+	files, err := f.Readdir(-1)
+	f.Close()
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			fmt.Println(magenta(file.Name()))
+		}
+	}
 }

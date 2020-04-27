@@ -1,11 +1,9 @@
 package cmd
 
 import (
-	"github.com/mgutz/ansi"
 	"github.com/spf13/cobra"
+	"github.com/viniciusbds/navio/images"
 )
-
-var magenta = ansi.ColorFunc("magenta+")
 
 func init() {
 	rootCmd.AddCommand(get())
@@ -19,7 +17,7 @@ func get() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if args[0] == "images" {
-				showDownloadedImages()
+				images.ShowDownloadedImages()
 			}
 
 			return nil
