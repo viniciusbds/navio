@@ -37,6 +37,9 @@ func Pull(imageName string) {
 
 	var url, file string
 	switch imageName {
+	case "alpine":
+		url = alpineURL
+		file = alpine
 	case "busybox":
 		url = busyboxURL
 		file = busybox
