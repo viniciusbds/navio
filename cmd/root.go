@@ -10,7 +10,7 @@ import (
 var (
 	rootCmd = &cobra.Command{
 		Use:          "navio",
-		Short:        "Atenção tripulação, os containers estão surgindo!",
+		Short:        "|___/ Navio is an extremely simple runtime container",
 		SilenceUsage: true,
 		// Run: func(cmd *cobra.Command, args []string) {
 		// 	fmt.Println("Root cmd")
