@@ -95,9 +95,9 @@ func ShowDownloadedImages() {
 	}
 }
 
-// RemoveDownloadedImages ...
+// RemoveDownloadedImage ...
 // [TODO]: Document this function
-func RemoveDownloadedImages(image string) {
+func RemoveDownloadedImage(image string) {
 	if CheckIfImageExists(image) {
 		err := os.RemoveAll("./images/" + image)
 		if err != nil {

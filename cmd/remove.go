@@ -18,7 +18,7 @@ func remove() *cobra.Command {
 
 			if args[0] == "image" {
 				// testar caso não exista arg[1]
-				images.RemoveDownloadedImages(args[1])
+				images.RemoveDownloadedImage(args[1])
 			}
 
 			return nil
