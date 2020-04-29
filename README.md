@@ -12,20 +12,11 @@
 
 a way to limit what a process can see
 
-**CLONE_NEWPID** : PID namespace isolates the process ID number space. This means that two processes running on the same host can have the same PID!
-
 **CLONE_NEWUTS** : The UTS namespace provides isolation of the hostname and domainname system identifiers
 
+**CLONE_NEWPID** : PID namespace isolates the process ID number space. This means that two processes running on the same host can have the same PID!
+
 **CLONE_NEWNS** : The Mount namespace isolate the ...
-
-
-
-https://www.infoq.com/br/articles/build-a-container-golang/
-https://stackoverflow.com/questions/22889241/linux-understanding-the-mount-namespace-clone-clone-newns-flag
-https://escotilhalivre.wordpress.com/2015/08/12/namespaces/
-
-
-
 
 
 - [x] UTS - isolate hostname and domainname
@@ -57,7 +48,7 @@ What you can use
 
 
 
-### References
+## References
 
   - [Linux Namespaces](https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a)
   
