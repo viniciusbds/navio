@@ -21,12 +21,9 @@ a way to limit what a process can see
 
 
 https://www.infoq.com/br/articles/build-a-container-golang/
-
-
-https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a
+https://stackoverflow.com/questions/22889241/linux-understanding-the-mount-namespace-clone-clone-newns-flag
 https://escotilhalivre.wordpress.com/2015/08/12/namespaces/
 
-https://stackoverflow.com/questions/22889241/linux-understanding-the-mount-namespace-clone-clone-newns-flag
 
 
 
@@ -60,8 +57,10 @@ What you can use
 
 
 
-### Source
+### References
 
-  - [Linux Namespaces](https://medium.com/@teddyking/linux-namespaces-850489d3ccf)
+  - [Linux Namespaces](https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a)
   
-<div>Ícones feitos por <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
+  - [Namespaces](https://escotilhalivre.wordpress.com/2015/08/12/namespaces/)
+  
+  - <div>Icons made by <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
