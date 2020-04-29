@@ -16,18 +16,18 @@ a way to limit what a process can see
 
 **CLONE_NEWPID** : PID namespace isolates the process ID number space. This means that two processes running on the same host can have the same PID!
 
-**CLONE_NEWNS** : The Mount namespace isolate the ...
+**CLONE_NEWNS** : The Mount namespace isolate the filesystem mount points
 
 
 - [x] UTS - isolate hostname and domainname
 
 - [x] PID - isolate the PID number space
 
-- [x] Mount - isolate filesystem mount points
+- [x] MNT - isolate filesystem mount points
 
 - [ ] IPC - isolate interprocess communication (IPC) resources
 
-- [ ] Network - isolate network interfaces
+- [ ] NET - isolate network interfaces
 
 - [ ] User - isolate UID/GID number spaces
 
@@ -49,6 +49,8 @@ What you can use
 
 
 ## References
+  
+  - [Building a container with less than 100 lines in Go](https://www.infoq.com/br/articles/build-a-container-golang/)
 
   - [Linux Namespaces](https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a)
   
