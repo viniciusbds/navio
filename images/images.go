@@ -42,7 +42,7 @@ func Pull(imageName string) {
 
 	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", imageName, imageURL))
 
-	imagePath := fmt.Sprintf("./images/%s", imageName)
+	imagePath := "./images/" + imageName
 
 	if err := util.Wget(imageURL, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled", imageName))
@@ -66,7 +66,7 @@ func Pull(imageName string) {
 // CheckIfImageExists ...
 // [TODO]: Document this function
 func CheckIfImageExists(imageName string) bool {
-	if _, err := os.Stat(fmt.Sprintf("./images/%s", imageName)); !os.IsNotExist(err) {
+	if _, err := os.Stat("./images/" + imageName); !os.IsNotExist(err) {
 		return true
 	}
 	return false

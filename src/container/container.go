@@ -36,7 +36,7 @@ func childRun(image string, command string, params []string) {
 
 	util.Must(syscall.Sethostname([]byte("container")))
 
-	imagePath := fmt.Sprintf("./images/%s", image)
+	imagePath := "./images/" + image
 
 	util.Must(syscall.Chroot(imagePath))
 	util.Must(os.Chdir("/"))
