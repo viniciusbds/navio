@@ -31,19 +31,11 @@ func child() {
 }
 
 func childRun(image string, command string, params []string) {
-
 	configureCgroups()
+	pivotRoot("./images/" + image)
+	mountProc("")
 
 	util.Must(syscall.Sethostname([]byte("container")))
-
-	imagePath := "./images/" + image
-
-	util.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
-	util.Must(os.MkdirAll(imagePath+"/oldrootfs", 0700))
-	util.Must(syscall.PivotRoot(imagePath, imagePath+"/oldrootfs"))
-	util.Must(os.Chdir("/"))
-
-	util.Must(mountProc(""))
 
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin
@@ -51,7 +43,7 @@ func childRun(image string, command string, params []string) {
 	cmd.Stderr = os.Stderr
 
 	util.Must(cmd.Run())
-	util.Must(unmountProc(""))
+	unmountProc("")
 }
 
 // CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
@@ -86,7 +78,14 @@ func run(image string, command string, params []string) {
 	util.Must(cmd.Run())
 }
 
-func mountProc(newroot string) error {
+func pivotRoot(imagePath string) {
+	util.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
+	util.Must(os.MkdirAll(imagePath+"/oldrootfs", 0700))
+	util.Must(syscall.PivotRoot(imagePath, imagePath+"/oldrootfs"))
+	util.Must(os.Chdir("/"))
+}
+
+func mountProc(newroot string) {
 	source := "proc"
 	target := filepath.Join(newroot, "/proc")
 	fstype := "proc"
@@ -95,13 +94,13 @@ func mountProc(newroot string) error {
 
 	_ = os.Mkdir(target, 0700)
 
-	return syscall.Mount(source, target, fstype, uintptr(flags), data)
+	util.Must(syscall.Mount(source, target, fstype, uintptr(flags), data))
 }
 
-func unmountProc(newroot string) error {
+func unmountProc(newroot string) {
 	target := filepath.Join(newroot, "/proc")
 	flags := 0
-	return syscall.Unmount(target, flags)
+	util.Must(syscall.Unmount(target, flags))
 }
 
 func configureCgroups() {
