@@ -38,8 +38,11 @@ func childRun(image string, command string, params []string) {
 
 	imagePath := "./images/" + image
 
-	util.Must(syscall.Chroot(imagePath))
+	util.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
+	util.Must(os.MkdirAll(imagePath+"/oldrootfs", 0700))
+	util.Must(syscall.PivotRoot(imagePath, imagePath+"/oldrootfs"))
 	util.Must(os.Chdir("/"))
+
 	util.Must(mountProc(""))
 
 	cmd := exec.Command(command, params...)
