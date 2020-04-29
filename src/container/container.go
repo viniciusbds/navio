@@ -52,6 +52,7 @@ func childRun(image string, command string, params []string) {
 }
 
 // CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
+// [TODO]: Better document this function
 func CreateContainer(args []string) {
 
 	if args[0] != "run" {

@@ -23,6 +23,7 @@ var (
 )
 
 // Execute executes the root command.
+// [TODO]: Document this function
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

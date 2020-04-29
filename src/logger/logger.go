@@ -19,11 +19,13 @@ type Logger struct {
 }
 
 // New ...
+// [TODO]: Document the constructor
 func New(timeFormat string, debug bool) *Logger {
 	return &Logger{timeFormat: timeFormat, debug: debug}
 }
 
 // Log ...
+// [TODO]: Document this function
 func (l *Logger) Log(level, message string) {
 	switch strings.ToLower(level) {
 	case "info":

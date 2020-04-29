@@ -21,6 +21,7 @@ var (
 )
 
 // Pull ...
+// [TODO]: Document this function
 func Pull(imageName string) {
 
 	if CheckIfImageExists(imageName) {
@@ -63,6 +64,7 @@ func Pull(imageName string) {
 }
 
 // CheckIfImageExists ...
+// [TODO]: Document this function
 func CheckIfImageExists(imageName string) bool {
 	if _, err := os.Stat(fmt.Sprintf("./images/%s", imageName)); !os.IsNotExist(err) {
 		return true
@@ -71,6 +73,7 @@ func CheckIfImageExists(imageName string) bool {
 }
 
 // ShowDownloadedImages ...
+// [TODO]: Document this function
 func ShowDownloadedImages() {
 	dirname := "./images"
 
@@ -93,6 +96,7 @@ func ShowDownloadedImages() {
 }
 
 // RemoveDownloadedImages ...
+// [TODO]: Document this function
 func RemoveDownloadedImages(image string) {
 	if CheckIfImageExists(image) {
 		err := os.RemoveAll("./images/" + image)

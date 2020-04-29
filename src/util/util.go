@@ -11,6 +11,7 @@ import (
 var l = logger.New(time.Kitchen, true)
 
 // Must ....
+// [TODO]: Document this function
 func Must(err error) {
 	if err != nil {
 		l.Log("ERROR", err.Error())
@@ -19,6 +20,7 @@ func Must(err error) {
 }
 
 // Contains ...
+// [TODO]: Document this function
 func Contains(s []string, e string) bool {
 	for _, a := range s {
 		if a == e {
@@ -29,6 +31,7 @@ func Contains(s []string, e string) bool {
 }
 
 // Wget ...
+// [TODO]: Document this function
 func Wget(url, filepath string) error {
 	// run shell `wget URL -O filepath`
 	cmd := exec.Command("wget", url, "-O", filepath)
@@ -38,6 +41,7 @@ func Wget(url, filepath string) error {
 }
 
 // Tar ...
+// [TODO]: Document this function
 func Tar(imagePath, imageName string) error {
 	cmd := exec.Command("tar", "-C", imagePath, "-xf", imageName)
 	cmd.Stdout = os.Stdout
