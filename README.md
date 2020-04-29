@@ -49,6 +49,8 @@ What you can use
 
 
 ## References
+
+  - [Containers From Scratch • Liz Rice](https://www.youtube.com/watch?v=8fi7uSYlOdc)
   
   - [Building a container with less than 100 lines in Go](https://www.infoq.com/br/articles/build-a-container-golang/)
 
