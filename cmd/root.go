@@ -14,7 +14,7 @@ var l = logger.New(time.Kitchen, true)
 var (
 	rootCmd = &cobra.Command{
 		Use:          "navio",
-		Short:        "|___/ Navio is an extremely simple runtime container",
+		Short:        "|___/ Navio is an extremely simple app that create linux containers",
 		SilenceUsage: true,
 		// Run: func(cmd *cobra.Command, args []string) {
 		// 	fmt.Println("Root cmd")
