@@ -1,11 +1,11 @@
-package util
+package utilities
 
 import (
 	"os"
 	"os/exec"
 	"time"
 
-	"github.com/viniciusbds/navio/src/logger"
+	"github.com/viniciusbds/navio/logger"
 )
 
 var l = logger.New(time.Kitchen, true)

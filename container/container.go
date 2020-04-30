@@ -12,8 +12,8 @@ import (
 
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/viniciusbds/navio/images"
-	"github.com/viniciusbds/navio/src/logger"
-	"github.com/viniciusbds/navio/src/util"
+	"github.com/viniciusbds/navio/logger"
+	util "github.com/viniciusbds/navio/utilities"
 )
 
 var l = logger.New(time.Kitchen, true)

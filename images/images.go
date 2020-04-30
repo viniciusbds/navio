@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/mgutz/ansi"
-	"github.com/viniciusbds/navio/src/logger"
-	"github.com/viniciusbds/navio/src/util"
+	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 var (
@@ -44,7 +44,7 @@ func Pull(imageName string) {
 
 	imagePath := "./images/" + imageName
 
-	if err := util.Wget(imageURL, imageName+".tar"); err != nil {
+	if err := utilities.Wget(imageURL, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled", imageName))
 	}
 
@@ -52,7 +52,7 @@ func Pull(imageName string) {
 		l.Log("ERROR", fmt.Sprintf("The directory %s was not created", imagePath))
 	}
 
-	if err := util.Tar(imagePath, imageName+".tar"); err != nil {
+	if err := utilities.Tar(imagePath, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The file %s was not extracted", imageName+".tar"))
 	}
 

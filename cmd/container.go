@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/src/container"
+	"github.com/viniciusbds/navio/container"
 )
 
 func init() {
