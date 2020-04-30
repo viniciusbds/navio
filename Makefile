@@ -3,3 +3,6 @@ build:
 
 run:
 	./navio
+
+clean:
+	rm navio
