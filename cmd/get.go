@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/images"
 )
@@ -17,7 +19,7 @@ func get() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if args[0] == "images" {
-				images.ShowDownloadedImages()
+				fmt.Println(images.ShowDownloadedImages())
 			}
 
 			return nil
