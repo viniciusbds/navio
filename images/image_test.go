@@ -13,26 +13,26 @@ func TestDescribe(t *testing.T) {
 	}
 
 	t.Run("Unavailable Image", func(t *testing.T) {
-		expected := ""
-		result := Describe("debianxsdsad")
-		check(t, expected, result)
+		e := ""
+		r := Describe("debianxsdsad")
+		check(t, e, r)
 	})
 
 	t.Run("Alpine Image", func(t *testing.T) {
-		expected := "alpine\t\tv3.11\t\t2.7M"
-		result := Describe("alpine")
-		check(t, expected, result)
+		e := "alpine\t\tv3.11\t\t2.7M"
+		r := Describe("alpine")
+		check(t, e, r)
 	})
 
 	t.Run("Busybox Image", func(t *testing.T) {
-		expected := "busybox\t\tv4.0\t\t1.5M"
-		result := Describe("busybox")
-		check(t, expected, result)
+		e := "busybox\t\tv4.0\t\t1.5M"
+		r := Describe("busybox")
+		check(t, e, r)
 	})
 
 	t.Run("Ubuntu Image", func(t *testing.T) {
-		expected := "ubuntu\t\tv20.04\t\t90.0M"
-		result := Describe("ubuntu")
-		check(t, expected, result)
+		e := "ubuntu\t\tv20.04\t\t90.0M"
+		r := Describe("ubuntu")
+		check(t, e, r)
 	})
 }
