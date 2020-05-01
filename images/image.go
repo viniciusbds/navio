@@ -108,5 +108,10 @@ func RemoveDownloadedImage(imageName string) {
 
 // Describe ...
 func Describe(imageName string) string {
-	return "NAME\t\tVERSION\t\tSIZE\n" + getImage(imageName).ToStr()
+	image := getImage(imageName)
+	if image == nil {
+		l.Log("WARNING", fmt.Sprintf("Invalid image! Cannot describe %s", imageName))
+		return ""
+	}
+	return getImage(imageName).ToStr()
 }

@@ -20,7 +20,7 @@ func describe() *cobra.Command {
 
 			if args[0] == "image" {
 				// testar caso não exista arg[1]
-				fmt.Println(images.Describe(args[1]))
+				fmt.Println("NAME\t\tVERSION\t\tSIZE\n" + images.Describe(args[1]))
 			}
 
 			return nil
