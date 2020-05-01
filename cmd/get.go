@@ -18,6 +18,11 @@ func get() *cobra.Command {
 		Long:  "i.e: navio get images show all downloaded images that are in the ./images directory.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
+			if len(args) == 0 {
+				l.Log("WARNING", "Insert a valid argument ex: images")
+				return nil
+			}
+
 			if args[0] == "images" {
 				fmt.Println(images.ShowDownloadedImages())
 			}
