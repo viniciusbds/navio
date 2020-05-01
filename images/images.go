@@ -29,13 +29,13 @@ func NewImage(name string, version string, size string, url string) *Image {
 }
 
 // ToStr ...
-func (image *Image) ToStr() string {
-	return fmt.Sprintf("%s\t\t%s\t\t%s", image.name, image.version, image.size)
+func (i *Image) ToStr() string {
+	return fmt.Sprintf("%s\t\t%s\t\t%s", i.name, i.version, i.size)
 }
 
-func getImage(imageName string) *Image {
+func getImage(name string) *Image {
 	for _, i := range availableImages {
-		if i.name == imageName {
+		if i.name == name {
 			return i
 		}
 	}
