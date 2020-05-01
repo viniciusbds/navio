@@ -66,7 +66,7 @@ func WasDownloaded(imageName string) bool {
 
 // ShowDownloadedImages ...
 // [TODO]: Document this function
-func ShowDownloadedImages() {
+func ShowDownloadedImages() string {
 	dirname := "./images"
 
 	f, err := os.Open(dirname)
@@ -81,13 +81,14 @@ func ShowDownloadedImages() {
 	}
 
 	var imageStr string
-	fmt.Printf("NAME\t\tVERSION\t\tSIZE\n")
+	result := "NAME\t\tVERSION\t\tSIZE"
 	for _, file := range files {
 		if file.IsDir() {
 			imageStr = getImage(file.Name()).ToStr()
-			fmt.Println(magenta(imageStr))
+			result += "\n" + magenta(imageStr)
 		}
 	}
+	return result
 }
 
 // RemoveDownloadedImage ...
