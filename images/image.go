@@ -104,3 +104,8 @@ func RemoveDownloadedImage(imageName string) {
 		l.Log("WARNING", fmt.Sprintf("The image %s doesn't exist.", imageName))
 	}
 }
+
+// Describe ...
+func Describe(imageName string) string {
+	return "NAME\t\tVERSION\t\tSIZE\n" + getImage(imageName).ToStr()
+}
