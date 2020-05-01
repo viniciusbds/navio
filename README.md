@@ -4,7 +4,7 @@
 
 ----------------------------
 
-**Navio** is an extremely simple runtime container that aims to create containers based on linux namespace, cgroups and chroot resources. The ship goes up containers, that is, processes with namespace isolation (PID, MOUNT ...), possible limitation of the amount of resources used via cgroups and a mini operating system that currently can be ubuntu, alpine or arch linux.
+**Navio** is an extremely simple tool that aims to create containers based on linux namespace, cgroups and chroot resources. The ship goes up containers, that is, processes with namespace isolation (PID, MOUNT ...), possible limitation of the amount of resources used via cgroups and a mini operating system that currently can be ubuntu, alpine or arch linux.
 
 
 
