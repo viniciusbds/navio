@@ -31,6 +31,11 @@ func TestAlreadyExists(t *testing.T) {
 }
 
 func TestRemoveDownloadedImage(t *testing.T) {
+	clear := func() {
+		RemoveDownloadedImage("busybox")
+		os.Remove("images")
+	}
+
 	var image string
 
 	t.Run("Valid image: busybox", func(t *testing.T) {
@@ -64,6 +69,8 @@ func TestRemoveDownloadedImage(t *testing.T) {
 			t.Errorf(err.Error())
 		}
 	})
+
+	clear()
 }
 
 func TestDescribe(t *testing.T) {
