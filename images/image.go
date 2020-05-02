@@ -5,6 +5,8 @@ import (
 	"os"
 	"time"
 
+	"errors"
+
 	"github.com/mgutz/ansi"
 	"github.com/viniciusbds/navio/assert"
 	"github.com/viniciusbds/navio/logger"
@@ -18,19 +20,19 @@ var (
 
 // Pull ...
 // [TODO]: Document this function
-func Pull(imageName string) {
+func Pull(imageName string) error {
 	image := getImage(imageName)
 
 	if image == nil {
-		msg := fmt.Sprintf("The image %s is not available", imageName)
-		l.Log("WARNING", msg)
-		return
+		err := errors.New("The image " + imageName + " is not available")
+		l.Log("WARNING", err.Error())
+		return err
 	}
 
 	if AlreadyExists(imageName) {
-		msg := fmt.Sprintf("The image %s already was downloaded", imageName)
-		l.Log("WARNING", msg)
-		return
+		err := errors.New("The image " + imageName + " already was downloaded")
+		l.Log("WARNING", err.Error())
+		return err
 	}
 
 	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", imageName, image.url))
@@ -40,24 +42,29 @@ func Pull(imageName string) {
 	if err := utilities.Wget(image.url, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled", imageName))
 		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
+		return err
 	}
 
 	if err := os.MkdirAll(imagePath, 0777); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The directory %s was not created", imagePath))
 		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
+		return err
 	}
 
 	if err := utilities.Tar(imagePath, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The file %s was not extracted", imageName+".tar"))
 		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
+		return err
 	}
 
 	if err := os.Remove(imageName + ".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The file %s was not removed", imageName))
 		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
+		return err
 	}
 
 	l.Log("INFO", "Pulled successfully :)\n")
+	return nil
 }
 
 // AlreadyExists ...
