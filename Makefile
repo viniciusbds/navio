@@ -1,3 +1,5 @@
+all: build
+
 build:
 	go build -o navio  main.go
 
@@ -6,3 +8,9 @@ run:
 
 clean:
 	rm navio
+
+unit-tests:
+	go test ./container/...
+	go test ./images/...
+	go test ./logger/...
+	go test ./utilities/...
