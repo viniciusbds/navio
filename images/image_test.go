@@ -5,6 +5,44 @@ import (
 	"testing"
 )
 
+var check = func(t *testing.T, expected string, result string) {
+	t.Helper()
+	if expected != result {
+		t.Errorf("Expected %s != Result %s", expected, result)
+	}
+}
+
+var clear = func() {
+	RemoveDownloadedImage("alpine")
+	RemoveDownloadedImage("busybox")
+	RemoveDownloadedImage("ubuntu")
+	os.Remove("images")
+}
+
+func TestPull(t *testing.T) {
+
+	//note: this tests don't cover all Pull function
+
+	t.Run("Invalid Image", func(t *testing.T) {
+		imageName := "ubuntó"
+		err := Pull(imageName)
+		expected := "The image " + imageName + " is not available"
+		result := err.Error()
+		check(t, expected, result)
+	})
+
+	t.Run("A Image that already was downloaded", func(t *testing.T) {
+		imageName := "alpine"
+		Pull(imageName)
+
+		err := Pull(imageName)
+		expected := "The image " + imageName + " already was downloaded"
+		result := err.Error()
+		check(t, expected, result)
+	})
+	clear()
+}
+
 func TestAlreadyExists(t *testing.T) {
 	check := func(t *testing.T, expected bool, result bool) {
 		t.Helper()
@@ -31,15 +69,8 @@ func TestAlreadyExists(t *testing.T) {
 }
 
 func TestRemoveDownloadedImage(t *testing.T) {
-	clear := func() {
-		RemoveDownloadedImage("busybox")
-		os.Remove("images")
-	}
-
-	var image string
-
 	t.Run("Valid image: busybox", func(t *testing.T) {
-		image = "busybox"
+		image := "busybox"
 		if !AlreadyExists(image) {
 			Pull(image)
 		}
@@ -53,52 +84,39 @@ func TestRemoveDownloadedImage(t *testing.T) {
 			t.Errorf("Expected != Result ")
 		}
 	})
-
 	t.Run("Invalid image: busycaixa", func(t *testing.T) {
-		image = "busycaixa"
+		image := "busycaixa"
 		err := RemoveDownloadedImage(image)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
 	})
-
 	t.Run("Empty image: '' ", func(t *testing.T) {
-		image = ""
+		image := ""
 		err := RemoveDownloadedImage(image)
 		if err.Error() != "The imageName must be a non-empty value" {
 			t.Errorf(err.Error())
 		}
 	})
-
 	clear()
 }
 
 func TestDescribe(t *testing.T) {
-	check := func(t *testing.T, expected string, result string) {
-		t.Helper()
-		if expected != result {
-			t.Errorf("Expected %s != Result %s", expected, result)
-		}
-	}
-
 	t.Run("Unavailable Image", func(t *testing.T) {
 		e := ""
 		r := Describe("debianxsdsad")
 		check(t, e, r)
 	})
-
 	t.Run("Alpine Image", func(t *testing.T) {
 		e := "alpine\t\tv3.11\t\t2.7M"
 		r := Describe("alpine")
 		check(t, e, r)
 	})
-
 	t.Run("Busybox Image", func(t *testing.T) {
 		e := "busybox\t\tv4.0\t\t1.5M"
 		r := Describe("busybox")
 		check(t, e, r)
 	})
-
 	t.Run("Ubuntu Image", func(t *testing.T) {
 		e := "ubuntu\t\tv20.04\t\t90.0M"
 		r := Describe("ubuntu")
