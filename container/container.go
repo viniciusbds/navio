@@ -57,7 +57,7 @@ func CreateContainer(args []string) {
 
 	image, command, params := args[1], args[2], args[3:]
 
-	if !images.WasDownloaded(image) {
+	if !images.AlreadyExists(image) {
 		l.Log("WARNING", fmt.Sprintf("Image %s is not available, pull it ...", image))
 		images.Pull(image)
 	}

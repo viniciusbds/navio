@@ -26,7 +26,7 @@ func Pull(imageName string) {
 		return
 	}
 
-	if WasDownloaded(imageName) {
+	if AlreadyExists(imageName) {
 		msg := fmt.Sprintf("The image %s already was downloaded", imageName)
 		l.Log("WARNING", msg)
 		return
@@ -55,9 +55,9 @@ func Pull(imageName string) {
 	l.Log("INFO", "Pulled successfully :)\n")
 }
 
-// WasDownloaded ...
+// AlreadyExists ...
 // [TODO]: Document this function
-func WasDownloaded(imageName string) bool {
+func AlreadyExists(imageName string) bool {
 	if _, err := os.Stat("./images/" + imageName); !os.IsNotExist(err) {
 		return true
 	}
@@ -94,7 +94,7 @@ func ShowDownloadedImages() string {
 // RemoveDownloadedImage ...
 // [TODO]: Document this function
 func RemoveDownloadedImage(imageName string) {
-	if WasDownloaded(imageName) {
+	if AlreadyExists(imageName) {
 		err := os.RemoveAll("./images/" + imageName)
 		if err != nil {
 			l.Log("ERROR", err.Error())
