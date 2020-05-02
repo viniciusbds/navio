@@ -1,8 +1,57 @@
 package images
 
 import (
+	"os"
 	"testing"
 )
+
+func TestAlreadyExists(t *testing.T) {
+	check := func(t *testing.T, expected bool, result bool) {
+		t.Helper()
+		if expected != result {
+			t.Errorf("Expected %v != Result %v", expected, result)
+		}
+	}
+	clear := func() {
+		RemoveDownloadedImage("alpine")
+		os.Remove("images")
+	}
+
+	Pull("alpine")
+	result := AlreadyExists("alpine")
+	expected := true
+	check(t, expected, result)
+
+	RemoveDownloadedImage("alpine")
+	result = AlreadyExists("alpine")
+	expected = false
+	check(t, expected, result)
+
+	clear()
+}
+
+func TestShowDownloadedImages(t *testing.T) {
+	if !AlreadyExists("alpine") {
+		Pull("alpine")
+	}
+	if !AlreadyExists("busybox") {
+		Pull("busybox")
+	}
+	if !AlreadyExists("ubuntu") {
+		Pull("ubuntu")
+	}
+
+	e := "NAME\t\tVERSION\t\tSIZE\n" +
+		"busybox\t\tv4.0\t\t1.5M" +
+		"alpine\t\tv3.11\t\t2.7M" +
+		"ubuntu\t\tv20.04\t\t90.0M"
+
+	r := ShowDownloadedImages()
+
+	if r != e {
+		t.Errorf("Expected %s != Result %s", e, r)
+	}
+}
 
 func TestRemoveDownloadedImage(t *testing.T) {
 	var image string
