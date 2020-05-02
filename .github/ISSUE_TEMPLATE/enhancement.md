@@ -1,8 +1,6 @@
 ---
 name: Enhancement Request
 about: Suggest an enhancement to the Navio project
-labels: kind/feature
-
 ---
 <!-- Please only use this template for submitting enhancement requests -->
 
