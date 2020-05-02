@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/mgutz/ansi"
+	"github.com/viniciusbds/navio/assert"
 	"github.com/viniciusbds/navio/logger"
 	"github.com/viniciusbds/navio/utilities"
 )
@@ -93,17 +94,21 @@ func ShowDownloadedImages() string {
 
 // RemoveDownloadedImage ...
 // [TODO]: Document this function
-func RemoveDownloadedImage(imageName string) {
+func RemoveDownloadedImage(imageName string) error {
+	if err := assert.ImageisNotEmpty(imageName); err != nil {
+		return err
+	}
 	if AlreadyExists(imageName) {
 		err := os.RemoveAll("./images/" + imageName)
 		if err != nil {
 			l.Log("ERROR", err.Error())
-		} else {
-			l.Log("INFO", fmt.Sprintf("The image %s was removed sucessfully!", imageName))
+			return err
 		}
+		l.Log("INFO", fmt.Sprintf("The image %s was removed sucessfully!", imageName))
 	} else {
 		l.Log("WARNING", fmt.Sprintf("The image %s doesn't exist.", imageName))
 	}
+	return nil
 }
 
 // Describe ...
