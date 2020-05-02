@@ -39,18 +39,22 @@ func Pull(imageName string) {
 
 	if err := utilities.Wget(image.url, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled", imageName))
+		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
 	}
 
-	if err := os.Mkdir(imagePath, 0777); err != nil {
+	if err := os.MkdirAll(imagePath, 0777); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The directory %s was not created", imagePath))
+		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
 	}
 
 	if err := utilities.Tar(imagePath, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The file %s was not extracted", imageName+".tar"))
+		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
 	}
 
 	if err := os.Remove(imageName + ".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The file %s was not removed", imageName))
+		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
 	}
 
 	l.Log("INFO", "Pulled successfully :)\n")
