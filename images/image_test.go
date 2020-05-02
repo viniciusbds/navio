@@ -4,6 +4,42 @@ import (
 	"testing"
 )
 
+func TestRemoveDownloadedImage(t *testing.T) {
+	var image string
+
+	t.Run("Valid image: busybox", func(t *testing.T) {
+		image = "busybox"
+		if !AlreadyExists(image) {
+			Pull(image)
+		}
+
+		err := RemoveDownloadedImage(image)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+		// certifies that the image was removed
+		if AlreadyExists(image) {
+			t.Errorf("Expected != Result ")
+		}
+	})
+
+	t.Run("Invalid image: busycaixa", func(t *testing.T) {
+		image = "busycaixa"
+		err := RemoveDownloadedImage(image)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+	})
+
+	t.Run("Empty image: '' ", func(t *testing.T) {
+		image = ""
+		err := RemoveDownloadedImage(image)
+		if err.Error() != "The imageName must be a non-empty value" {
+			t.Errorf(err.Error())
+		}
+	})
+}
+
 func TestDescribe(t *testing.T) {
 	check := func(t *testing.T, expected string, result string) {
 		t.Helper()
