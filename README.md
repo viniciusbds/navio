@@ -72,7 +72,7 @@ To run all unit tests
 
 You can contribute to the project in any way you want, either by fixing bugs, implementing new features, improving the documentation or proposing new features through issues
 
-See [Contributting](/CONTRIBUTING.md) tips for more details
+See [Contributting](/CONTRIBUTING.md) for more details
 
 ## References
 
