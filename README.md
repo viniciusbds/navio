@@ -53,9 +53,11 @@ What you can use
 
 
 
-## Running
+## How to install
 
-To compile the source code in the file ./navio
+This project support static compiling for linux platform (amd64). If you want to compile itself follow the instructions below:
+
+To compile the source code in the file **./navio**
 ```
   make
 ```
@@ -66,6 +68,24 @@ To run all unit tests
   sudo make unit-tests
 ```
   
+  
+## Example Commands
+
+`./navio get images`
+
+`./navio remove image alpine`
+
+`./navio pull alpine`
+
+`./navio run alpine sh`
+
+...
+
+`./navio run ubuntu /bin/bash`
+
+`./navio run busybox sh`
+
+
   
   
 ## Contributing
