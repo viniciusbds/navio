@@ -61,15 +61,15 @@ What you can use
 
 This project support static compiling for linux platform (amd64). If you want to compile itself follow the instructions below:
 
-To compile the source code in the file **./navio**
+Compile the source code, the result is the **./navio** bin
 ```
   make
 ```
 
-To run all unit tests
+Run all unit tests
 
 ```
-  sudo make unit-tests
+  make unit-tests
 ```
   
   
