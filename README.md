@@ -75,19 +75,19 @@ Run all unit tests
   
 ## Example Commands
 
-`./navio get images`
+`navio get images`
 
-`./navio remove image alpine`
+`navio remove image alpine`
 
-`./navio pull alpine`
+`navio pull alpine`
 
-`./navio run alpine sh`
+`navio run alpine sh`
 
 ...
 
-`./navio run ubuntu /bin/bash`
+`navio run ubuntu /bin/bash`
 
-`./navio run busybox sh`
+`navio run busybox sh`
 
 
   
