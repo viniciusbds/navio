@@ -100,7 +100,9 @@ See [Contributting](/CONTRIBUTING.md) for more details
 
 ## References
 
-  - [Containers From Scratch • Liz Rice](https://www.youtube.com/watch?v=8fi7uSYlOdc)
+  - [Containers from Scratch • Liz Rice](https://www.youtube.com/watch?v=8fi7uSYlOdc)
+  
+  - [Containers from Scratch](https://ericchiang.github.io/post/containers-from-scratch/)
   
   - [Building a container with less than 100 lines in Go](https://www.infoq.com/br/articles/build-a-container-golang/)
 
