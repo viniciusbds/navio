@@ -7,6 +7,8 @@ You can contribute to the project in any way you want, either by fixing bugs, im
   - **Open a Issue** describing what your change is about and why
   
   - **Fork** and make your changes
+  
+  - **Test** it running `sudo make unit-tests` to make sure that your changes passes the tests
     
   - **Make Pull Request** with your changes.
  
