@@ -22,6 +22,7 @@ a way to limit what a process can see
 
 **CLONE_NEWNS** : The Mount namespace isolate the filesystem mount points
 
+---
 
 - [x] UTS - isolate hostname and domainname
 
@@ -52,6 +53,27 @@ What you can use
 
 
 
+## Running
+
+To compile the source code in the file ./navio
+```
+  make
+```
+
+To run all unit tests
+
+```
+  sudo make unit-tests
+```
+  
+  
+  
+## Contributing
+
+You can contribute to the project in any way you want, either by fixing bugs, implementing new features, improving the documentation or proposing new features through issues
+
+See [Contributting](/CONTRIBUTING.md) tips for more details
+
 ## References
 
   - [Containers From Scratch • Liz Rice](https://www.youtube.com/watch?v=8fi7uSYlOdc)
@@ -62,4 +84,4 @@ What you can use
   
   - [Namespaces](https://escotilhalivre.wordpress.com/2015/08/12/namespaces/)
   
-  - <div>Icons made by <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
+  - <div><a href="/cargueiro.png" title="Icon">Icon</a> made by <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
