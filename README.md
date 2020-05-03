@@ -52,6 +52,10 @@ What you can use
 - [ ] Process numbers
 
 
+## Requirements
+
+- [golang environment](https://golang.org/)
+- make
 
 ## How to install
 
