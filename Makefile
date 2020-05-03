@@ -1,17 +1,15 @@
 all: build
 
 build:
-	go build -o navio  main.go
+	@echo "Building..."	
+	@go build -o navio  main.go
+	@echo "ok"
 
 run:
-	./navio
+	@./navio
 
 clean:
-	rm navio
+	@rm navio
 
 unit-tests:
-	go test ./assert/...
-	go test ./container/...
-	go test ./images/...
-	go test ./logger/...
-	go test ./utilities/...
+	@go test ./assert/... ./container/... ./images/... ./logger/... ./utilities/...
