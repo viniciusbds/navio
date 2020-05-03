@@ -2,7 +2,7 @@
 
 You can contribute to the project in any way you want, either by fixing bugs, implementing new features, improving the documentation or proposing new features through issues.
 
-**Workflow*:**  
+**Workflow:**  
 
   - **Open a Issue** describing what your change is about and why
   
@@ -12,6 +12,5 @@ You can contribute to the project in any way you want, either by fixing bugs, im
     
   - **Make Pull Request** with your changes.
  
-*this is a suggestion, not a rule
-
-**:-)**
+ 
+This is a suggestion, not a rule **:-)**
