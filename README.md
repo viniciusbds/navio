@@ -59,14 +59,28 @@ What you can use
 
 ## How to install
 
-This project support static compiling for linux platform (amd64). If you want to compile itself follow the instructions below:
+This project support static compiling for linux platform (amd64).
 
-Compile the source code, the result is the **./navio** bin
+#### If you just want use the navio, is very simples: 
+
 ```
-  make
+ git clone https://github.com/viniciusbds/navio.git
+ cd navio
+ sudo cp ./navio /usr/local/bin
 ```
 
-Run all unit tests
+#### If you want compile the code before running it:
+
+
+
+```
+ git clone https://github.com/viniciusbds/navio.git
+ cd navio
+ make
+ sudo cp ./navio /usr/local/bin
+```
+
+To run all unit tests, type:
 
 ```
   make unit-tests
