@@ -13,6 +13,7 @@ import (
 	"github.com/docker/docker/pkg/reexec"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/utilities"
 	util "github.com/viniciusbds/navio/utilities"
 )
 
@@ -32,7 +33,7 @@ func child() {
 
 func childRun(image string, command string, params []string) {
 	configureCgroups()
-	pivotRoot("./images/" + image)
+	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
 	mountProc("")
 
 	util.Must(syscall.Sethostname([]byte("container")))

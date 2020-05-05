@@ -37,7 +37,7 @@ func Pull(imageName string) error {
 
 	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", imageName, image.url))
 
-	imagePath := "./images/" + imageName
+	imagePath := utilities.ImagesRootDir + "/images/" + imageName
 
 	if err := utilities.Wget(image.url, imageName+".tar"); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled", imageName))
@@ -70,7 +70,7 @@ func Pull(imageName string) error {
 // AlreadyExists ...
 // [TODO]: Document this function
 func AlreadyExists(imageName string) bool {
-	if _, err := os.Stat("./images/" + imageName); !os.IsNotExist(err) {
+	if _, err := os.Stat(utilities.ImagesRootDir + "/images/" + imageName); !os.IsNotExist(err) {
 		return true
 	}
 	return false
@@ -79,7 +79,7 @@ func AlreadyExists(imageName string) bool {
 // ShowDownloadedImages ...
 // [TODO]: Document this function
 func ShowDownloadedImages() (string, error) {
-	dirname := "./images"
+	dirname := utilities.ImagesRootDir + "/images"
 
 	f, err := os.Open(dirname)
 	if err != nil {
@@ -112,7 +112,7 @@ func RemoveDownloadedImage(imageName string) error {
 		return err
 	}
 	if AlreadyExists(imageName) {
-		err := os.RemoveAll("./images/" + imageName)
+		err := os.RemoveAll(utilities.ImagesRootDir + "/images/" + imageName)
 		if err != nil {
 			l.Log("ERROR", err.Error())
 			return err
