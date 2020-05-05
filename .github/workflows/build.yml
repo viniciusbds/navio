@@ -9,7 +9,7 @@ on:
 jobs:
   build-linux:
     name: Build linux
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
     - name: Set up Go 1.14
       uses: actions/setup-go@v1
@@ -24,14 +24,14 @@ jobs:
     
     - name: Run all tests
       run: | 
-        make unit-tests
+        sudo make unit-tests
     
     - name: Build linux
       env:
         GOPATH: /home/vinicius/go
         TARGET_OS_ARCH: linux/amd64
       run: | 
-        make all
+        sudo make all
         ./navio version
     - uses: actions/upload-artifact@master
       name: Generating artifact
