@@ -1,0 +1,40 @@
+name: CI
+on: 
+  push:
+    branches:
+    - master
+  pull_request: 
+    branches:
+    - master
+jobs:
+  build-linux:
+    name: Build linux
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Set up Go 1.14
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.14
+      id: go
+
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v1
+      with:
+        path: go/src/github.com/viniciusbds/navio
+    
+    - name: Run all tests
+      run: | 
+        make unit-tests
+    
+    - name: Build linux
+      env:
+        GOPATH: /home/vinicius/go
+        TARGET_OS_ARCH: linux/amd64
+      run: | 
+        make all
+        ./navio version
+    - uses: actions/upload-artifact@master
+      name: Generating artifact
+      with:
+        name: navio-linux64
+        path: ./navio
