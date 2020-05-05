@@ -80,12 +80,17 @@ This project support static compiling for linux platform (amd64).
  sudo cp ./navio /usr/local/bin
 ```
 
-To run all unit tests, type:
+#### To run all unit tests, type:
 
 ```
   make unit-tests
 ```
-  
+
+#### To uninstall:
+
+ ```
+ sudo rm /usr/local/bin/navio
+```
   
 ## Example Commands
 
