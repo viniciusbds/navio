@@ -1,4 +1,4 @@
-name: CI
+name: build
 on: 
   push:
     branches:
@@ -9,7 +9,7 @@ on:
 jobs:
   build-linux:
     name: Build linux
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-18.04
     steps:
     - name: Set up Go 1.14
       uses: actions/setup-go@v1
