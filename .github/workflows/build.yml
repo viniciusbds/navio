@@ -37,4 +37,4 @@ jobs:
       name: Generating artifact
       with:
         name: navio-linux64
-        path: sudo ./navio
+        path: ./navio
