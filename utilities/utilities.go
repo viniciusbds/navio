@@ -3,6 +3,7 @@ package utilities
 import (
 	"os"
 	"os/exec"
+	"strings"
 	"time"
 
 	"github.com/viniciusbds/navio/logger"
@@ -47,4 +48,12 @@ func Tar(imagePath, imageName string) error {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
+}
+
+// IsEmpty ...
+func IsEmpty(imageName string) bool {
+	if len(strings.TrimSpace(imageName)) == 0 {
+		return true
+	}
+	return false
 }
