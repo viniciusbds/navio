@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 func init() {
@@ -24,7 +25,11 @@ func get() *cobra.Command {
 			}
 
 			if args[0] == "images" {
-				fmt.Println(images.ShowDownloadedImages())
+				fmt.Println("NAME\t\tVERSION\t\tSIZE")
+				imageList, _ := images.ShowDownloadedImages()
+				if !utilities.IsEmpty(imageList) {
+					fmt.Println(imageList)
+				}
 			}
 
 			return nil

@@ -78,29 +78,31 @@ func AlreadyExists(imageName string) bool {
 
 // ShowDownloadedImages ...
 // [TODO]: Document this function
-func ShowDownloadedImages() string {
+func ShowDownloadedImages() (string, error) {
 	dirname := "./images"
 
 	f, err := os.Open(dirname)
 	if err != nil {
-		l.Log("ERROR", err.Error())
+		os.Mkdir(dirname, 0777)
+		return "", nil
 	}
 
 	files, err := f.Readdir(-1)
 	f.Close()
 	if err != nil {
 		l.Log("ERROR", err.Error())
+		return "", err
 	}
 
 	var imageStr string
-	result := "NAME\t\tVERSION\t\tSIZE"
+	result := ""
 	for _, file := range files {
 		if file.IsDir() {
 			imageStr = getImage(file.Name()).ToStr()
 			result += "\n" + magenta(imageStr)
 		}
 	}
-	return result
+	return result, nil
 }
 
 // RemoveDownloadedImage ...

@@ -43,6 +43,14 @@ func TestPull(t *testing.T) {
 	clear()
 }
 
+func TestShowDownloadedImages(t *testing.T) {
+	t.Run("", func(t *testing.T) {
+		if _, err := ShowDownloadedImages(); err != nil {
+			t.Errorf("ERROR: on ShowDownloadedImages(): %s", err.Error())
+		}
+	})
+}
+
 func TestAlreadyExists(t *testing.T) {
 	check := func(t *testing.T, expected bool, result bool) {
 		t.Helper()
