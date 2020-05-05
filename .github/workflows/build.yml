@@ -38,5 +38,3 @@ jobs:
       with:
         name: navio-linux64
         path: ./navio
-    - name: Go Formatter
-      uses: sladyn98/auto-go-format@v0.0.1
