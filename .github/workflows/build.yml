@@ -36,5 +36,5 @@ jobs:
     - uses: actions/upload-artifact@master
       name: Generating artifact
       with:
-        name: navio
+        name: navio-linux64
         path: sudo ./navio
