@@ -64,44 +64,37 @@ func child() {
 }
 
 func childRun(image string, command string, params []string) {
+	util.Must(syscall.Sethostname([]byte("container")))
+
 	configureCgroups()
 	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
-	mountProc("")
-
-	util.Must(syscall.Sethostname([]byte("container")))
+	mountProc()
 
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-
 	util.Must(cmd.Run())
-	unmountProc("")
+
+	unmountProc()
 }
 
 func pivotRoot(imagePath string) {
+	oldrootfs := imagePath + "/oldrootfs"
 	util.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
-	util.Must(os.MkdirAll(imagePath+"/oldrootfs", 0700))
-	util.Must(syscall.PivotRoot(imagePath, imagePath+"/oldrootfs"))
+	util.Must(os.MkdirAll(oldrootfs, 0700))
+	util.Must(syscall.PivotRoot(imagePath, oldrootfs))
 	util.Must(os.Chdir("/"))
 }
 
-func mountProc(newroot string) {
-	source := "proc"
-	target := filepath.Join(newroot, "/proc")
-	fstype := "proc"
-	flags := 0
-	data := ""
-
-	_ = os.Mkdir(target, 0700)
-
-	util.Must(syscall.Mount(source, target, fstype, uintptr(flags), data))
+func mountProc() {
+	// source, target, fstype, flags, data
+	util.Must(syscall.Mount("proc", "/proc", "proc", 0, ""))
 }
 
-func unmountProc(newroot string) {
-	target := filepath.Join(newroot, "/proc")
-	flags := 0
-	util.Must(syscall.Unmount(target, flags))
+func unmountProc() {
+	// target, flags
+	util.Must(syscall.Unmount("/proc", 0))
 }
 
 func configureCgroups() {
