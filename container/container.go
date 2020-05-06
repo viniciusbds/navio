@@ -26,27 +26,6 @@ func init() {
 	}
 }
 
-func child() {
-	l.Log("INFO", "Namespace setup code goes here <<\n")
-	childRun(os.Args[1], os.Args[2], os.Args[3:])
-}
-
-func childRun(image string, command string, params []string) {
-	configureCgroups()
-	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
-	mountProc("")
-
-	util.Must(syscall.Sethostname([]byte("container")))
-
-	cmd := exec.Command(command, params...)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-
-	util.Must(cmd.Run())
-	unmountProc("")
-}
-
 // CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
 // [TODO]: Better document this function
 func CreateContainer(args []string) {
@@ -77,6 +56,27 @@ func run(image string, command string, params []string) {
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	util.Must(cmd.Run())
+}
+
+func child() {
+	l.Log("INFO", "Namespace setup code goes here <<\n")
+	childRun(os.Args[1], os.Args[2], os.Args[3:])
+}
+
+func childRun(image string, command string, params []string) {
+	configureCgroups()
+	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
+	mountProc("")
+
+	util.Must(syscall.Sethostname([]byte("container")))
+
+	cmd := exec.Command(command, params...)
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+
+	util.Must(cmd.Run())
+	unmountProc("")
 }
 
 func pivotRoot(imagePath string) {
