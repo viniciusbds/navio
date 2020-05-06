@@ -88,13 +88,26 @@ func pivotRoot(imagePath string) {
 }
 
 func mountProc() {
+
+	if _, err := os.Stat("/proc"); os.IsNotExist(err) {
+		os.Mkdir("/proc", 0700)
+	}
+
 	// source, target, fstype, flags, data
-	util.Must(syscall.Mount("proc", "/proc", "proc", 0, ""))
+	err := syscall.Mount("proc", "/proc", "proc", 0, "")
+	if err != nil {
+		l.Log("ERROR", "The path /proc wasn't mounted: "+err.Error())
+		os.Exit(1)
+	}
 }
 
 func unmountProc() {
 	// target, flags
-	util.Must(syscall.Unmount("/proc", 0))
+	err := syscall.Unmount("/proc", 0)
+	if err != nil {
+		l.Log("ERROR", "The path /proc wasn't unmounted: "+err.Error())
+		os.Exit(1)
+	}
 }
 
 func configureCgroups() {
