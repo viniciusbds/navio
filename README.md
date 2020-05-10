@@ -10,11 +10,14 @@
 - busybox
 - ubuntu
 
+### What are containers?
+
+Containers are a set of linux processes with several layers of isolation.
 
 
-## Namespaces
+## [Namespaces](https://en.wikipedia.org/wiki/Linux_namespaces)
 
-a way to limit what a process can see
+what the processes can see
 
 **CLONE_NEWUTS** : The UTS namespace provides isolation of the hostname and domainname system identifiers
 
@@ -24,24 +27,27 @@ a way to limit what a process can see
 
 ---
 
-- [x] UTS - isolate hostname and domainname
 
-- [x] PID - isolate the PID number space
+- [x] UTS - isolate **hostname and domainname**
 
-- [x] MNT - isolate filesystem mount points
+- [x] PID - isolate the **PID number space**
 
-- [ ] IPC - isolate interprocess communication (IPC) resources
+- [x] MNT - isolate **filesystem mount points**
 
-- [ ] NET - isolate network interfaces
+- [ ] IPC - isolate **interprocess communication (IPC)** resources
 
-- [ ] User - isolate UID/GID number spaces
+- [ ] NET - isolate **network interfaces**
 
-- [ ] Cgroup - isolate cgroup root directory
+- [ ] User - isolate **UID/GID number spaces**
+
+- [ ] Cgroup - isolate **cgroup root directory**
+
+- [ ] Time Namespace - allows processes to see **different system times** in a way similar to the UTS namespace.
 
 
-## Cgroups
+## [Cgroups](https://en.wikipedia.org/wiki/Cgroups)
 
-What you can use
+What the processes can use
 
 - [ ] Memory
 
