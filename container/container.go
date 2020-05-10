@@ -59,13 +59,9 @@ func run(image string, command string, params []string) {
 }
 
 func child() {
-	l.Log("INFO", "Namespace setup code goes here <<\n")
-	childRun(os.Args[1], os.Args[2], os.Args[3:])
-}
+	image, command, params := os.Args[1], os.Args[2], os.Args[3:]
 
-func childRun(image string, command string, params []string) {
 	util.Must(syscall.Sethostname([]byte("container")))
-
 	configureCgroups()
 	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
 	mountProc()
