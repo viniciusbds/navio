@@ -83,6 +83,8 @@ This project support static compiling for linux platform (amd64).
 #### To run all unit tests, type:
 
 ```
+  sudo su -
+  cd /path/to/project/navio
   make unit-tests
 ```
 
