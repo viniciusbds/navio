@@ -14,7 +14,6 @@ import (
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/logger"
 	"github.com/viniciusbds/navio/utilities"
-	util "github.com/viniciusbds/navio/utilities"
 )
 
 var l = logger.New(time.Kitchen, true)
@@ -55,13 +54,13 @@ func run(image string, command string, params []string) {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	util.Must(cmd.Run())
+	utilities.Must(cmd.Run())
 }
 
 func child() {
 	image, command, params := os.Args[1], os.Args[2], os.Args[3:]
 
-	util.Must(syscall.Sethostname([]byte("container")))
+	utilities.Must(syscall.Sethostname([]byte("container")))
 	configureCgroups()
 	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
 	mountProc()
@@ -70,20 +69,20 @@ func child() {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	util.Must(cmd.Run())
+	utilities.Must(cmd.Run())
 
 	unmountProc()
 }
 
 func pivotRoot(imagePath string) {
 	oldrootfs := imagePath + "/oldrootfs"
-	util.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
-	util.Must(os.MkdirAll(oldrootfs, 0700))
-	util.Must(syscall.PivotRoot(imagePath, oldrootfs))
-	util.Must(os.Chdir("/"))
+	utilities.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
+	utilities.Must(os.MkdirAll(oldrootfs, 0700))
+	utilities.Must(syscall.PivotRoot(imagePath, oldrootfs))
+	utilities.Must(os.Chdir("/"))
 	oldrootfs = "/oldrootfs"
-	util.Must(syscall.Unmount(oldrootfs, syscall.MNT_DETACH))
-	util.Must(os.RemoveAll(oldrootfs))
+	utilities.Must(syscall.Unmount(oldrootfs, syscall.MNT_DETACH))
+	utilities.Must(os.RemoveAll(oldrootfs))
 }
 
 func mountProc() {
@@ -112,8 +111,8 @@ func configureCgroups() {
 	pids := filepath.Join(cgroups, "pids")
 	os.Mkdir(filepath.Join(pids, "vini"), 0755)
 	//fmt.Println(filepath.Join(pids, "vini"))
-	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("24"), 0700))
+	utilities.Must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("24"), 0700))
 	// Removes the new cgroup in place after the container exits
-	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/notify_on_release"), []byte("1"), 0700))
-	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+	utilities.Must(ioutil.WriteFile(filepath.Join(pids, "vini/notify_on_release"), []byte("1"), 0700))
+	utilities.Must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
 }
