@@ -2,7 +2,9 @@ package images
 
 import (
 	"fmt"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"time"
 
 	"errors"
@@ -61,6 +63,17 @@ func Pull(imageName string) error {
 		l.Log("ERROR", fmt.Sprintf("The file %s was not removed", imageName))
 		l.Log("ERROR", fmt.Sprintf("%s", err.Error()))
 		return err
+	}
+
+	if imageName == "ubuntu" {
+		resolveFile := filepath.Join(imagePath, "/run/systemd/resolve/stub-resolv.conf")
+		if _, err := os.Stat(resolveFile); os.IsNotExist(err) {
+			utilities.Must(os.MkdirAll(imagePath+"/run/systemd/resolve", 0777))
+			//add a known DNS server to your system
+			utilities.Must(ioutil.WriteFile(resolveFile, []byte("nameserver 8.8.8.8\n"), 0644))
+
+			// see for more details: https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error
+		}
 	}
 
 	l.Log("INFO", "Pulled successfully :)\n")
