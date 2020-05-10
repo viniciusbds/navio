@@ -85,14 +85,15 @@ func pivotRoot(imagePath string) {
 	util.Must(os.MkdirAll(oldrootfs, 0700))
 	util.Must(syscall.PivotRoot(imagePath, oldrootfs))
 	util.Must(os.Chdir("/"))
+	oldrootfs = "/oldrootfs"
+	util.Must(syscall.Unmount(oldrootfs, syscall.MNT_DETACH))
+	util.Must(os.RemoveAll(oldrootfs))
 }
 
 func mountProc() {
-
 	if _, err := os.Stat("/proc"); os.IsNotExist(err) {
 		os.Mkdir("/proc", 0700)
 	}
-
 	// source, target, fstype, flags, data
 	err := syscall.Mount("proc", "/proc", "proc", 0, "")
 	if err != nil {
