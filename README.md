@@ -87,9 +87,9 @@ What the processes can use
 #### To run all unit tests, type:
 
 ```
-  sudo su -
-  cd /path/to/project/navio
-  make unit-tests
+ sudo su -
+ cd /path/to/project/navio
+ make unit-tests
 ```
 
 #### To uninstall:
