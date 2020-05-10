@@ -65,9 +65,7 @@ What the processes can use
 
 ## How to install
 
-This project support static compiling for linux platform (amd64).
-
-#### If you just want use the navio, is very simples: 
+#### If you just want use, is very simples: 
 
 ```
  git clone https://github.com/viniciusbds/navio.git
