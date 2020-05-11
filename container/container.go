@@ -1,7 +1,6 @@
 package container
 
 import (
-	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
@@ -28,24 +27,25 @@ func init() {
 // CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
 // [TODO]: Better document this function
 func CreateContainer(args []string) {
-
-	if args[0] != "run" {
-		l.Log("ERROR", "Bad command")
-		os.Exit(1)
-	}
-
-	image, command, params := args[1], args[2], args[3:]
-
-	if !images.AlreadyExists(image) {
-		l.Log("WARNING", fmt.Sprintf("Image %s is not available, pull it ...", image))
-		images.Pull(image)
-	}
-
-	run(image, command, params)
+	image, command, containerName, params := args[0], args[1], args[2], args[3:]
+	prepareImage(image, containerName)
+	run(image, command, containerName, params)
 }
 
-func run(image string, command string, params []string) {
-	cmd := reexec.Command(append([]string{"child", image, command}, params...)...)
+func prepareImage(image, containerName string) {
+	if !images.TarImageExists(image) {
+		images.Pull(image)
+	}
+	if !images.ImageIsReady(containerName) {
+		images.Prepare(image, containerName)
+	}
+	if image == "ubuntu" {
+		images.ConfigureNetworkForUbuntu(containerName)
+	}
+}
+
+func run(image string, command string, containerName string, params []string) {
+	cmd := reexec.Command(append([]string{"child", image, command, containerName}, params...)...)
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
@@ -58,11 +58,11 @@ func run(image string, command string, params []string) {
 }
 
 func child() {
-	image, command, params := os.Args[1], os.Args[2], os.Args[3:]
+	_, command, containerName, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
 
-	utilities.Must(syscall.Sethostname([]byte("container")))
+	utilities.Must(syscall.Sethostname([]byte(containerName)))
 	configureCgroups()
-	pivotRoot(utilities.ImagesRootDir + "/images/" + image)
+	pivotRoot(filepath.Join(utilities.ImagesPath, containerName))
 	mountProc()
 
 	cmd := exec.Command(command, params...)
