@@ -41,10 +41,10 @@ func Wget(url, filepath string) error {
 	return cmd.Run()
 }
 
-// Tar ...
+// Untar ...
 // [TODO]: Document this function
-func Tar(imagePath, imageName string) error {
-	cmd := exec.Command("tar", "-C", imagePath, "-xf", imageName)
+func Untar(directory, file string) error {
+	cmd := exec.Command("tar", "-C", directory, "-xf", file)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	return cmd.Run()
@@ -56,4 +56,12 @@ func IsEmpty(imageName string) bool {
 		return true
 	}
 	return false
+}
+
+// FileExists verifies if a directory or a file exists
+func FileExists(fileName string) bool {
+	if _, err := os.Stat(fileName); os.IsNotExist(err) {
+		return false
+	}
+	return true
 }
