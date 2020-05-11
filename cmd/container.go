@@ -7,7 +7,14 @@ import (
 	"github.com/viniciusbds/navio/container"
 )
 
+var (
+	// Used for containerame flag.
+	containerName string
+)
+
 func init() {
+	rootCmd.PersistentFlags().StringVar(&containerName, "name", "", "The name of the container")
+	rootCmd.MarkFlagRequired("name")
 	rootCmd.AddCommand(createContainer())
 }
 
@@ -20,9 +27,13 @@ func createContainer() *cobra.Command {
 			command := args[1]
 			params := args[2:]
 
-			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
+			if containerName == "" {
+				// TODO: generate a random container name
+				containerName = "XPTO"
+			}
 
-			args = append([]string{"run", image, command}, params...)
+			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
+			args = append([]string{"run", image, command, containerName}, params...)
 			container.CreateContainer(args)
 
 			return nil
