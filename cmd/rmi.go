@@ -11,14 +11,17 @@ func init() {
 
 func remove() *cobra.Command {
 	return &cobra.Command{
-		Use:   "remove",
-		Short: "Remove Navio objects",
+		Use:   "rmi",
+		Short: "Remove a Image",
 		Long:  "ex: navio remove image <image_name> remove a downloaded images located in the ./images directory.",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
-			if args[0] == "image" {
-				// testar caso não exista arg[1]
-				images.RemoveDownloadedImage(args[1])
+			if len(args) == 0 {
+				l.Log("WARNING", "You must insert a image name!")
+			} else {
+				if args[0] != "" {
+					images.DeleteImage(args[0])
+				}
 			}
 
 			return nil
