@@ -1,7 +1,6 @@
+ ![](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![](https://github.com/viniciusbds/navio/workflows/test/badge.svg)
+ 
 # Navio
-
-![](https://github.com/viniciusbds/navio/workflows/build/badge.svg) 
-![](https://github.com/viniciusbds/navio/workflows/test/badge.svg)
 
 <img src="/cargueiro.png" alt="drawing" width="120"/>
 
