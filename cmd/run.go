@@ -5,6 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
+	"github.com/viniciusbds/navio/images"
 )
 
 var (
@@ -24,6 +25,12 @@ func createContainer() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// navio run IMAGE COMMAND PARAMS...
 			image := args[0]
+
+			if !images.IsValidImage(image) {
+				l.Log("WARNING", "Invalid Image!!! To see all available images run navio get images")
+				return nil
+			}
+
 			command := args[1]
 			params := args[2:]
 

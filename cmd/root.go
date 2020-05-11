@@ -9,7 +9,9 @@ import (
 	"github.com/viniciusbds/navio/logger"
 )
 
-var l = logger.New(time.Kitchen, true)
+var (
+	l = logger.New(time.Kitchen, true)
+)
 
 var (
 	rootCmd = &cobra.Command{
