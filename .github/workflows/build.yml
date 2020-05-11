@@ -22,10 +22,6 @@ jobs:
       with:
         path: go/src/github.com/viniciusbds/navio
     
-    - name: Run all tests
-      run: | 
-        sudo make unit-tests
-    
     - name: Build linux
       env:
         GOPATH: /home/vinicius/go
