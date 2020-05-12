@@ -1,4 +1,4 @@
- ![](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![](https://github.com/viniciusbds/navio/workflows/test/badge.svg)
+ ![](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![](https://github.com/viniciusbds/navio/workflows/unit-tests/badge.svg)
  
 # Navio
 
