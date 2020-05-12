@@ -24,6 +24,12 @@ func createContainer() *cobra.Command {
 		Use: "run",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// navio run IMAGE COMMAND PARAMS...
+
+			if len(args) < 2 {
+				l.Log("WARNING", "You must insert at least a image name and a command!")
+				return nil
+			}
+
 			image := args[0]
 
 			if !images.IsValidImage(image) {

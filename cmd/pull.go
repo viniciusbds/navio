@@ -16,8 +16,14 @@ func pullImage() *cobra.Command {
 		Long: "Receive an [image_name] as an argument and download it from the official website." +
 			" To see all available images run: navio get images",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			image := args[0]
-			images.Pull(image)
+
+			if len(args) == 0 {
+				l.Log("WARNING", "You must insert a image name!")
+			} else {
+				image := args[0]
+				images.Pull(image)
+			}
+
 			return nil
 		},
 	}
