@@ -25,7 +25,7 @@ func Pull(imageName string) error {
 	image := getImage(imageName)
 
 	if image == nil {
-		msg := "Invalid image: " + image.name
+		msg := "The image " + imageName + " is not available"
 		l.Log("WARNING", msg)
 		return errors.New(msg)
 	}
@@ -137,8 +137,7 @@ func DeleteImage(containerName string) error {
 		return err
 	}
 	if ImageIsReady(containerName) {
-		err := os.RemoveAll(filepath.Join(utilities.ImagesPath, containerName))
-		if err != nil {
+		if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, containerName)); err != nil {
 			l.Log("ERROR", err.Error())
 			return err
 		}

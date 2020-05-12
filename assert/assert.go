@@ -14,7 +14,7 @@ var l = logger.New(time.Kitchen, true)
 func ImageisNotEmpty(imageName string) error {
 	if len(strings.TrimSpace(imageName)) == 0 {
 		err := errors.New("The imageName must be a non-empty value")
-		l.Log("ERROR", err.Error())
+		l.Log("WARNING", err.Error())
 		return err
 	}
 	return nil

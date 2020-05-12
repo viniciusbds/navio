@@ -13,9 +13,9 @@ var check = func(t *testing.T, expected string, result string) {
 }
 
 var clear = func() {
-	RemoveDownloadedImage("alpine")
-	RemoveDownloadedImage("busybox")
-	RemoveDownloadedImage("ubuntu")
+	DeleteImage("alpine")
+	DeleteImage("busybox")
+	DeleteImage("ubuntu")
 	os.Remove("images")
 }
 
@@ -24,11 +24,13 @@ func TestPull(t *testing.T) {
 	//note: this tests don't cover all Pull function
 
 	t.Run("Invalid Image", func(t *testing.T) {
-		imageName := "ubuntó"
+		imageName := "ubuntuxxx"
 		err := Pull(imageName)
-		expected := "The image " + imageName + " is not available"
-		result := err.Error()
-		check(t, expected, result)
+		if err != nil {
+			expected := "The image " + imageName + " is not available"
+			result := err.Error()
+			check(t, expected, result)
+		}
 	})
 
 	t.Run("A Image that already was downloaded", func(t *testing.T) {
@@ -36,9 +38,10 @@ func TestPull(t *testing.T) {
 		Pull(imageName)
 
 		err := Pull(imageName)
-		expected := "The image " + imageName + " already was downloaded"
-		result := err.Error()
-		check(t, expected, result)
+		if err != nil {
+			t.Errorf("EThe image %s already exists, thus we do not expect any error", imageName)
+		}
+
 	})
 	clear()
 }
@@ -51,7 +54,7 @@ func TestShowDownloadedImages(t *testing.T) {
 	})
 }
 
-func TestAlreadyExists(t *testing.T) {
+func TestImageIsReady(t *testing.T) {
 	check := func(t *testing.T, expected bool, result bool) {
 		t.Helper()
 		if expected != result {
@@ -59,49 +62,59 @@ func TestAlreadyExists(t *testing.T) {
 		}
 	}
 	clear := func() {
-		RemoveDownloadedImage("alpine")
-		os.Remove("images")
+		DeleteImage("alpine")
 	}
 
+	// Here we don't call Prepare(), thus we expect that the Image isn't Ready
 	Pull("alpine")
-	result := AlreadyExists("alpine")
-	expected := true
+	result := ImageIsReady("alpine")
+	expected := false
 	check(t, expected, result)
 
-	RemoveDownloadedImage("alpine")
-	result = AlreadyExists("alpine")
+	// Here we  call Prepare(), thus we expect that the Image is Ready
+	Prepare("alpine", "alpine")
+	result = ImageIsReady("alpine")
+	expected = true
+	check(t, expected, result)
+
+	DeleteImage("alpine")
+	result = ImageIsReady("alpine")
 	expected = false
 	check(t, expected, result)
 
 	clear()
 }
 
-func TestRemoveDownloadedImage(t *testing.T) {
+func TestDeleteImage(t *testing.T) {
 	t.Run("Valid image: busybox", func(t *testing.T) {
-		image := "busybox"
-		if !AlreadyExists(image) {
+		image, containerName := "busybox", "mycontainer"
+
+		if !TarImageExists(image) {
 			Pull(image)
 		}
+		if !ImageIsReady(containerName) {
+			Prepare(image, containerName)
+		}
 
-		err := RemoveDownloadedImage(image)
+		err := DeleteImage(containerName)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
 		// certifies that the image was removed
-		if AlreadyExists(image) {
-			t.Errorf("Expected != Result ")
+		if ImageIsReady(containerName) {
+			t.Errorf("We expected that in this moment the image isn't ready")
 		}
 	})
 	t.Run("Invalid image: busycaixa", func(t *testing.T) {
-		image := "busycaixa"
-		err := RemoveDownloadedImage(image)
+		containerName := "busycaixa"
+		err := DeleteImage(containerName)
 		if err != nil {
-			t.Errorf(err.Error())
+			t.Errorf("We don't expected any error here, because the image doesn't exists. Err:  %s", err.Error())
 		}
 	})
 	t.Run("Empty image: '' ", func(t *testing.T) {
 		image := ""
-		err := RemoveDownloadedImage(image)
+		err := DeleteImage(image)
 		if err.Error() != "The imageName must be a non-empty value" {
 			t.Errorf(err.Error())
 		}
