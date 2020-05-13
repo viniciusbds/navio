@@ -31,8 +31,9 @@ func Pull(imageName string) error {
 	image := getImage(imageName)
 
 	if TarImageExists(image.name) {
-		l.Log("WARNING", "The image "+image.name+" already was downloaded")
-		return nil
+		msg := "The image " + image.name + " already was downloaded"
+		l.Log("WARNING", msg)
+		return errors.New(msg)
 	}
 
 	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", image.name, image.url))
