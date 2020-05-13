@@ -74,15 +74,20 @@ func child() {
 	unmountProc()
 }
 
+// pivotRoot change the root file system of the process/container
+// It moves the root file system of the current process to the
+// directory putOld and makes newRoot the new root file system
+// see more in https://linux.die.net/man/8/pivot_root
 func pivotRoot(imagePath string) {
-	oldrootfs := imagePath + "/oldrootfs"
-	utilities.Must(syscall.Mount(imagePath, imagePath, "", syscall.MS_BIND, ""))
-	utilities.Must(os.MkdirAll(oldrootfs, 0700))
-	utilities.Must(syscall.PivotRoot(imagePath, oldrootfs))
+	newRoot := imagePath
+	putOld := imagePath + "/put_old"
+	utilities.Must(syscall.Mount(newRoot, newRoot, "", syscall.MS_BIND, ""))
+	utilities.Must(os.MkdirAll(putOld, 0700))
+	utilities.Must(syscall.PivotRoot(newRoot, putOld))
 	utilities.Must(os.Chdir("/"))
-	oldrootfs = "/oldrootfs"
-	utilities.Must(syscall.Unmount(oldrootfs, syscall.MNT_DETACH))
-	utilities.Must(os.RemoveAll(oldrootfs))
+	putOld = "/put_old"
+	utilities.Must(syscall.Unmount(putOld, syscall.MNT_DETACH))
+	utilities.Must(os.RemoveAll(putOld))
 }
 
 func mountProc() {
