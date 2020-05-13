@@ -47,7 +47,7 @@ func NewImage(name string, base string, version string, size string, url string)
 
 // ToStr ...
 func (i *Image) ToStr() string {
-	return fmt.Sprintf("%s\t\t%s\t\t%s\t\t%s", i.name, i.base, i.version, i.size)
+	return fmt.Sprintf("%s\t\t\t%s\t\t%s\t\t%s", i.name, i.base, i.version, i.size)
 }
 
 func getImage(name string) *Image {
