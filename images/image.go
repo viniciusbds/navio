@@ -22,13 +22,13 @@ var (
 
 // Pull Downloads the .tar file from the official site
 func Pull(imageName string) error {
-	image := getImage(imageName)
-
-	if image == nil {
-		msg := "The image " + imageName + " is not available"
+	if !utilities.IsaBaseImage(imageName) {
+		msg := fmt.Sprintf("%s is not a base Image. Select one of the: %v", imageName, utilities.BaseImages)
 		l.Log("WARNING", msg)
 		return errors.New(msg)
 	}
+
+	image := getImage(imageName)
 
 	if TarImageExists(image.name) {
 		l.Log("WARNING", "The image "+image.name+" already was downloaded")
@@ -66,10 +66,7 @@ func Prepare(imageName, containerName string) error {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not extracted. \n%s", imageName, err.Error()))
 		return err
 	}
-	// fmt.Printf("before insert %v\n", availableImages)
-	// availableImages = InsertANewImage(containerName, imageName, availableImages)
-	// fmt.Printf("after insert %v\n", availableImages)
-
+	InsertImage(containerName, imageName)
 	return nil
 }
 
@@ -103,49 +100,46 @@ func TarImageExists(imageName string) bool {
 	return true
 }
 
-// ShowDownloadedImages ...
-// [TODO]: Document this function
-func ShowDownloadedImages() (string, error) {
-	f, err := os.Open(utilities.ImagesPath)
-	if err != nil {
-		os.Mkdir(utilities.ImagesPath, 0777)
-		return "", nil
-	}
-
-	files, err := f.Readdir(-1)
-	f.Close()
-	if err != nil {
-		l.Log("ERROR", err.Error())
-		return "", err
-	}
-
-	var imageStr string
+// ShowBaseImages return a string with all official images
+func ShowBaseImages() (string, error) {
 	result := ""
-	for _, file := range files {
-		if file.IsDir() {
-			imageStr = file.Name() //getImage(file.Name()).ToStr()
-			result += "\n" + magenta(imageStr)
+	for _, img := range baseImages {
+		result += "\n" + magenta(img.ToStr())
+	}
+	return result, nil
+}
+
+// Ps return a string with all availables container images that was created. see it like "containers"
+func Ps() (string, error) {
+	result := ""
+	for _, img := range images {
+		if !utilities.IsaBaseImage(img.name) {
+			result += "\n" + magenta(img.ToStr())
 		}
 	}
 	return result, nil
 }
 
-// DeleteImage ...
-// [TODO]: Document this function
-func DeleteImage(containerName string) error {
+// DeleteImage receives a containerImage and remove it
+func DeleteImage(containerName string) {
+	if utilities.IsaBaseImage(containerName) {
+		l.Log("WARNING", "Cannot remove the ["+containerName+"] base image")
+		return
+	}
 	if err := assert.ImageisNotEmpty(containerName); err != nil {
-		return err
+		l.Log("WARNING", "Cannot remove a empty image: "+containerName)
+		return
 	}
 	if ImageIsReady(containerName) {
 		if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, containerName)); err != nil {
 			l.Log("ERROR", err.Error())
-			return err
+			return
 		}
 		l.Log("INFO", fmt.Sprintf("The image %s was removed sucessfully!", containerName))
 	} else {
 		l.Log("WARNING", fmt.Sprintf("The image %s doesn't exist.", containerName))
 	}
-	return nil
+	RemoveImage(containerName)
 }
 
 // Describe ...
