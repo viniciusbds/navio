@@ -65,3 +65,14 @@ func FileExists(fileName string) bool {
 	}
 	return true
 }
+
+// IsaBaseImage receive a imageName as parameter and retur true if is one of
+// the supported official images. (see utilities.constants.BaseImages)
+func IsaBaseImage(image string) bool {
+	for _, i := range BaseImages {
+		if image == i {
+			return true
+		}
+	}
+	return false
+}
