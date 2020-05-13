@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
-	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 var (
@@ -32,8 +32,8 @@ func createContainer() *cobra.Command {
 
 			image := args[0]
 
-			if !images.IsValidImage(image) {
-				l.Log("WARNING", "Invalid Image!!! To see all available images run navio get images")
+			if !utilities.IsaBaseImage(image) {
+				l.Log("WARNING", fmt.Sprintf("%s is not a base Image. Select one of the: %v", image, utilities.BaseImages))
 				return nil
 			}
 

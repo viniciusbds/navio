@@ -22,7 +22,7 @@ func describe() *cobra.Command {
 				// testar caso não exista arg[1]
 				result := images.Describe(args[1])
 				if result != "" {
-					fmt.Println("NAME\t\tVERSION\t\tSIZE\n" + result)
+					fmt.Println("NAME\t\t\tBASE\t\tVERSION\t\tSIZE\n" + result)
 				}
 			}
 

@@ -25,8 +25,8 @@ func get() *cobra.Command {
 			}
 
 			if args[0] == "images" {
-				fmt.Println("NAME\t\tVERSION\t\tSIZE")
-				imageList, _ := images.ShowDownloadedImages()
+				fmt.Println("NAME\t\t\tBASE\t\tVERSION\t\tSIZE")
+				imageList, _ := images.ShowBaseImages()
 				if !utilities.IsEmpty(imageList) {
 					fmt.Println(imageList)
 				}
