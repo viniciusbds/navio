@@ -60,6 +60,14 @@ func getImage(name string) *Image {
 	return nil
 }
 
+// IsValidContainerImage ...
+func IsValidContainerImage(containerName string) bool {
+	if images[containerName] != nil {
+		return true
+	}
+	return false
+}
+
 // InsertImage receive a containerName and the respective baseImage and creates a new
 // Image and insert it on [images map]. Also update the csv file that store all containerImages
 func InsertImage(containerName, baseImage string) {
