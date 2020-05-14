@@ -7,16 +7,25 @@
 
 ----------------------------
 
-**Navio** is an extremely simple tool that aims to create linux containers based on the linux namespace and cgroups features. The Navio goes up containers, that is, a set of processes with namespace isolation (PID, MOUNT ...), possible limitation of the amount of resources used via cgroups and a mini operating system that currently can be:
+**Navio** is a simple tool to create linux containers based on the namespace and cgroups features. 
 
-- alpine
-- busybox
-- ubuntu
+The Navio creates containers, that is, **a set of processes isolated by Linux namespaces**, for example: PID to isolate the processes and Mount to isolate the file systems.
 
-### What are containers?
+All created containers have their own **rootfs** (a mini operating system) associated, so that a change (for example, an installation of any library) in a container does not affect others ones.
 
-Containers are a set of linux processes with several layers of isolation.
+It is also possible to limit the amount of resources that each container can use, this is done through Cgroups.
 
+
+### Why?
+Just for science, do not use this code in production !!! :D.
+
+### Available Images
+
+| Image| version| size |
+| ---- | -----| ------|
+| alpine|  v3.11| 2.7M|
+| busybox| v4.0| 1.5M|
+| ubuntu| v20.04| 90M|
 
 ## [Namespaces](https://en.wikipedia.org/wiki/Linux_namespaces)
 
