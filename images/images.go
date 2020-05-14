@@ -16,9 +16,9 @@ var (
 )
 
 func init() {
-	baseImages["alpine"] = NewImage("alpine", "alpine", "v3.11", "2.7M", "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz")
-	baseImages["busybox"] = NewImage("busybox", "busybox", "v4.0", "1.5M", "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar")
-	baseImages["ubuntu"] = NewImage("ubuntu", "ubuntu", "v20.04", "90.0M", "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz")
+	baseImages["alpine"] = NewImage("alpine", "alpine", "v3.11", "2.7M", utilities.AlpineURL)
+	baseImages["busybox"] = NewImage("busybox", "busybox", "v4.0", "1.5M", utilities.BusyboxURL)
+	baseImages["ubuntu"] = NewImage("ubuntu", "ubuntu", "v20.04", "90.0M", utilities.Ubuntu20ltsURL)
 
 	if utilities.FileExists(utilities.Imagescsv) {
 		readImages()
