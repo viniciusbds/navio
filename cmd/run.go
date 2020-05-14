@@ -6,6 +6,7 @@ import (
 	"github.com/docker/docker/pkg/random"
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
+	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/utilities"
 )
 
@@ -43,6 +44,11 @@ func createContainer() *cobra.Command {
 
 			if containerName == "" {
 				containerName = fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
+			}
+
+			if images.IsValidContainerImage(containerName) {
+				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
+				return nil
 			}
 
 			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
