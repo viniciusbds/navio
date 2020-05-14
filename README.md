@@ -59,7 +59,7 @@ what the processes can see
 
 ## [Cgroups](https://en.wikipedia.org/wiki/Cgroups)
 
-What the processes can use
+what the processes can use
 
 - [ ] Memory
 
@@ -114,20 +114,20 @@ What the processes can use
 
 `navio get images`
 
-`navio remove image alpine`
+`navio rmi alpine`
 
 `navio pull alpine`
 
-`navio run alpine sh`
+`navio run alpine sh --name mycontainer`
+
+`navio exec mycontainer sh` 
 
 ...
 
-`navio run ubuntu /bin/bash`
-
 `navio run busybox sh`
 
+`navio run ubuntu /bin/bash --name python3apps`
 
-  
   
 ## Contributing
 
