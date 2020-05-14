@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 
+	"github.com/docker/docker/pkg/random"
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/utilities"
@@ -41,8 +42,7 @@ func createContainer() *cobra.Command {
 			params := args[2:]
 
 			if containerName == "" {
-				// TODO: generate a random container name
-				containerName = "XPTO"
+				containerName = fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
 			}
 
 			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
