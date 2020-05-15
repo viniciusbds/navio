@@ -1,8 +1,6 @@
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/images"
 )
@@ -21,19 +19,10 @@ func stop() *cobra.Command {
 				l.Log("WARNING", "You must insert the containerName!")
 				return nil
 			}
-			if len(args) > 1 {
-				l.Log("WARNING", "You only need insert the containerName!")
-				return nil
+
+			for _, containerName := range args {
+				images.DeleteImage(containerName)
 			}
-
-			containerName := args[0]
-
-			if !images.IsValidContainerImage(containerName) {
-				l.Log("WARNING", fmt.Sprintf("%s is not a valid containerImage. Run navio ps to see the available ones.", containerName))
-				return nil
-			}
-
-			images.DeleteImage(containerName)
 
 			return nil
 		},
