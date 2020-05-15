@@ -45,9 +45,17 @@ func NewImage(name string, base string, version string, size string, url string)
 	}
 }
 
-// ToStr ...
+// ToStr ... Ignore esse código, essa foi a minha maior vigarice (https://www.youtube.com/watch?v=PK0c_n5EDhk)
 func (i *Image) ToStr() string {
-	return fmt.Sprintf("%s\t\t\t%s\t\t%s\t\t%s", i.name, i.base, i.version, i.size)
+	tab := ""
+	if len(i.name) < 8 {
+		tab = "\t\t\t\t\t"
+	} else if len(i.name) >= 8 && len(i.name) < 16 {
+		tab = "\t\t\t\t"
+	} else {
+		tab = "\t\t\t"
+	}
+	return fmt.Sprintf("%s%s%s\t\t\t%s\t\t\t%s", i.name, tab, i.base, i.version, i.size)
 }
 
 func getImage(name string) *Image {
