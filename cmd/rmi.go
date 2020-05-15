@@ -17,11 +17,15 @@ func remove() *cobra.Command {
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			if len(args) == 0 {
-				l.Log("WARNING", "You must insert a image name!")
+				l.Log("WARNING", "You must insert at least a image name!")
 			} else {
-				if args[0] != "" {
-					images.DeleteImage(args[0])
+
+				for _, image := range args {
+					if image != "" {
+						images.DeleteImage(image)
+					}
 				}
+
 			}
 
 			return nil
