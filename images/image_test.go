@@ -137,17 +137,17 @@ func TestDescribe(t *testing.T) {
 		check(t, e, r)
 	})
 	t.Run("Alpine Image", func(t *testing.T) {
-		e := "alpine\t\t\talpine\t\tv3.11\t\t2.7M"
+		e := "alpine\t\t\t\t\talpine\t\t\tv3.11\t\t\t2.7M"
 		r := Describe("alpine")
 		check(t, e, r)
 	})
 	t.Run("Busybox Image", func(t *testing.T) {
-		e := "busybox\t\t\tbusybox\t\tv4.0\t\t1.5M"
+		e := "busybox\t\t\t\t\tbusybox\t\t\tv4.0\t\t\t1.5M"
 		r := Describe("busybox")
 		check(t, e, r)
 	})
 	t.Run("Ubuntu Image", func(t *testing.T) {
-		e := "ubuntu\t\t\tubuntu\t\tv20.04\t\t90.0M"
+		e := "ubuntu\t\t\t\t\tubuntu\t\t\tv20.04\t\t\t90.0M"
 		r := Describe("ubuntu")
 		check(t, e, r)
 	})
