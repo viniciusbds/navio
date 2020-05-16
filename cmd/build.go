@@ -12,7 +12,14 @@ import (
 	"github.com/viniciusbds/navio/utilities"
 )
 
+var (
+	newImageName string
+)
+
 func init() {
+	rootCmd.PersistentFlags().StringVar(&newImageName, "t", "", "The image tag. (i.e. the newImageName)")
+	rootCmd.MarkFlagRequired("t")
+
 	rootCmd.AddCommand(build())
 }
 
@@ -23,24 +30,26 @@ func build() *cobra.Command {
 		Long:  "",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			// navio build [image-name] [directory]
+			// navio build [directory] -t [image-name]
 
-			var naviofileDir, newImg string
-			if len(args) < 2 {
-				l.Log("WARNING", "You must insert a directory and a image name!")
-				return
-			}
-
-			if utilities.FileExists(args[0] + "/Naviofile") {
-				naviofileDir = args[0]
-				newImg = args[1]
-			} else if utilities.FileExists(args[1] + "/Naviofile") {
-				naviofileDir = args[1]
-				newImg = args[0]
-			} else {
+			if len(args) < 1 {
 				l.Log("WARNING", "You must insert a directory of your Naviofile!")
 				return
 			}
+			if len(args) > 1 {
+				l.Log("WARNING", "You only need insert a directory of your Naviofile!")
+				return
+			}
+			if !utilities.FileExists(args[0] + "/Naviofile") {
+				l.Log("WARNING", "You must insert a directory of your Naviofile!")
+				return
+			}
+			if utilities.IsEmpty(newImageName) {
+				l.Log("WARNING", "You must insert the image name! ex.: --t python-ubuntu")
+				return
+			}
+
+			naviofileDir := args[0]
 
 			naviofile, err := ioutil.ReadFile(filepath.Join(naviofileDir, "Naviofile")) // just pass the file name
 			if err != nil {
@@ -48,7 +57,7 @@ func build() *cobra.Command {
 				return
 			}
 
-			var from, origem, destino string
+			var baseImage, origem, destino string
 			var commands = [][]string{}
 
 			lines := strings.Split(string(naviofile), "\n")
@@ -57,7 +66,7 @@ func build() *cobra.Command {
 				cmd := l[0]
 
 				if cmd == "FROM" {
-					from = l[1]
+					baseImage = l[1]
 				} else if cmd == "ADD" {
 					origem = l[1]
 					destino = l[2]
@@ -78,28 +87,28 @@ func build() *cobra.Command {
 				}
 			}
 
-			fmt.Printf("FROM %s\n", from)
+			fmt.Printf("FROM %s\n", baseImage)
 			fmt.Printf("ADD %s %s\n", origem, destino)
 			fmt.Printf("RUN %v\n", commands)
 			fmt.Println("------------------")
 
 			// FROM
-			images.BuildANewBaseImg(newImg, from)
+			images.BuildANewBaseImg(newImageName, baseImage)
 
 			// ADD
 			// [TODO]
 
 			// RUN
 			for _, command := range commands {
-				container.CreateContainer(append([]string{from, newImg}, command...))
+				container.CreateContainer(append([]string{baseImage, newImageName}, command...))
 			}
 
 			// saving the image.tarin tarPath ...
-			dir := filepath.Join(utilities.ImagesPath, newImg)
-			file := filepath.Join(utilities.TarsPath, newImg+".tar")
+			dir := filepath.Join(utilities.ImagesPath, newImageName)
+			file := filepath.Join(utilities.TarsPath, newImageName+".tar")
 			utilities.Must(utilities.Tar(dir, file))
 
-			images.InsertBaseImage(newImg, from)
+			images.InsertBaseImage(newImageName, baseImage)
 
 		},
 	}
