@@ -1,3 +1,6 @@
+// EXAMPLE OF A NAVIOFILE 
+// --------------------------------------
+
 FROM [baseImage]
 
 ADD . /path/to/a/dir/inside/the/container
