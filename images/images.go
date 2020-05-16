@@ -59,8 +59,8 @@ func (i *Image) ToStr() string {
 }
 
 func getImage(name string) *Image {
-	if images[name] != nil {
-		return images[name]
+	if contImages[name] != nil {
+		return contImages[name]
 	}
 	if baseImages[name] != nil {
 		return baseImages[name]
@@ -68,33 +68,42 @@ func getImage(name string) *Image {
 	return nil
 }
 
-// IsValidContainerImage ...
-func IsValidContainerImage(containerName string) bool {
-	if images[containerName] != nil {
+// IsValidContainerImgName verifies if a Container Image Name wasn't used.
+// If the containerImgName is available, return true.
+func IsValidContainerImgName(containerImgName string) bool {
+	if contImages[containerImgName] != nil {
 		return true
 	}
 	return false
 }
 
-// InsertImage receive a containerName and the respective baseImage and creates a new
-// Image and insert it on [images map]. Also update the csv file that store all containerImages
-func InsertImage(containerName, baseImage string) {
+// InsertContImage receive a containerImgName and the respective baseImage and creates a new
+// Image and insert it on [contImages map]. Also update the csv file that store all containerImages
+func InsertContImage(containerImgName, baseImage string) {
 	baseImg := getImage(baseImage)
-	newImg := NewImage(containerName, baseImage, baseImg.version, baseImg.size, baseImg.url)
-	images[containerName] = newImg
-	updateImageCSV()
+	newImg := NewImage(containerImgName, baseImage, baseImg.version, baseImg.size, baseImg.url)
+	contImages[containerImgName] = newImg
+	updateContImagesCSV()
+}
+
+// InsertBaseImage ...
+func InsertBaseImage(newBaseImg, base string) {
+	baseImg := getImage(base)
+	newImg := NewImage(newBaseImg, base, baseImg.version, baseImg.size, baseImg.url)
+	baseImages[newBaseImg] = newImg
+	updateBaseImagesCSV()
 }
 
 // RemoveImage receive a containerName and remove the respective image from the [images map].
 // Also update the csv file that store all containerImages
 func RemoveImage(containerName string) {
-	delete(images, containerName)
-	updateImageCSV()
+	delete(contImages, containerName)
+	updateContImagesCSV()
 }
 
 // updateImageCSV read the entire current [images map] and store all Images
 // in the utilities.Imagescsv file
-func updateImageCSV() {
+func updateContImagesCSV() {
 	err := os.RemoveAll(utilities.Imagescsv)
 	if err != nil {
 		log.Fatalln("Couldn't remove the csv file", err)
@@ -107,7 +116,7 @@ func updateImageCSV() {
 
 	w := csv.NewWriter(csvfile)
 
-	for _, v := range images {
+	for _, v := range contImages {
 		newimage := []string{v.name, v.base, v.version, v.size, v.url}
 		err = w.Write(newimage)
 		if err != nil {
@@ -120,8 +129,8 @@ func updateImageCSV() {
 
 // readImages read the entire utilities.Imagescsv file and store all available containerImages
 // in the [images map]
-func readImages() {
-	images = make(map[string]*Image)
+func readContImagesCSV() {
+	contImages = make(map[string]*Image)
 
 	csvfile, err := os.Open(utilities.Imagescsv)
 	if err != nil {
