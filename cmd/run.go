@@ -52,7 +52,7 @@ func createContainer() *cobra.Command {
 			}
 
 			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
-			args = append([]string{image, command, containerName}, params...)
+			args = append([]string{image, containerName, command}, params...)
 			container.CreateContainer(args)
 
 			return nil

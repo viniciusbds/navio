@@ -33,7 +33,7 @@ func exec() *cobra.Command {
 			params := args[2:]
 
 			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", containerName, command, params))
-			args = append([]string{containerName, command, containerName}, params...)
+			args = append([]string{containerName, containerName, command}, params...)
 			container.CreateContainer(args)
 
 			return nil

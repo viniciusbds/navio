@@ -27,7 +27,7 @@ func init() {
 // CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
 // [TODO]: Better document this function
 func CreateContainer(args []string) {
-	image, command, containerName, params := args[0], args[1], args[2], args[3:]
+	image, containerName, command, params := args[0], args[1], args[2], args[3:]
 	prepareImage(image, containerName)
 	run(image, command, containerName, params)
 }
