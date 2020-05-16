@@ -1,0 +1,5 @@
+FROM [baseImage]
+
+ADD . /path/to/a/dir/inside/the/container
+
+RUN command1 && command2 && command3
