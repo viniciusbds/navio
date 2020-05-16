@@ -32,6 +32,11 @@ func build() *cobra.Command {
 
 			// navio build [directory] -t [image-name]
 
+			if utilities.IsEmpty(newImageName) {
+				l.Log("WARNING", "You must insert a image name. for ex.: --t python-ubuntu")
+				return
+			}
+
 			if len(args) < 1 {
 				l.Log("WARNING", "You must insert a directory of your Naviofile!")
 				return
@@ -42,10 +47,6 @@ func build() *cobra.Command {
 			}
 			if !utilities.FileExists(args[0] + "/Naviofile") {
 				l.Log("WARNING", "You must insert a directory of your Naviofile!")
-				return
-			}
-			if utilities.IsEmpty(newImageName) {
-				l.Log("WARNING", "You must insert the image name! ex.: --t python-ubuntu")
 				return
 			}
 
