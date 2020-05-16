@@ -50,6 +50,17 @@ func Untar(directory, file string) error {
 	return cmd.Run()
 }
 
+// Tar ...
+func Tar(directory, file string) error {
+	if err := os.Chdir(directory); err != nil {
+		return err
+	}
+	cmd := exec.Command("tar", "cpjf", file, ".")
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 // IsEmpty ...
 func IsEmpty(imageName string) bool {
 	if len(strings.TrimSpace(imageName)) == 0 {
@@ -66,10 +77,9 @@ func FileExists(fileName string) bool {
 	return true
 }
 
-// IsaBaseImage receive a imageName as parameter and retur true if is one of
-// the supported official images. (see utilities.constants.BaseImages)
-func IsaBaseImage(image string) bool {
-	for _, i := range BaseImages {
+// IsOfficialImage ...
+func IsOfficialImage(image string) bool {
+	for _, i := range OfficialImages {
 		if image == i {
 			return true
 		}
