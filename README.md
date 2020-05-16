@@ -74,6 +74,7 @@ what the processes can use
 
 - [golang environment](https://golang.org/)
 - make
+- some of commands (ex.: `navio build`, `navio run`, `navio rmi` and `navio exec`) must be executed with sudo privilegies.
 
 ## How to install
 
@@ -114,19 +115,19 @@ what the processes can use
 
 `navio get images`
 
-`navio rmi alpine`
+`sudo navio rmi alpine`
 
 `navio pull alpine`
 
-`navio run alpine sh --name mycontainer`
+`sudo navio run alpine sh --name mycontainer`
 
-`navio exec mycontainer sh` 
+`sudo navio exec mycontainer sh` 
 
 ...
 
-`navio run busybox sh`
+`sudo navio run busybox sh`
 
-`navio run ubuntu /bin/bash --name python3apps`
+`sudo navio run ubuntu /bin/bash --name python3apps`
 
   
 ## Contributing
