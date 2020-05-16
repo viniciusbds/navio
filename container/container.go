@@ -32,14 +32,14 @@ func CreateContainer(args []string) {
 	run(image, command, containerName, params)
 }
 
-func prepareImage(image, containerName string) {
-	if !images.TarImageExists(image) {
-		images.Pull(image)
+func prepareImage(baseImg, containerName string) {
+	if !images.TarImageExists(baseImg) {
+		images.Pull(baseImg)
 	}
 	if !images.ImageIsReady(containerName) {
-		images.Prepare(image, containerName)
+		images.Prepare(baseImg, containerName)
 	}
-	if image == "ubuntu" {
+	if baseImg == "ubuntu" {
 		images.ConfigureNetworkForUbuntu(containerName)
 	}
 }

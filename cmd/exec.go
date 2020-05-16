@@ -25,7 +25,7 @@ func exec() *cobra.Command {
 
 			containerName := args[0]
 
-			if !images.IsValidContainerImage(containerName) {
+			if !images.IsValidContainerImgName(containerName) {
 				l.Log("WARNING", fmt.Sprintf("%s is not a valid containerImage. Run navio ps to see the available ones.", containerName))
 				return nil
 			}
