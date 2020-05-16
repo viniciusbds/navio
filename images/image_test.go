@@ -30,7 +30,7 @@ func TestPull(t *testing.T) {
 		imageName := "ubuntuxxx"
 		err := Pull(imageName)
 		if err != nil {
-			expected := imageName + " is not a base Image. Select one of the: [alpine busybox ubuntu]"
+			expected := imageName + " is not a official Image. Select one of the: [alpine busybox ubuntu]"
 			result := err.Error()
 			check(t, expected, result)
 		}

@@ -22,8 +22,8 @@ var (
 
 // Pull Downloads the .tar file from the official site
 func Pull(imageName string) error {
-	if !utilities.IsaBaseImage(imageName) {
-		msg := fmt.Sprintf("%s is not a base Image. Select one of the: %v", imageName, utilities.BaseImages)
+	if !utilities.IsOfficialImage(imageName) {
+		msg := fmt.Sprintf("%s is not a official Image. Select one of the: %v", imageName, utilities.OfficialImages)
 		l.Log("WARNING", msg)
 		return errors.New(msg)
 	}
@@ -54,20 +54,20 @@ func Pull(imageName string) error {
 	return nil
 }
 
-// Prepare receive as argument the imageName and the containerName, create a directory with the
+// Prepare receive as argument the baseImage and the containerName, create a directory with the
 // containerName and untar the respective image to this directory
-func Prepare(imageName, containerName string) error {
+func Prepare(baseImage, containerName string) error {
 	imagePath := filepath.Join(utilities.ImagesPath, containerName)
-	tarFile := filepath.Join(utilities.TarsPath, imageName) + ".tar"
+	tarFile := filepath.Join(utilities.TarsPath, baseImage) + ".tar"
 	if err := os.MkdirAll(imagePath, 0777); err != nil {
 		l.Log("ERROR", fmt.Sprintf("The directory %s was not created \n%s", imagePath, err.Error()))
 		return err
 	}
 	if err := utilities.Untar(imagePath, tarFile); err != nil {
-		l.Log("ERROR", fmt.Sprintf("The image %s was not extracted. \n%s", imageName, err.Error()))
+		l.Log("ERROR", fmt.Sprintf("The image %s was not extracted. \n%s", baseImage, err.Error()))
 		return err
 	}
-	InsertImage(containerName, imageName)
+	InsertContImage(containerName, baseImage)
 	return nil
 }
 
@@ -113,8 +113,8 @@ func ShowBaseImages() (string, error) {
 // Ps return a string with all availables container images that was created. see it like "containers"
 func Ps() (string, error) {
 	result := ""
-	for _, img := range images {
-		if !utilities.IsaBaseImage(img.name) {
+	for _, img := range contImages {
+		if !IsaBaseImage(img.name) && !utilities.IsOfficialImage(img.name) {
 			result += "\n" + magenta(img.ToStr())
 		}
 	}
@@ -123,8 +123,8 @@ func Ps() (string, error) {
 
 // DeleteImage receives a containerImage and remove it
 func DeleteImage(containerName string) {
-	if utilities.IsaBaseImage(containerName) {
-		l.Log("WARNING", "Cannot remove the ["+containerName+"] base image")
+	if utilities.IsOfficialImage(containerName) {
+		l.Log("WARNING", "Cannot remove a official image")
 		return
 	}
 	if err := assert.ImageisNotEmpty(containerName); err != nil {
@@ -151,4 +151,18 @@ func Describe(imageName string) string {
 		return ""
 	}
 	return getImage(imageName).ToStr()
+}
+
+// BuildANewBaseImg ...
+func BuildANewBaseImg(newImg, baseImg string) error {
+	newImgPath := filepath.Join(utilities.ImagesPath, newImg)
+	tarFile := filepath.Join(utilities.TarsPath, baseImg) + ".tar"
+	if err := os.Mkdir(newImgPath, 0777); err != nil {
+		return err
+	}
+	if err := utilities.Untar(newImgPath, tarFile); err != nil {
+		return err
+	}
+	InsertBaseImage(newImg, baseImg)
+	return nil
 }
