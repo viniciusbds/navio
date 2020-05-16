@@ -1,5 +1,8 @@
 package utilities
 
+// NavioVersion is the current version of Navio
+var NavioVersion = "v1.0"
+
 // ImagesRootDir  is the default directory where we manipulate all images
 var ImagesRootDir = "/tmp/navioimages"
 
