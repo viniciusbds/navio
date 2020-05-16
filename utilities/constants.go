@@ -9,12 +9,15 @@ var TarsPath = ImagesRootDir + "/tars"
 // ImagesPath is the directory where we store all Images directories
 var ImagesPath = ImagesRootDir + "/images"
 
-// Imagescsv is the file where we all container images (for example, if you create a container
+// ContImagescsv is the file where we all container images (for example, if you create a container
 // with "ana" as name, the image "ana" will be here)
-var Imagescsv = ImagesRootDir + "/imagelist.csv"
+var ContImagescsv = ImagesRootDir + "/contimages.csv"
 
-// BaseImages are the official images that are currently suported
-var BaseImages = []string{"alpine", "busybox", "ubuntu"}
+// BaseImagescsv ...
+var BaseImagescsv = ImagesRootDir + "/baseimages.csv"
+
+// OfficialImages are the official images that are currently suported
+var OfficialImages = []string{"alpine", "busybox", "ubuntu"}
 
 // AlpineURL ...
 var AlpineURL = "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz"

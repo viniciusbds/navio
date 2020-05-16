@@ -11,17 +11,23 @@ import (
 )
 
 var (
-	images     = make(map[string]*Image)
+	contImages = make(map[string]*Image)
 	baseImages = make(map[string]*Image)
 )
 
 func init() {
-	baseImages["alpine"] = NewImage("alpine", "alpine", "v3.11", "2.7M", utilities.AlpineURL)
-	baseImages["busybox"] = NewImage("busybox", "busybox", "v4.0", "1.5M", utilities.BusyboxURL)
-	baseImages["ubuntu"] = NewImage("ubuntu", "ubuntu", "v20.04", "90.0M", utilities.Ubuntu20ltsURL)
 
-	if utilities.FileExists(utilities.Imagescsv) {
-		readImages()
+	if utilities.FileExists(utilities.BaseImagescsv) {
+		readBaseImagesCSV()
+	} else {
+		baseImages["alpine"] = NewImage("alpine", "alpine", "v3.11", "2.7M", utilities.AlpineURL)
+		baseImages["busybox"] = NewImage("busybox", "busybox", "v4.0", "1.5M", utilities.BusyboxURL)
+		baseImages["ubuntu"] = NewImage("ubuntu", "ubuntu", "v20.04", "90.0M", utilities.Ubuntu20ltsURL)
+		updateBaseImagesCSV()
+	}
+
+	if utilities.FileExists(utilities.ContImagescsv) {
+		readContImagesCSV()
 	}
 }
 
@@ -101,15 +107,50 @@ func RemoveImage(containerName string) {
 	updateContImagesCSV()
 }
 
-// updateImageCSV read the entire current [images map] and store all Images
-// in the utilities.Imagescsv file
+// IsaBaseImage receive a imageName as parameter and retur true if is one of
+// the supported official images. (see utilities.constants.BaseImages)
+func IsaBaseImage(image string) bool {
+	for _, i := range baseImages {
+		if image == i.name {
+			return true
+		}
+	}
+	return false
+}
+
+// readImages read the entire utilities.Imagescsv file and store all available containerImages
+// in the [images map]
+func readContImagesCSV() {
+	contImages = make(map[string]*Image)
+
+	csvfile, err := os.Open(utilities.ContImagescsv)
+	if err != nil {
+		l.Log("Error", err.Error())
+	}
+
+	r := csv.NewReader(csvfile)
+	for {
+		// Read each record from csv
+		record, err := r.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			log.Fatal(err)
+		}
+		contImages[record[0]] = NewImage(record[0], record[1], record[2], record[3], record[4])
+	}
+}
+
+// updateImageCSV read the entire current [contImages map] and store all Images
+// in the utilities.ContImagescsv file
 func updateContImagesCSV() {
-	err := os.RemoveAll(utilities.Imagescsv)
+	err := os.RemoveAll(utilities.ContImagescsv)
 	if err != nil {
 		log.Fatalln("Couldn't remove the csv file", err)
 	}
 
-	csvfile, err := os.Create(utilities.Imagescsv)
+	csvfile, err := os.Create(utilities.ContImagescsv)
 	if err != nil {
 		log.Fatalln("Couldn't create the csv file", err)
 	}
@@ -127,12 +168,10 @@ func updateContImagesCSV() {
 	csvfile.Close()
 }
 
-// readImages read the entire utilities.Imagescsv file and store all available containerImages
-// in the [images map]
-func readContImagesCSV() {
-	contImages = make(map[string]*Image)
+func readBaseImagesCSV() {
+	baseImages = make(map[string]*Image)
 
-	csvfile, err := os.Open(utilities.Imagescsv)
+	csvfile, err := os.Open(utilities.BaseImagescsv)
 	if err != nil {
 		l.Log("Error", err.Error())
 	}
@@ -147,6 +186,34 @@ func readContImagesCSV() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		images[record[0]] = NewImage(record[0], record[1], record[2], record[3], record[4])
+		baseImages[record[0]] = NewImage(record[0], record[1], record[2], record[3], record[4])
 	}
+}
+
+func updateBaseImagesCSV() {
+	err := os.RemoveAll(utilities.BaseImagescsv)
+	if err != nil {
+		log.Fatalln("Couldn't remove the csv file", err)
+	}
+
+	if !utilities.FileExists(utilities.ImagesRootDir) {
+		os.MkdirAll(utilities.ImagesRootDir, 0777)
+	}
+
+	csvfile, err := os.Create(utilities.BaseImagescsv)
+	if err != nil {
+		log.Fatalln("Couldn't create the csv file [picuinha]", err)
+	}
+
+	w := csv.NewWriter(csvfile)
+
+	for _, v := range baseImages {
+		newimage := []string{v.name, v.base, v.version, v.size, v.url}
+		err = w.Write(newimage)
+		if err != nil {
+			fmt.Println("Erro aque")
+		}
+	}
+	w.Flush()
+	csvfile.Close()
 }
