@@ -16,9 +16,9 @@ var check = func(t *testing.T, expected string, result string) {
 }
 
 var clear = func() {
-	DeleteImage("alpine")
-	DeleteImage("busybox")
-	DeleteImage("ubuntu")
+	DeleteContImage("alpine")
+	DeleteContImage("busybox")
+	DeleteContImage("ubuntu")
 	os.Remove("images")
 }
 
@@ -78,7 +78,7 @@ func TestImageIsReady(t *testing.T) {
 		}
 	}
 	clear := func() {
-		DeleteImage("alpine")
+		DeleteBaseImage("alpine")
 	}
 
 	image := "alpine"
@@ -86,19 +86,19 @@ func TestImageIsReady(t *testing.T) {
 
 	// Here we don't call Prepare(), thus we expect that the Image isn't Ready
 	Pull(image)
-	result := ImageIsReady(containerImg)
+	result := IsContImageReady(containerImg)
 	expected := false
 	check(t, expected, result)
 
 	// Here we  call Prepare(), thus we expect that the Image is Ready on containerImg
 	Prepare(image, containerImg)
-	result = ImageIsReady(containerImg)
+	result = IsContImageReady(containerImg)
 	expected = true
 	check(t, expected, result)
 
 	// Here we delete the ready containerImg, thus we expect that is isn't Ready anymore
-	DeleteImage(containerImg)
-	result = ImageIsReady(containerImg)
+	DeleteContImage(containerImg)
+	result = IsContImageReady(containerImg)
 	expected = false
 	check(t, expected, result)
 
@@ -112,43 +112,20 @@ func TestDeleteImage(t *testing.T) {
 		if !TarImageExists(image) {
 			Pull(image)
 		}
-		if !ImageIsReady(containerName) {
+		if !IsContImageReady(containerName) {
 			Prepare(image, containerName)
 		}
 
-		if !ImageIsReady(containerName) {
+		if !IsContImageReady(containerName) {
 			t.Errorf("We expected that in this moment the image is ready")
 		}
 
-		DeleteImage(containerName)
+		DeleteContImage(containerName)
 
 		// certifies that the image was removed
-		if ImageIsReady(containerName) {
+		if IsContImageReady(containerName) {
 			t.Errorf("We expected that in this moment the image isn't ready")
 		}
 	})
 	clear()
-}
-
-func TestDescribe(t *testing.T) {
-	t.Run("Unavailable Image", func(t *testing.T) {
-		e := ""
-		r := Describe("debianxsdsad")
-		check(t, e, r)
-	})
-	t.Run("Alpine Image", func(t *testing.T) {
-		e := "alpine\t\t\t\t\talpine\t\t\tv3.11\t\t\t2.7M"
-		r := Describe("alpine")
-		check(t, e, r)
-	})
-	t.Run("Busybox Image", func(t *testing.T) {
-		e := "busybox\t\t\t\t\tbusybox\t\t\tv4.0\t\t\t1.5M"
-		r := Describe("busybox")
-		check(t, e, r)
-	})
-	t.Run("Ubuntu Image", func(t *testing.T) {
-		e := "ubuntu\t\t\t\t\tubuntu\t\t\tv20.04\t\t\t90.0M"
-		r := Describe("ubuntu")
-		check(t, e, r)
-	})
 }
