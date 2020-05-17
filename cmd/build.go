@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"path/filepath"
 	"strings"
 
@@ -110,6 +111,12 @@ func build() *cobra.Command {
 			utilities.Must(utilities.Tar(dir, file))
 
 			images.InsertBaseImage(newImageName, baseImage)
+
+			// clear the rootfs used to build the image.tar file
+			if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, newImageName)); err != nil {
+				l.Log("ERROR", err.Error())
+				return
+			}
 
 		},
 	}
