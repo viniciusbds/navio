@@ -118,8 +118,6 @@ func IsaBaseImage(image string) bool {
 	return false
 }
 
-// readImages read the entire utilities.Imagescsv file and store all available containerImages
-// in the [images map]
 func readContImagesCSV() {
 	contImages = make(map[string]*Image)
 
@@ -142,8 +140,6 @@ func readContImagesCSV() {
 	}
 }
 
-// updateImageCSV read the entire current [contImages map] and store all Images
-// in the utilities.ContImagescsv file
 func updateContImagesCSV() {
 	err := os.RemoveAll(utilities.ContImagescsv)
 	if err != nil {

@@ -83,9 +83,9 @@ func ConfigureNetworkForUbuntu(containerName string) {
 	}
 }
 
-// ImageIsReady receive a containerName as argument and return TRUE if her rootfs is ready
+// IsContImageReady receive a containerName as argument and return TRUE if her rootfs is ready
 // (i.e.: verify if there is a containerName dir on the ImagesPath directory)
-func ImageIsReady(containerName string) bool {
+func IsContImageReady(containerName string) bool {
 	if _, err := os.Stat(filepath.Join(utilities.ImagesPath, containerName)); os.IsNotExist(err) {
 		return false
 	}
@@ -101,7 +101,7 @@ func TarImageExists(imageName string) bool {
 	return true
 }
 
-// ShowBaseImages return a string with all official images
+// ShowBaseImages return a string with all base images
 func ShowBaseImages() (string, error) {
 	result := ""
 	for _, img := range baseImages {
@@ -119,12 +119,8 @@ func Ps() (string, error) {
 	return result, nil
 }
 
-// DeleteImage receives a containerImage and remove it
-func DeleteImage(containerName string) {
-	if utilities.IsOfficialImage(containerName) {
-		l.Log("WARNING", "Cannot remove a official image")
-		return
-	}
+// DeleteContImage receives a containerImage and remove it
+func DeleteContImage(containerName string) {
 	if err := assert.ImageisNotEmpty(containerName); err != nil {
 		l.Log("WARNING", "Cannot remove a empty image: "+containerName)
 		return
