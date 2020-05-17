@@ -21,7 +21,7 @@ func stop() *cobra.Command {
 			}
 
 			for _, containerName := range args {
-				images.DeleteImage(containerName)
+				images.DeleteContImage(containerName)
 			}
 
 			return nil
