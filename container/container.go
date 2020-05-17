@@ -24,19 +24,18 @@ func init() {
 	}
 }
 
-// CreateContainer creates a container. Receive as argument: ["run", <image-name>, <command>, <params> ]
-// [TODO]: Better document this function
+// CreateContainer creates a container based on a baseImg, containerName and command with params
 func CreateContainer(args []string) {
-	image, containerName, command, params := args[0], args[1], args[2], args[3:]
-	prepareImage(image, containerName)
-	run(image, command, containerName, params)
+	baseImage, containerName, command, params := args[0], args[1], args[2], args[3:]
+	prepareImage(baseImage, containerName)
+	run(baseImage, containerName, command, params)
 }
 
 func prepareImage(baseImg, containerName string) {
 	if !images.TarImageExists(baseImg) {
 		images.Pull(baseImg)
 	}
-	if !images.ImageIsReady(containerName) {
+	if !images.IsContImageReady(containerName) {
 		images.Prepare(baseImg, containerName)
 	}
 	if baseImg == "ubuntu" {
@@ -44,8 +43,8 @@ func prepareImage(baseImg, containerName string) {
 	}
 }
 
-func run(image string, command string, containerName string, params []string) {
-	cmd := reexec.Command(append([]string{"child", image, command, containerName}, params...)...)
+func run(baseImage string, containerName string, command string, params []string) {
+	cmd := reexec.Command(append([]string{"child", baseImage, containerName, command}, params...)...)
 
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
@@ -58,7 +57,7 @@ func run(image string, command string, containerName string, params []string) {
 }
 
 func child() {
-	_, command, containerName, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
+	_, containerName, command, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
 
 	utilities.Must(syscall.Sethostname([]byte(containerName)))
 	configureCgroups()
