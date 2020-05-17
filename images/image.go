@@ -114,9 +114,7 @@ func ShowBaseImages() (string, error) {
 func Ps() (string, error) {
 	result := ""
 	for _, img := range contImages {
-		if !IsaBaseImage(img.name) && !utilities.IsOfficialImage(img.name) {
-			result += "\n" + magenta(img.ToStr())
-		}
+		result += "\n" + magenta(img.ToStr())
 	}
 	return result, nil
 }
