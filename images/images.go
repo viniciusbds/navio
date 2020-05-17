@@ -100,15 +100,17 @@ func InsertBaseImage(newBaseImg, base string) {
 	updateBaseImagesCSV()
 }
 
-// RemoveImage receive a containerName and remove the respective image from the [images map].
-// Also update the csv file that store all containerImages
-func RemoveImage(containerName string) {
-	delete(contImages, containerName)
+func removeContImage(contImamge string) {
+	delete(contImages, contImamge)
 	updateContImagesCSV()
 }
 
-// IsaBaseImage receive a imageName as parameter and retur true if is one of
-// the supported official images. (see utilities.constants.BaseImages)
+func removeBaseImage(baseImage string) {
+	delete(baseImages, baseImage)
+	updateBaseImagesCSV()
+}
+
+// IsaBaseImage receive a imageName and return true if is a base image.
 func IsaBaseImage(image string) bool {
 	for _, i := range baseImages {
 		if image == i.name {

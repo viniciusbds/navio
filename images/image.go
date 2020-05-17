@@ -125,7 +125,7 @@ func DeleteContImage(containerName string) {
 		l.Log("WARNING", "Cannot remove a empty image: "+containerName)
 		return
 	}
-	if ImageIsReady(containerName) {
+	if IsContImageReady(containerName) {
 		if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, containerName)); err != nil {
 			l.Log("ERROR", err.Error())
 			return
@@ -134,7 +134,29 @@ func DeleteContImage(containerName string) {
 	} else {
 		l.Log("WARNING", fmt.Sprintf("The image %s doesn't exist.", containerName))
 	}
-	RemoveImage(containerName)
+	removeContImage(containerName)
+}
+
+// DeleteBaseImage ...
+func DeleteBaseImage(baseImage string) {
+	if utilities.IsOfficialImage(baseImage) {
+		l.Log("WARNING", "Cannot remove a official image")
+		return
+	}
+	if err := assert.ImageisNotEmpty(baseImage); err != nil {
+		l.Log("WARNING", "Cannot remove a empty image: "+baseImage)
+		return
+	}
+	if TarImageExists(baseImage) {
+		if err := os.RemoveAll(filepath.Join(utilities.TarsPath, baseImage+".tar")); err != nil {
+			l.Log("ERROR", err.Error())
+			return
+		}
+		l.Log("INFO", fmt.Sprintf("The image %s was removed sucessfully!", baseImage))
+	} else {
+		l.Log("WARNING", fmt.Sprintf("The image %s doesn't exist.", baseImage))
+	}
+	removeBaseImage(baseImage)
 }
 
 // Describe ...
