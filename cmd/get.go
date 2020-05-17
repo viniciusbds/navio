@@ -24,7 +24,7 @@ func get() *cobra.Command {
 				return nil
 			}
 
-			if args[0] == "images" {
+			if args[0] == "images" || args[0] == "image" || args[0] == "imgs" || args[0] == "img" {
 				fmt.Println("NAME\t\t\t\t\tBASE\t\t\tVERSION\t\t\tSIZE")
 				imageList, _ := images.ShowBaseImages()
 				if !utilities.IsEmpty(imageList) {
