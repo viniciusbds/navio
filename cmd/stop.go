@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/container"
 )
 
 func init() {
@@ -21,7 +21,7 @@ func stop() *cobra.Command {
 			}
 
 			for _, containerName := range args {
-				images.DeleteContImage(containerName)
+				container.RemoveContainerRootfs(containerName)
 			}
 
 			return nil

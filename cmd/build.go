@@ -102,18 +102,18 @@ func build() *cobra.Command {
 
 			// RUN
 			for _, command := range commands {
-				container.CreateContainer(append([]string{baseImage, newImageName}, command...))
+				container.Exec(append([]string{baseImage, newImageName}, command...))
 			}
 
 			// saving the image.tarin tarPath ...
-			dir := filepath.Join(utilities.ImagesPath, newImageName)
-			file := filepath.Join(utilities.TarsPath, newImageName+".tar")
+			dir := filepath.Join(utilities.RootfsPath, newImageName)
+			file := filepath.Join(utilities.ImagesPath, newImageName+".tar")
 			utilities.Must(utilities.Tar(dir, file))
 
-			images.InsertBaseImage(newImageName, baseImage)
+			images.InsertImage(newImageName, baseImage)
 
 			// clear the rootfs used to build the image.tar file
-			if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, newImageName)); err != nil {
+			if err := os.RemoveAll(dir); err != nil {
 				l.Log("ERROR", err.Error())
 				return
 			}

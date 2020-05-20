@@ -22,7 +22,7 @@ func remove() *cobra.Command {
 
 				for _, image := range args {
 					if image != "" {
-						images.DeleteBaseImage(image)
+						images.RemoveImage(image)
 					}
 				}
 

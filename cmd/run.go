@@ -40,18 +40,19 @@ func createContainer() *cobra.Command {
 
 			command := args[1]
 			params := args[2:]
+			containerID := fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
 
 			if containerName == "" {
-				containerName = fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
+				containerName = containerID
 			}
 
-			if images.IsValidContainerImgName(containerName) {
+			if images.RootfsExists(containerName) {
 				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
 				return nil
 			}
 
 			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
-			args = append([]string{image, containerName, command}, params...)
+			args = append([]string{image, containerID, containerName, command}, params...)
 			container.CreateContainer(args)
 
 			return nil
