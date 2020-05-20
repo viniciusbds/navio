@@ -25,16 +25,16 @@ func exec() *cobra.Command {
 
 			containerName := args[0]
 
-			if !images.IsValidContainerImgName(containerName) {
-				l.Log("WARNING", fmt.Sprintf("%s is not a valid containerImage. Run navio ps to see the available ones.", containerName))
+			if !images.RootfsExists(containerName) {
+				l.Log("WARNING", fmt.Sprintf("%s is not a valid container. Run navio ps to see the available ones.", containerName))
 				return nil
 			}
 			command := args[1]
 			params := args[2:]
 
-			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", containerName, command, params))
-			args = append([]string{containerName, containerName, command}, params...)
-			container.CreateContainer(args)
+			l.Log("INFO", fmt.Sprintf("Container: %s, Command: %s, Params: %v", containerName, command, params))
+			args = append([]string{containerName, command}, params...)
+			container.Exec(args)
 
 			return nil
 		},
