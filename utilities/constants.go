@@ -6,11 +6,11 @@ var NavioVersion = "v1.0"
 // ImagesRootDir  is the default directory where we manipulate all images
 var ImagesRootDir = "/tmp/navioimages"
 
-// TarsPath is the directory where we store all image.tar files
-var TarsPath = ImagesRootDir + "/tars"
+// ImagesPath is the directory where we store all image.tar files
+var ImagesPath = ImagesRootDir + "/tars"
 
-// ImagesPath is the directory where we store all Images directories
-var ImagesPath = ImagesRootDir + "/images"
+// RootfsPath is the directory where we store all Rootfs directories
+var RootfsPath = ImagesRootDir + "/images"
 
 // ContImagescsv is the file where we all container images (for example, if you create a container
 // with "ana" as name, the image "ana" will be here)

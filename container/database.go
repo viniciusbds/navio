@@ -3,6 +3,7 @@ package container
 import (
 	"database/sql"
 
+	// Mysql Driver
 	_ "github.com/go-sql-driver/mysql"
 )
 
