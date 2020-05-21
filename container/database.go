@@ -31,12 +31,12 @@ func readContainersDB() {
 	}
 
 	for selDB.Next() {
-		var id, name, imageID, status, root string
-		err := selDB.Scan(&id, &name, &imageID, &status, &root)
+		var id, name, imageID, status, root, command string
+		err := selDB.Scan(&id, &name, &imageID, &status, &root, &command)
 		if err != nil {
 			panic(err.Error())
 		}
-		containers[name] = NewContainer(id, name, imageID, status, root)
+		containers[name] = NewContainer(id, name, imageID, status, root, command)
 	}
 }
 
@@ -44,11 +44,11 @@ func insertContainersDB(container *Container) {
 	db := openDBConn()
 	defer db.Close()
 
-	insForm, err := db.Prepare("INSERT INTO containers(id, name, imageID, status, root) VALUES(?,?,?,?,?)")
+	insForm, err := db.Prepare("INSERT INTO containers(id, name, imageID, status, root, command) VALUES(?,?,?,?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
-	insForm.Exec(container.ID, container.Name, container.ImageID, container.Status, container.Root)
+	insForm.Exec(container.ID, container.Name, container.ImageID, container.Status, container.Root, container.Command)
 }
 
 func removeContainerDB(name string) error {

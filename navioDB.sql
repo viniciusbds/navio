@@ -9,6 +9,7 @@ CREATE TABLE containers (
   `imageid` varchar(30) NOT NULL,
   `status` varchar(10) NOT NULL,
   `root` varchar(30) NOT NULL,
+  `command` varchar(130) NOT NULL,
   PRIMARY KEY (`id`)
 )  DEFAULT CHARSET=latin1;
 
