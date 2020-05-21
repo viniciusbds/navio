@@ -44,7 +44,14 @@ func prepareImage(baseImg, containerName string) {
 }
 
 func run(baseImage string, containerID string, containerName string, command string, params []string) {
-	container := NewContainer(containerID, containerName, baseImage, "Up", containerName, command)
+	container := &Container{
+		ID:      containerID,
+		Name:    containerName,
+		ImageID: baseImage,
+		Status:  "Up",
+		Root:    filepath.Join(utilities.RootfsPath, containerName),
+		Command: command,
+	}
 	InsertContainer(container)
 	cmd := reexec.Command(append([]string{"child", baseImage, containerName, command}, params...)...)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
