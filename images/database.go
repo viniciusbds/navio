@@ -49,7 +49,7 @@ func insertImageDB(image *Image) {
 	if err != nil {
 		panic(err.Error())
 	}
-	insForm.Exec(image.name, image.base, image.version, image.size, image.url)
+	insForm.Exec(image.Name, image.Base, image.Version, image.Size, image.URL)
 }
 
 func removeImageDB(imgName string) {

@@ -27,20 +27,20 @@ func Pull(imageName string) error {
 
 	image := getImage(imageName)
 
-	if Exists(image.name) {
-		return errors.New("The image " + image.name + " already was downloaded")
+	if Exists(image.Name) {
+		return errors.New("The image " + image.Name + " already was downloaded")
 	}
 
-	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", image.name, image.url))
+	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", image.Name, image.URL))
 
 	dir, _ := os.Getwd()
 	if tarsPathExists := utilities.FileExists(utilities.ImagesPath); !tarsPathExists {
 		utilities.Must(os.MkdirAll(utilities.ImagesPath, 0777))
 	}
 	utilities.Must(os.Chdir(utilities.ImagesPath))
-	err := utilities.Wget(image.url, image.name+".tar")
+	err := utilities.Wget(image.URL, image.Name+".tar")
 	if err != nil {
-		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled\n %s", image.name, err.Error()))
+		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled\n %s", image.Name, err.Error()))
 		return err
 	}
 	utilities.Must(os.Chdir(dir))
@@ -99,6 +99,14 @@ func GetImages() (result string, err error) {
 	return result, nil
 }
 
+// InsertImage ...
+func InsertImage(name, baseImage string) {
+	baseImg := getImage(baseImage)
+	newImg := NewImage(name, baseImage, baseImg.Version, baseImg.Size, baseImg.URL)
+	images[name] = newImg
+	insertImageDB(newImg)
+}
+
 // RemoveImage ...
 func RemoveImage(image string) error {
 	if utilities.IsOfficialImage(image) {
@@ -107,18 +115,17 @@ func RemoveImage(image string) error {
 	if utilities.IsEmpty(image) {
 		return errors.New("Cannot remove a empty image")
 	}
+	// delete the image.tar file
 	if Exists(image) {
 		if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, image+".tar")); err != nil {
 			return err
 		}
 	}
-	deleteImage(image)
+	// remove it from the data structure
+	delete(images, image)
+	// update the database
+	removeImageDB(image)
 	return nil
-}
-
-func deleteImage(imgName string) {
-	delete(images, imgName)
-	removeImageDB(imgName)
 }
 
 // Describe ...
@@ -128,6 +135,10 @@ func Describe(imageName string) (string, error) {
 		return "", errors.New("Invalid image! Cannot describe" + imageName)
 	}
 	return getImage(imageName).ToStr(), nil
+}
+
+func getImage(name string) *Image {
+	return images[name]
 }
 
 // BuildANewBaseImg ...
@@ -142,4 +153,9 @@ func BuildANewBaseImg(name, baseImg string) error {
 	}
 	InsertImage(name, baseImg)
 	return nil
+}
+
+// IsValid receive a imageName and return true if is a valid image.
+func IsValid(image string) bool {
+	return getImage(image) != nil
 }
