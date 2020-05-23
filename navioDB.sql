@@ -1,8 +1,6 @@
 CREATE DATABASE IF NOT EXISTS navio;
 USE  navio;
 
--- ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root';
-
 CREATE TABLE containers (
   id varchar(30) NOT NULL,
   name varchar(30) NOT NULL,

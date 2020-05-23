@@ -5,16 +5,12 @@ import (
 
 	// Mysql Driver
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 // Função openDBConn, abre a conexão com o banco de dados
 func openDBConn() (db *sql.DB) {
-	dbDriver := "mysql"
-	dbUser := "root"
-	dbPass := "root"
-	dbName := "navio"
-
-	db, err := sql.Open(dbDriver, dbUser+":"+dbPass+"@/"+dbName)
+	db, err := sql.Open("mysql", utilities.DBuser+":"+utilities.DBpass+"@/"+utilities.DBname)
 	if err != nil {
 		panic(err.Error())
 	}
