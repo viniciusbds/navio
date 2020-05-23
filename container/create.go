@@ -25,17 +25,18 @@ func init() {
 }
 
 // CreateContainer creates a container based on a baseImg, containerName and command with params
-func CreateContainer(args []string) {
+func CreateContainer(args []string) error {
 	baseImage, containerID, containerName, command, params := args[0], args[1], args[2], args[3], args[4:]
 	prepareImage(baseImage, containerName)
-	run(baseImage, containerID, containerName, command, params)
+	saveContainer(baseImage, containerID, containerName, command, params)
+	return run(containerName, command, params)
 }
 
 func prepareImage(baseImg, containerName string) {
 	if !images.Exists(baseImg) {
 		utilities.Must(images.Pull(baseImg))
 	}
-	if !images.RootfsExists(containerName) {
+	if !RootfsExists(containerName) {
 		images.PrepareRootfs(baseImg, containerName)
 	}
 	if baseImg == "ubuntu" {
@@ -43,17 +44,21 @@ func prepareImage(baseImg, containerName string) {
 	}
 }
 
-func run(baseImage string, containerID string, containerName string, command string, params []string) {
+func saveContainer(baseImage string, containerID string, containerName string, command string, params []string) {
 	container := &Container{
 		ID:      containerID,
 		Name:    containerName,
-		ImageID: baseImage,
+		Image:   baseImage,
 		Status:  "Up",
-		Root:    filepath.Join(utilities.RootfsPath, containerName),
+		Root:    filepath.Join(utilities.RootFSPath, containerName),
 		Command: command,
+		Params:  params,
 	}
 	InsertContainer(container)
-	cmd := reexec.Command(append([]string{"child", baseImage, containerName, command}, params...)...)
+}
+
+func run(containerName string, command string, params []string) error {
+	cmd := reexec.Command(append([]string{"child", containerName, command}, params...)...)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 		Unshareflags: syscall.CLONE_NEWNS,
@@ -61,23 +66,20 @@ func run(baseImage string, containerID string, containerName string, command str
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	utilities.Must(cmd.Run())
+	return cmd.Run()
 }
 
 func child() {
-	_, containerName, command, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
-
+	containerName, command, params := os.Args[1], os.Args[2], os.Args[3:]
 	utilities.Must(syscall.Sethostname([]byte(containerName)))
 	configureCgroups()
-	pivotRoot(filepath.Join(utilities.RootfsPath, containerName))
+	pivotRoot(filepath.Join(utilities.RootFSPath, containerName))
 	mountProc()
-
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
 	utilities.Must(cmd.Run())
-
 	unmountProc()
 }
 
