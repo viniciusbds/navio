@@ -1,4 +1,4 @@
-package constants
+package utilities
 
 // NavioVersion is the current version of Navio
 var NavioVersion = "v1.1"
