@@ -2,6 +2,7 @@ package container
 
 import (
 	"database/sql"
+	"strings"
 
 	// Mysql Driver
 	_ "github.com/go-sql-driver/mysql"
@@ -31,12 +32,12 @@ func readContainersDB() {
 	}
 
 	for selDB.Next() {
-		var id, name, imageID, status, root, command string
-		err := selDB.Scan(&id, &name, &imageID, &status, &root, &command)
+		var id, name, image, status, root, command, params string
+		err := selDB.Scan(&id, &name, &image, &status, &root, &command, &params)
 		if err != nil {
 			panic(err.Error())
 		}
-		containers[name] = NewContainer(id, name, imageID, status, root, command)
+		containers[name] = NewContainer(id, name, image, status, root, command, strings.Split(params, ","))
 	}
 }
 
@@ -44,11 +45,21 @@ func insertContainersDB(container *Container) {
 	db := openDBConn()
 	defer db.Close()
 
-	insForm, err := db.Prepare("INSERT INTO containers(id, name, imageID, status, root, command) VALUES(?,?,?,?,?,?)")
+	params := ""
+	if len(container.Params) > 0 {
+		params = container.Params[0]
+		for i, param := range container.Params {
+			if i != 0 {
+				params += "," + param
+			}
+		}
+	}
+
+	insForm, err := db.Prepare("INSERT INTO containers(id, name, image, status, root, command, params) VALUES(?,?,?,?,?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
-	insForm.Exec(container.ID, container.Name, container.ImageID, container.Status, container.Root, container.Command)
+	insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.Root, container.Command, params)
 }
 
 func removeContainerDB(name string) error {
