@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 func init() {
@@ -16,21 +17,29 @@ func exec() *cobra.Command {
 	return &cobra.Command{
 		Use: "exec",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			// navio exec CONTAINERIMAGENAME COMMAND PARAMS...
 
-			if len(args) < 2 {
-				l.Log("WARNING", "You must insert at least a containerName and a command!")
+			// navio exec [--id containerID | --name containerName] COMMAND PARAMS...
+
+			if containerName == "" && containerID == "" {
+				l.Log("WARNING", "You must insert a container name or a container id. (ex.: --name containerName or --id containerID)")
 				return nil
 			}
 
-			containerName := args[0]
+			if len(args) < 1 {
+				l.Log("WARNING", "You must insert a command!")
+				return nil
+			}
+
+			if utilities.IsEmpty(containerName) {
+				containerName = container.GetContainerName(containerID)
+			}
 
 			if !images.RootfsExists(containerName) {
 				l.Log("WARNING", fmt.Sprintf("%s is not a valid container. Run navio ps to see the available ones.", containerName))
 				return nil
 			}
-			command := args[1]
-			params := args[2:]
+			command := args[0]
+			params := args[1:]
 
 			l.Log("INFO", fmt.Sprintf("Container: %s, Command: %s, Params: %v", containerName, command, params))
 			args = append([]string{containerName, command}, params...)
