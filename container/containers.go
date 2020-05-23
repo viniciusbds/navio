@@ -34,20 +34,27 @@ func InsertContainer(container *Container) {
 	insertContainersDB(container)
 }
 
-// RemoveContainerRootfs remove the rootfs directory of a container
-func RemoveContainerRootfs(name string) error {
+// RemoveContainer remove the rootfs directory of a container and remove it from the database.
+func RemoveContainer(name string) error {
 	if utilities.IsEmpty(name) {
 		return errors.New("Empty container name")
 	}
-	if images.RootfsExists(name) {
-		if err := os.RemoveAll(filepath.Join(utilities.RootfsPath, name)); err != nil {
+	if !exists(name) {
+		return errors.New("Invalid container name")
+	}
+	// remove the rootFS
+	if RootfsExists(name) {
+		if err := os.RemoveAll(filepath.Join(utilities.RootFSPath, name)); err != nil {
 			return err
 		}
 	}
 	return deleteContainerRootfs(name)
 }
 
-func deleteContainerRootfs(name string) error {
-	delete(containers, name)
-	return removeContainerDB(name)
+// RootfsExists ...
+func RootfsExists(containerName string) bool {
+	if _, err := os.Stat(filepath.Join(utilities.RootFSPath, containerName)); os.IsNotExist(err) {
+		return false
+	}
+	return true
 }

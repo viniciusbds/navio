@@ -74,14 +74,6 @@ func ConfigureNetworkForUbuntu(containerName string) {
 	}
 }
 
-// RootfsExists ...
-func RootfsExists(containerName string) bool {
-	if _, err := os.Stat(filepath.Join(utilities.RootFSPath, containerName)); os.IsNotExist(err) {
-		return false
-	}
-	return true
-}
-
 // Exists receive a imageName as argument and return TRUE if the imageName.tar file exists
 // on the default TarsPath directory (see it on utilities.contants)
 func Exists(image string) bool {

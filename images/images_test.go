@@ -28,8 +28,6 @@ func TestPull(t *testing.T) {
 
 // [TODO: test] ConfigureNetworkForUbuntu ...
 
-// [TODO: test] RootfsExists ...
-
 // [TODO: test] Exists receive a imageName as argument and return TRUE if the imageName.tar file exists
 
 func TestGetImages(t *testing.T) {
