@@ -32,7 +32,7 @@ func NewImage(name string, base string, version string, size string, url string)
 	}
 }
 
-// ToStr ... Ignore esse código, essa foi a minha maior vigarice (https://www.youtube.com/watch?v=PK0c_n5EDhk)
+// ToStr of the Image
 func (i *Image) ToStr() string {
 	return fmt.Sprintf("%s            \t\t\t%s\t\t\t%s\t\t\t%s", i.Name, i.Base, i.Version, i.Size)
 }
