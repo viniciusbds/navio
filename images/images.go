@@ -134,7 +134,7 @@ func Describe(imageName string) (string, error) {
 	if image == nil {
 		return "", errors.New("Invalid image! Cannot describe" + imageName)
 	}
-	return getImage(imageName).ToStr(), nil
+	return image.ToStr(), nil
 }
 
 func getImage(name string) *Image {
