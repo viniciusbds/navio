@@ -7,6 +7,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/docker/docker/pkg/random"
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
@@ -101,12 +102,27 @@ func build() *cobra.Command {
 			// [TODO]
 
 			// RUN
+
+			containerID := fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
+
+			if container.RootfsExists(containerName) {
+				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
+				os.Exit(1)
+			}
+
+			if containerName == "" {
+				containerName = containerID
+			}
+
+			args = append([]string{baseImage, containerID, containerName, "ls"}, []string{}...)
+			container.CreateContainer(args)
+
 			for _, command := range commands {
-				container.Exec(append([]string{baseImage, newImageName}, command...))
+				container.Exec(append([]string{containerName}, command...))
 			}
 
 			// saving the image.tarin tarPath ...
-			dir := filepath.Join(utilities.RootfsPath, newImageName)
+			dir := filepath.Join(utilities.RootFSPath, containerName)
 			file := filepath.Join(utilities.ImagesPath, newImageName+".tar")
 			utilities.Must(utilities.Tar(dir, file))
 
