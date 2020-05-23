@@ -10,12 +10,23 @@ jobs:
   build-linux:
     name: Build linux
     runs-on: ubuntu-latest
+    
     steps:
     - name: Set up Go 1.14
       uses: actions/setup-go@v1
       with:
         go-version: 1.14
       id: go
+    
+    - uses: mirromutth/mysql-action@v1.1
+      with:
+        character set server: 'utf8' # Optional, default value is 'utf8mb4'. The '--character-set-server' option for mysqld
+        collation server: 'utf8_general_ci' # Optional, default value is 'utf8mb4_general_ci'. The '--collation-server' option for mysqld
+        mysql database: 'navioDB.sql' # Optional, default value is "test". The specified database which will be create
+        mysql root password: ${{ secrets.RootPassword }} # Required if "mysql user" is empty, default is empty. The root superuser password
+        mysql user: 'root' # Required if "mysql root password" is empty, default is empty. The superuser for the specified database. Can use secrets, too
+        mysql password: 'root' # Required if "mysql user" exists. The password for the "mysql user"
+    
 
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
