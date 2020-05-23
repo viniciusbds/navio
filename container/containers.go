@@ -6,7 +6,6 @@ import (
 	"path/filepath"
 
 	"github.com/mgutz/ansi"
-	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/utilities"
 )
 
@@ -28,7 +27,7 @@ func Ps() (string, error) {
 	return result, nil
 }
 
-// InsertContainer ...
+// InsertContainer insert a new container on the data structure and in the database
 func InsertContainer(container *Container) {
 	containers[container.Name] = container
 	insertContainersDB(container)
@@ -48,7 +47,40 @@ func RemoveContainer(name string) error {
 			return err
 		}
 	}
-	return deleteContainerRootfs(name)
+	// remove the container from data structure
+	delete(containers, name)
+	// update the database
+	return removeContainerDB(name)
+}
+
+func exists(name string) bool {
+	return getContainer(name) != nil
+}
+
+func getContainer(name string) *Container {
+	return containers[name]
+}
+
+// GetContainerID receive a container name and returns the respective ID
+func GetContainerID(name string) string {
+	result := ""
+	c := getContainer(name)
+	if c != nil {
+		result = c.ID
+	}
+	return result
+}
+
+// GetContainerName receive a container ID and returns the respective name
+func GetContainerName(ID string) string {
+	result := ""
+	for _, c := range containers {
+		if c.ID == ID {
+			result = c.Name
+			return result
+		}
+	}
+	return result
 }
 
 // RootfsExists ...
