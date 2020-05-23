@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/docker/docker/pkg/random"
 	"github.com/spf13/cobra"
@@ -10,7 +11,7 @@ import (
 )
 
 var (
-	// Used for containerame flag.
+	// Used for name flag.
 	containerName string
 )
 
@@ -33,7 +34,7 @@ func createContainer() *cobra.Command {
 
 			image := args[0]
 
-			if !images.IsaBaseImage(image) {
+			if !images.IsValid(image) {
 				l.Log("WARNING", fmt.Sprintf("%s is not a base Image. See navio get images", image))
 				return nil
 			}
@@ -48,7 +49,7 @@ func createContainer() *cobra.Command {
 
 			if images.RootfsExists(containerName) {
 				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
-				return nil
+				os.Exit(1)
 			}
 
 			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))

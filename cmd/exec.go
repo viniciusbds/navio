@@ -9,7 +9,13 @@ import (
 	"github.com/viniciusbds/navio/utilities"
 )
 
+var (
+	// Used for id flag.
+	containerID string
+)
+
 func init() {
+	rootCmd.PersistentFlags().StringVar(&containerID, "id", "", "The ID of the container")
 	rootCmd.AddCommand(exec())
 }
 
