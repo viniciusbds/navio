@@ -12,7 +12,7 @@ func init() {
 	readImagesDB()
 }
 
-// Image ...
+// Image holds the structure defining a image object.
 type Image struct {
 	name    string
 	base    string
@@ -21,7 +21,7 @@ type Image struct {
 	url     string
 }
 
-// NewImage ...
+// NewImage creates a new image with its basic configuration.
 func NewImage(name string, base string, version string, size string, url string) *Image {
 	return &Image{
 		name:    name,
@@ -34,22 +34,11 @@ func NewImage(name string, base string, version string, size string, url string)
 
 // ToStr ... Ignore esse código, essa foi a minha maior vigarice (https://www.youtube.com/watch?v=PK0c_n5EDhk)
 func (i *Image) ToStr() string {
-	tab := ""
-	if len(i.name) < 8 {
-		tab = "\t\t\t\t\t"
-	} else if len(i.name) >= 8 && len(i.name) < 16 {
-		tab = "\t\t\t\t"
-	} else {
-		tab = "\t\t\t"
-	}
-	return fmt.Sprintf("%s%s%s\t\t\t%s\t\t\t%s", i.name, tab, i.base, i.version, i.size)
+	return fmt.Sprintf("%s            \t\t\t%s\t\t\t%s\t\t\t%s", i.name, i.base, i.version, i.size)
 }
 
 func getImage(name string) *Image {
-	if images[name] != nil {
-		return images[name]
-	}
-	return nil
+	return images[name]
 }
 
 // InsertImage ...
@@ -60,12 +49,7 @@ func InsertImage(name, baseImage string) {
 	insertImageDB(newImg)
 }
 
-// IsaBaseImage receive a imageName and return true if is a base image.
-func IsaBaseImage(image string) bool {
-	for _, i := range images {
-		if image == i.name {
-			return true
-		}
-	}
-	return false
+// IsValid receive a imageName and return true if is a valid image.
+func IsValid(image string) bool {
+	return getImage(image) != nil
 }
