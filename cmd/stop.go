@@ -21,7 +21,7 @@ func stop() *cobra.Command {
 			}
 
 			for _, containerName := range args {
-				container.RemoveContainerRootfs(containerName)
+				container.RemoveContainer(containerName)
 			}
 
 			return nil

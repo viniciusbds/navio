@@ -5,7 +5,6 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
-	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/utilities"
 )
 
@@ -40,7 +39,7 @@ func exec() *cobra.Command {
 				containerName = container.GetContainerName(containerID)
 			}
 
-			if !images.RootfsExists(containerName) {
+			if !container.RootfsExists(containerName) {
 				l.Log("WARNING", fmt.Sprintf("%s is not a valid container. Run navio ps to see the available ones.", containerName))
 				return nil
 			}
