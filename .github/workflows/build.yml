@@ -6,30 +6,31 @@ on:
   pull_request: 
     branches:
     - master
-jobs:        
+
+jobs:
   build-linux:
     name: Build linux
     runs-on: ubuntu-latest
     services:
       mysql:
-        image: mysql:5.7
+        image: mysql
         env:
           MYSQL_ROOT_PASSWORD: root
         ports:
         - 32574:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3    
-  
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
+    - name: Verify MySQL connection from host
+      run: |
+        sudo apt-get install -y mysql-client
+        mysql --host 127.0.0.1 --port 32574 -uroot -ppassword -e "SHOW DATABASES"
+        
     - name: Set up Go 1.14
       uses: actions/setup-go@v1
       with:
         go-version: 1.14
       id: go
-      
-    - name: Verify MySQL connection from host
-      run: |
-        mysql  --port 32574 -uroot -ppassword -e "SHOW DATABASES"
-      
+        
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
       with:
