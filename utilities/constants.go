@@ -14,3 +14,12 @@ var RootFSPath = RootDir + "/roots"
 
 // OfficialImages are the official images that are currently suported.
 var OfficialImages = []string{"alpine", "busybox", "ubuntu"}
+
+// DBuser represents the database user
+var DBuser = "root"
+
+// DBpass represents the database password
+var DBpass = "root"
+
+// DBname represents the database name...
+var DBname = "navio"
