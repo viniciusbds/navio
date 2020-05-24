@@ -9,9 +9,9 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/docker/docker/pkg/reexec"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/pkg/reexec"
 	"github.com/viniciusbds/navio/utilities"
 )
 
