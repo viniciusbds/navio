@@ -25,11 +25,6 @@ jobs:
         sudo apt-get install -y mysql-client
         mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
         
-    - name: Create Navio database
-      run: |
-        mysql -uroot -proot < navioDB.sql
-        
-        
     - name: Set up Go 1.14
       uses: actions/setup-go@v1
       with:
@@ -40,7 +35,11 @@ jobs:
       uses: actions/checkout@v1
       with:
         path: go/src/github.com/viniciusbds/navio
-
+        
+    - name: Create Navio database
+      run: |
+        mysql -uroot -proot < navioDB.sql
+        
     - name: Build linux
       env:
         GOPATH: /home/vinicius/go
