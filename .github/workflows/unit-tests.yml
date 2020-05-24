@@ -6,22 +6,40 @@ on:
   pull_request: 
     branches:
     - master
+
 jobs:
   build-linux:
-    name: Build linux
+    name: Build Linux
     runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql
+        env:
+          MYSQL_ROOT_PASSWORD: root
+        ports:
+        - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
     steps:
+    - name: Verify MySQL connection from host
+      run: |
+        mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
+        
     - name: Set up Go 1.14
       uses: actions/setup-go@v1
       with:
         go-version: 1.14
       id: go
-
+        
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
       with:
         path: go/src/github.com/viniciusbds/navio
-    
+        
+    - name: Create Navio database
+      run: |
+          go run ./database/up.go
+          mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
+        
     - name: Run all tests
       run: | 
         sudo make unit-tests
