@@ -27,7 +27,7 @@ jobs:
         
     - name: Create Navio database
       run: |
-        mysql -uroot -proot < /home/vinicius/go/src/github.com/viniciusbds/navio/navioDB.sql
+        mysql -uroot -proot < navioDB.sql
         
         
     - name: Set up Go 1.14
