@@ -72,6 +72,7 @@ what the processes can use
 
 ## Requirements
 
+- **linux.** Navio's doesn't support others operational systems :(
 - [golang environment](https://golang.org/)
 - make
 - wget
