@@ -4,14 +4,6 @@ import (
 	"fmt"
 )
 
-var (
-	images = make(map[string]*Image)
-)
-
-func init() {
-	readImagesDB()
-}
-
 // Image holds the structure defining a image object.
 type Image struct {
 	Name    string

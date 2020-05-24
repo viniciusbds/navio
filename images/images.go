@@ -17,7 +17,12 @@ import (
 var (
 	l       = logger.New(time.Kitchen, true)
 	magenta = ansi.ColorFunc("magenta+")
+	images  = make(map[string]*Image)
 )
+
+func init() {
+	readImagesDB()
+}
 
 // Pull Downloads the .tar file from the official site
 func Pull(imageName string) error {
