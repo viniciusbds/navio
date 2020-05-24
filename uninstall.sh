@@ -1,6 +1,9 @@
 #!/bin/bash
 
 
+# REMOVE NAVIO FILES (ROOTFS + IMAGES.tar's)
+sudo rm -r "/usr/local/navio"
+
 # REMOVE NAVIO DATABASE
 mysqlversion=`mysql --version`
 goversion=`go version`
