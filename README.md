@@ -75,6 +75,7 @@ what the processes can use
 - [golang environment](https://golang.org/)
 - make
 - wget
+- mysql
 - some of commands (ex.: `navio build`, `navio run`, `navio rmi` and `navio exec`) must be executed with sudo privilegies.
 
 ## How to install

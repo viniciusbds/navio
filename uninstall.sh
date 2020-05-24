@@ -1,11 +1,12 @@
 #!/bin/bash
 
-# CREATE NAVIO DATABASE
+
+# REMOVE NAVIO DATABASE
 mysqlversion=`mysql --version`
 goversion=`go version`
 if [ -n "$goversion"  ] && [ -n "$mysqlversion"  ]; then 
-    go run ./database/up.go
+    mysql -uroot -proot -e "DROP DATABASE navio";
 fi
 
 # ...
-sudo cp ./navio /usr/local/bin
+sudo rm /usr/local/bin/navio

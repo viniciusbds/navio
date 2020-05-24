@@ -17,7 +17,12 @@ func main() {
 	}
 	defer db.Close()
 
-	_, err = db.Exec("CREATE DATABASE IF NOT EXISTS " + utilities.DBname)
+	_, err = db.Exec("DROP DATABASE IF EXISTS " + utilities.DBname)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec("CREATE DATABASE " + utilities.DBname)
 	if err != nil {
 		panic(err)
 	}
