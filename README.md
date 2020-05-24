@@ -85,32 +85,30 @@ what the processes can use
 ```
  git clone https://github.com/viniciusbds/navio.git
  cd navio
- sudo cp ./navio /usr/local/bin
+ ./install.sh
 ```
 
-#### If you want compile the code before running it:
-
-
+#### If you want compile the code before install:
 
 ```
  git clone https://github.com/viniciusbds/navio.git
  cd navio
  make
- sudo cp ./navio /usr/local/bin
+ ./install.sh
 ```
 
 #### To run all unit tests, type:
 
 ```
- sudo su -
  cd /path/to/project/navio
- make unit-tests
+ sudo make unit-tests
 ```
 
 #### To uninstall:
 
  ```
- sudo rm /usr/local/bin/navio
+ cd navio
+ ./uninstall.sh
 ```
   
 ## Example Commands
