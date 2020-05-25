@@ -15,11 +15,11 @@ import (
 )
 
 var (
-	newImageName string
+	imgTag string
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&newImageName, "t", "", "The image tag. (i.e. the newImageName)")
+	rootCmd.PersistentFlags().StringVar(&imgTag, "t", "", "The image tag. (i.e. the newImageName)")
 	rootCmd.MarkFlagRequired("t")
 
 	rootCmd.AddCommand(build())
@@ -34,11 +34,14 @@ func build() *cobra.Command {
 
 			// navio build [directory] -t [image-name]
 
-			if utilities.IsEmpty(newImageName) {
+			if utilities.IsEmpty(imgTag) {
 				l.Log("WARNING", "You must insert a image name. for ex.: --t python-ubuntu")
 				return
 			}
-
+			if images.Exists(imgTag) {
+				l.Log("WARNING", "This image name already exists.")
+				return
+			}
 			if len(args) < 1 {
 				l.Log("WARNING", "You must insert a directory of your Naviofile!")
 				return
@@ -95,26 +98,25 @@ func build() *cobra.Command {
 			fmt.Printf("RUN %v\n", commands)
 			fmt.Println("------------------")
 
-			// FROM
-			images.BuildANewBaseImg(newImageName, baseImage)
-
-			// ADD
-			// [TODO]
-
-			// RUN
-
 			containerID := fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
+			containerName := imgTag
 
 			if container.RootfsExists(containerName) {
 				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
 				os.Exit(1)
 			}
 
-			if containerName == "" {
-				containerName = containerID
-			}
+			// FROM
+			images.BuildANewBaseImg(imgTag, baseImage)
 
-			args = append([]string{baseImage, containerID, containerName, "ls"}, []string{}...)
+			// ADD
+			// [TODO]
+
+			// CMD
+			// [TODO]
+
+			// RUN
+			args = append([]string{baseImage, containerID, containerName, "echo"}, []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}...)
 			container.CreateContainer(args)
 
 			for _, command := range commands {
@@ -123,17 +125,14 @@ func build() *cobra.Command {
 
 			// saving the image.tarin tarPath ...
 			dir := filepath.Join(utilities.RootFSPath, containerName)
-			file := filepath.Join(utilities.ImagesPath, newImageName+".tar")
+			file := filepath.Join(utilities.ImagesPath, imgTag+".tar")
 			utilities.Must(utilities.Tar(dir, file))
 
-			images.InsertImage(newImageName, baseImage)
-
-			// clear the rootfs used to build the image.tar file
-			if err := os.RemoveAll(dir); err != nil {
+			images.InsertImage(imgTag, baseImage)
+			err = container.RemoveContainer(containerName)
+			if err != nil {
 				l.Log("ERROR", err.Error())
-				return
 			}
-
 		},
 	}
 }

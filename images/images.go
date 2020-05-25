@@ -148,7 +148,6 @@ func BuildANewBaseImg(name, baseImg string) error {
 	if err := utilities.Untar(newImgPath, tarFile); err != nil {
 		return err
 	}
-	InsertImage(name, baseImg)
 	return nil
 }
 
