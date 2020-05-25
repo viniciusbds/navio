@@ -6,10 +6,11 @@ import (
 
 func TestRemoveContainer(t *testing.T) {
 	t.Run("Invalid containerName", func(t *testing.T) {
-		err := RemoveContainer("atata")
+		name := "atata"
+		err := RemoveContainer(name)
 		if err != nil {
 			result := err.Error()
-			expected := "Invalid container name"
+			expected := "Invalid container name: " + name
 			check(t, expected, result)
 		}
 	})

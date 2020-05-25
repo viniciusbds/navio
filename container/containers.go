@@ -39,7 +39,7 @@ func RemoveContainer(name string) error {
 		return errors.New("Empty container name")
 	}
 	if !exists(name) {
-		return errors.New("Invalid container name")
+		return errors.New("Invalid container name: " + name)
 	}
 	// remove the rootFS
 	if RootfsExists(name) {
