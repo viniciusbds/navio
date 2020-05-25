@@ -2,15 +2,14 @@ package cmd
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/docker/docker/pkg/random"
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/naviofile"
 	"github.com/viniciusbds/navio/utilities"
 )
 
@@ -56,42 +55,7 @@ func build() *cobra.Command {
 			}
 
 			naviofileDir := args[0]
-
-			naviofile, err := ioutil.ReadFile(filepath.Join(naviofileDir, "Naviofile")) // just pass the file name
-			if err != nil {
-				l.Log("ERROR", err.Error())
-				return
-			}
-
-			var baseImage, origem, destino string
-			var commands = [][]string{}
-
-			lines := strings.Split(string(naviofile), "\n")
-			for _, line := range lines {
-				l := strings.Split(line, " ")
-				cmd := l[0]
-
-				if cmd == "FROM" {
-					baseImage = l[1]
-				} else if cmd == "ADD" {
-					origem = l[1]
-					destino = l[2]
-				} else if cmd == "RUN" {
-					l = strings.Split(line, "&&")
-					// expected example: [RUN apt update,  apt -y upgrade, apt install -y python]
-
-					for i, c := range l {
-						c = strings.TrimSpace(c)
-						aux := strings.Split(c, " ")
-						if i == 0 {
-							// removing the the [RUN] cmd
-							aux = aux[1:]
-						}
-
-						commands = append(commands, aux)
-					}
-				}
-			}
+			baseImage, origem, destino, commands := naviofile.ReadNaviofile(naviofileDir)
 
 			fmt.Printf("FROM %s\n", baseImage)
 			fmt.Printf("ADD %s %s\n", origem, destino)
@@ -129,7 +93,7 @@ func build() *cobra.Command {
 			utilities.Must(utilities.Tar(dir, file))
 
 			images.InsertImage(imgTag, baseImage)
-			err = container.RemoveContainer(containerName)
+			err := container.RemoveContainer(containerName)
 			if err != nil {
 				l.Log("ERROR", err.Error())
 			}
