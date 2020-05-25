@@ -37,6 +37,10 @@ func build() *cobra.Command {
 				l.Log("WARNING", "You must insert a image name. for ex.: --t python-ubuntu")
 				return
 			}
+			if len(imgTag) > utilities.MaxImageNameLenght {
+				l.Log("WARNING", "Image name is too long, please enter a shorter name.")
+				return
+			}
 			if images.Exists(imgTag) {
 				l.Log("WARNING", "This image name already exists.")
 				return

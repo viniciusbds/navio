@@ -2,6 +2,9 @@ package images
 
 import (
 	"fmt"
+	"strings"
+
+	"github.com/viniciusbds/navio/utilities"
 )
 
 // Image holds the structure defining a image object.
@@ -26,5 +29,7 @@ func NewImage(name string, base string, version string, size string, url string)
 
 // ToStr of the Image
 func (i *Image) ToStr() string {
-	return fmt.Sprintf("%s            \t\t\t%s\t\t\t%s\t\t\t%s", i.Name, i.Base, i.Version, i.Size)
+	name := i.Name + strings.Repeat(" ", utilities.MaxImageNameLenght-len(i.Name))
+	base := i.Base + strings.Repeat(" ", utilities.MaxImageNameLenght-len(i.Base))
+	return fmt.Sprintf("%s%s%s\t\t%s", name, base, i.Version, i.Size)
 }
