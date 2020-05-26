@@ -30,13 +30,7 @@ func TestPull(t *testing.T) {
 
 // [TODO: test] Exists receive a imageName as argument and return TRUE if the imageName.tar file exists
 
-func TestGetImages(t *testing.T) {
-	t.Run("", func(t *testing.T) {
-		if _, err := GetImages(); err != nil {
-			t.Errorf("ERROR: on GetImages(): %s", err.Error())
-		}
-	})
-}
+// [TODO: test] GetImages ...
 
 // [TODO: test] InsertImage ...
 
