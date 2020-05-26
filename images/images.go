@@ -89,11 +89,11 @@ func Exists(image string) bool {
 }
 
 // GetImages return a string with all base images
-func GetImages() (result string, err error) {
+func GetImages() (result string) {
 	for _, img := range images {
 		result += "\n" + magenta(img.ToStr())
 	}
-	return result, nil
+	return
 }
 
 // InsertImage ...
