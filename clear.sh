@@ -5,7 +5,7 @@
 
 
 # REMOVE NAVIO FILES (ROOTFS + IMAGES.tar's)
-sudo rm -r "/usr/local/navio"
+sudo rm -r /usr/local/navio
 
 # Re-open (reset) the database
 mysqlversion=`mysql --version`
