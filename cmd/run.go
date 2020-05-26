@@ -33,7 +33,7 @@ func createContainer() *cobra.Command {
 				return nil
 			}
 
-			if len(containerName) > utilities.MaxContainerNameLenght {
+			if len(containerName) > utilities.MaxContainerNameLength {
 				l.Log("WARNING", "Container name is too long, please enter a shorter name.")
 				return nil
 			}

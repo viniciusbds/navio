@@ -33,7 +33,7 @@ func NewContainer(id, name, image, status, root, command string, params []string
 
 // ToStr ...
 func (c *Container) ToStr() string {
-	name := c.Name + strings.Repeat(" ", utilities.MaxContainerNameLenght-len(c.Name))
-	image := c.Image + strings.Repeat(" ", utilities.MaxImageNameLenght-len(c.Image))
+	name := c.Name + strings.Repeat(" ", utilities.MaxContainerNameLength-len(c.Name))
+	image := c.Image + strings.Repeat(" ", utilities.MaxImageNameLength-len(c.Image))
 	return fmt.Sprintf("%s\t%s %s\t%s\t\t\t%s", c.ID, name, image, c.Command, c.Status)
 }

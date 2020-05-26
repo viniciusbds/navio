@@ -23,6 +23,8 @@ func TestRemoveContainer(t *testing.T) {
 }
 
 // [TODO: test] Ps return a string with all availables container images that was created. see it like "containers"
+func TestPs(t *testing.T) {
+}
 
 // [TODO: test] InsertContainer ...
 

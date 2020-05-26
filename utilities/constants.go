@@ -24,8 +24,8 @@ var DBpass = "root"
 // DBname represents the database name...
 var DBname = "navio"
 
-// MaxImageNameLenght  23 == len("NAME                    ") -1
-var MaxImageNameLenght = 23
+// MaxImageNameLength  23 == len("NAME                    ") -1
+var MaxImageNameLength = 23
 
-// MaxContainerNameLenght  23 == len("NAME                    ") -1
-var MaxContainerNameLenght = 23
+// MaxContainerNameLength  23 == len("NAME                    ") -1
+var MaxContainerNameLength = 23
