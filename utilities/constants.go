@@ -26,3 +26,6 @@ var DBname = "navio"
 
 // MaxImageNameLenght  23 == len("NAME                    ") -1
 var MaxImageNameLenght = 23
+
+// MaxContainerNameLenght  23 == len("NAME                    ") -1
+var MaxContainerNameLenght = 23

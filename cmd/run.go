@@ -8,6 +8,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 var (
@@ -29,6 +30,11 @@ func createContainer() *cobra.Command {
 
 			if len(args) < 2 {
 				l.Log("WARNING", "You must insert at least a image name and a command!")
+				return nil
+			}
+
+			if len(containerName) > utilities.MaxContainerNameLenght {
+				l.Log("WARNING", "Container name is too long, please enter a shorter name.")
 				return nil
 			}
 

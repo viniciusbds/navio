@@ -18,7 +18,7 @@ func ps() *cobra.Command {
 		Short: "Shows all containerImages that was created",
 		Long:  "Each of thesees containerImages are a /rootf of the respective container that was created",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			fmt.Println("ID\t\tNAME\t\t\t\tCOMMAND\t\t\tIMAGE\t\t\tSTATUS")
+			fmt.Println("ID\t\tNAME\t\t\tIMAGE\t\t\tCOMMAND\t\t\tSTATUS")
 			containers, _ := container.Ps()
 			if !utilities.IsEmpty(containers) {
 				fmt.Println(containers)
