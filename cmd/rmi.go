@@ -6,10 +6,10 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(remove())
+	rootCmd.AddCommand(rmi())
 }
 
-func remove() *cobra.Command {
+func rmi() *cobra.Command {
 	return &cobra.Command{
 		Use:   "rmi",
 		Short: "Remove a Image",

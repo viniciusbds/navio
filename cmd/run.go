@@ -24,7 +24,8 @@ func init() {
 
 func createContainer() *cobra.Command {
 	return &cobra.Command{
-		Use: "run",
+		Use:   "run",
+		Short: "Run a command in a new container",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// navio run IMAGE COMMAND PARAMS...
 

@@ -20,7 +20,8 @@ func init() {
 
 func exec() *cobra.Command {
 	return &cobra.Command{
-		Use: "exec",
+		Use:   "exec",
+		Short: "Run a command in a running container",
 		RunE: func(cmd *cobra.Command, args []string) error {
 
 			// navio exec [--id containerID | --name containerName] COMMAND PARAMS...

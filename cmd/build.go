@@ -27,8 +27,7 @@ func init() {
 func build() *cobra.Command {
 	return &cobra.Command{
 		Use:   "build",
-		Short: "Create a new Image",
-		Long:  "",
+		Short: "Build an image from a Naviofile",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			// navio build [directory] -t [image-name]

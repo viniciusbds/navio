@@ -11,7 +11,8 @@ func init() {
 
 func stop() *cobra.Command {
 	return &cobra.Command{
-		Use: "stop",
+		Use:   "stop",
+		Short: "Stop one or more running containers",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// navio stop CONTAINERIMAGENAME
 

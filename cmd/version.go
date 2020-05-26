@@ -13,8 +13,7 @@ func init() {
 
 var versionCmd = &cobra.Command{
 	Use:   "version",
-	Short: "Show the Navio version",
-	Long:  "All software has versions. This is Navio's",
+	Short: "Show the Navio version information",
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("|___/ Navio ", utilities.NavioVersion)
 	},
