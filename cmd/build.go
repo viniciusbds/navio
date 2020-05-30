@@ -58,10 +58,10 @@ func build() *cobra.Command {
 			}
 
 			naviofileDir := args[0]
-			baseImage, origem, destino, commands := naviofile.ReadNaviofile(naviofileDir)
+			baseImage, source, destiny, commands := naviofile.ReadNaviofile(naviofileDir)
 
 			fmt.Printf("FROM %s\n", baseImage)
-			fmt.Printf("ADD %s %s\n", origem, destino)
+			fmt.Printf("ADD %s %s\n", source, destiny)
 			fmt.Printf("RUN %v\n", commands)
 			fmt.Println("------------------")
 
@@ -73,11 +73,17 @@ func build() *cobra.Command {
 				os.Exit(1)
 			}
 
+			containerRootFS := filepath.Join(utilities.RootFSPath, containerName)
+
 			// FROM
 			images.BuildANewBaseImg(imgTag, baseImage)
 
 			// ADD
-			// [TODO]
+			fullDestinyPath := filepath.Join(containerRootFS, destiny)
+			err := utilities.Copy(source, fullDestinyPath)
+			if err != nil {
+				l.Log("ERROR", "on ADD "+source+" to "+destiny)
+			}
 
 			// CMD
 			// [TODO]
@@ -91,12 +97,11 @@ func build() *cobra.Command {
 			}
 
 			// saving the image.tarin tarPath ...
-			dir := filepath.Join(utilities.RootFSPath, containerName)
-			file := filepath.Join(utilities.ImagesPath, imgTag+".tar")
-			utilities.Must(utilities.Tar(dir, file))
+			imageFile := filepath.Join(utilities.ImagesPath, imgTag+".tar")
+			utilities.Must(utilities.Tar(containerRootFS, imageFile))
 
 			images.InsertImage(imgTag, baseImage)
-			err := container.RemoveContainer(containerName)
+			err = container.RemoveContainer(containerName)
 			if err != nil {
 				l.Log("ERROR", err.Error())
 			}

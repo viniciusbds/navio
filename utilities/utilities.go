@@ -61,6 +61,21 @@ func Tar(directory, file string) error {
 	return cmd.Run()
 }
 
+// Copy Copy a directory or a file from origen to a specific destiny
+// (for ex: insidy the rootFS of a container)
+func Copy(source, destiny string) error {
+	if !FileExists(destiny) {
+		err := os.MkdirAll(destiny, 0777)
+		if err != nil {
+			return err
+		}
+	}
+	cmd := exec.Command("cp", "-r", source, destiny)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd.Run()
+}
+
 // IsEmpty ...
 func IsEmpty(imageName string) bool {
 	if len(strings.TrimSpace(imageName)) == 0 {
