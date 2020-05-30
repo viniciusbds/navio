@@ -2,10 +2,10 @@ package cmd
 
 import (
 	"fmt"
+	"math/rand"
 	"os"
 	"path/filepath"
 
-	"github.com/docker/docker/pkg/random"
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
@@ -65,7 +65,7 @@ func build() *cobra.Command {
 			fmt.Printf("RUN %v\n", commands)
 			fmt.Println("------------------")
 
-			containerID := fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
+			containerID := fmt.Sprintf("%d", rand.Int31n(1000000000))
 			containerName := imgTag
 
 			if container.RootfsExists(containerName) {

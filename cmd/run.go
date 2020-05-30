@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/docker/docker/pkg/random"
+	"math/rand"
+
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
@@ -48,7 +49,7 @@ func createContainer() *cobra.Command {
 
 			command := args[1]
 			params := args[2:]
-			containerID := fmt.Sprintf("%d", random.Rand.Int31n(1000000000))
+			containerID := fmt.Sprintf("%d", rand.Int31n(1000000000))
 
 			if containerName == "" {
 				containerName = containerID
