@@ -1,13 +1,13 @@
 package images
 
 import (
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sync"
 	"time"
-
-	"errors"
 
 	"github.com/mgutz/ansi"
 	"github.com/viniciusbds/navio/logger"
@@ -139,7 +139,8 @@ func getImage(name string) *Image {
 }
 
 // BuildANewBaseImg ...
-func BuildANewBaseImg(name, baseImg string) error {
+func BuildANewBaseImg(name, baseImg string, wg *sync.WaitGroup) error {
+	defer wg.Done()
 	newImgPath := filepath.Join(utilities.RootFSPath, name)
 	tarFile := filepath.Join(utilities.ImagesPath, baseImg) + ".tar"
 	if err := os.Mkdir(newImgPath, 0777); err != nil {

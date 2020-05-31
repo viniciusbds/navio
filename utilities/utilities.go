@@ -4,6 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/viniciusbds/navio/logger"
@@ -63,7 +64,8 @@ func Tar(directory, file string) error {
 
 // Copy Copy a directory or a file from origen to a specific destiny
 // (for ex: insidy the rootFS of a container)
-func Copy(source, destiny string) error {
+func Copy(source, destiny string, wg *sync.WaitGroup) error {
+	defer wg.Done()
 	if !FileExists(destiny) {
 		err := os.MkdirAll(destiny, 0777)
 		if err != nil {

@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"os"
 	"path/filepath"
+	"sync"
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
@@ -15,6 +16,7 @@ import (
 
 var (
 	imgTag string
+	wg     sync.WaitGroup
 )
 
 func init() {
@@ -76,18 +78,32 @@ func build() *cobra.Command {
 			containerRootFS := filepath.Join(utilities.RootFSPath, containerName)
 
 			// FROM
-			images.BuildANewBaseImg(imgTag, baseImage)
+			wg.Add(1)
+			images.BuildANewBaseImg(imgTag, baseImage, &wg)
 
 			// ADD
-			fullDestinyPath := filepath.Join(containerRootFS, destiny)
-			err := utilities.Copy(source, fullDestinyPath)
-			if err != nil {
-				l.Log("ERROR", "on ADD "+source+" to "+destiny)
+			if !utilities.IsEmpty(source) && !utilities.IsEmpty(destiny) {
+				fullDestinyPath := filepath.Join(containerRootFS, destiny)
+				wg.Add(1)
+				err := utilities.Copy(source, fullDestinyPath, &wg)
+				if err != nil {
+					l.Log("ERROR", "on ADD "+source+" to "+destiny)
+				}
 			}
+
+			// ENTRYPOINT
+			// [TODO]
+
+			// ENV
+			// [TODO]
+
+			// WORKDIR
+			// [TODO]
 
 			// CMD
 			// [TODO]
 
+			wg.Wait()
 			// RUN
 			args = append([]string{baseImage, containerID, containerName, "echo"}, []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}...)
 			container.CreateContainer(args)
@@ -101,7 +117,7 @@ func build() *cobra.Command {
 			utilities.Must(utilities.Tar(containerRootFS, imageFile))
 
 			images.InsertImage(imgTag, baseImage)
-			err = container.RemoveContainer(containerName)
+			err := container.RemoveContainer(containerName)
 			if err != nil {
 				l.Log("ERROR", err.Error())
 			}
