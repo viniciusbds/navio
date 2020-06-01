@@ -11,6 +11,12 @@ var check = func(t *testing.T, expected string, result string) {
 	}
 }
 
+var done chan bool
+
+func init() {
+	done = make(chan bool)
+}
+
 func TestExec(t *testing.T) {
 
 	t.Run("Try EXEC a invalid container (i.e:  that doesn't exists)", func(t *testing.T) {
@@ -44,10 +50,8 @@ func TestExec(t *testing.T) {
 
 		baseImg := "alpine"
 		containerID := "98989898989"
-		err = CreateContainer([]string{baseImg, containerID, containerName, "echo", "creating container"})
-		if err != nil {
-			t.Errorf(err.Error())
-		}
+		go CreateContainer([]string{baseImg, containerID, containerName, "echo", "creating container"}, done)
+		<-done
 
 		// Testing exec
 		err = Exec([]string{containerName, "echo", "Ola", "Menino", "Jesus", "de", "Atocha"})
