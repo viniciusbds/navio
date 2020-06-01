@@ -1,6 +1,7 @@
 package utilities
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"strings"
@@ -52,14 +53,16 @@ func Untar(directory, file string) error {
 }
 
 // Tar ...
-func Tar(directory, file string) error {
+func Tar(directory, file string, done chan bool) error {
 	if err := os.Chdir(directory); err != nil {
 		return err
 	}
 	cmd := exec.Command("tar", "cpjf", file, ".")
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	err := cmd.Run()
+	done <- true
+	return err
 }
 
 // Copy Copy a directory or a file from origen to a specific destiny
@@ -102,4 +105,30 @@ func IsOfficialImage(image string) bool {
 		}
 	}
 	return false
+}
+
+// Loader ...
+func Loader(done chan bool, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	i := 0
+	load := []rune(`|\-/`)
+
+	for {
+		select {
+		case <-done:
+			fmt.Printf("\r")
+			fmt.Println("Done :)")
+			return
+		default:
+			fmt.Printf("\r")
+			fmt.Printf(string(load[i]))
+			time.Sleep(time.Millisecond * 100)
+			i++
+			if i == len(load) {
+				i = 0
+			}
+		}
+	}
+
 }

@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"sync"
 	"time"
 
 	"github.com/mgutz/ansi"
@@ -138,9 +137,8 @@ func getImage(name string) *Image {
 	return images[name]
 }
 
-// BuildANewBaseImg ...
-func BuildANewBaseImg(name, baseImg string, wg *sync.WaitGroup) error {
-	defer wg.Done()
+// UntarImg extract the baseImage to create another one
+func UntarImg(name, baseImg string, done chan bool) error {
 	newImgPath := filepath.Join(utilities.RootFSPath, name)
 	tarFile := filepath.Join(utilities.ImagesPath, baseImg) + ".tar"
 	if err := os.Mkdir(newImgPath, 0777); err != nil {
@@ -149,6 +147,7 @@ func BuildANewBaseImg(name, baseImg string, wg *sync.WaitGroup) error {
 	if err := utilities.Untar(newImgPath, tarFile); err != nil {
 		return err
 	}
+	done <- true
 	return nil
 }
 

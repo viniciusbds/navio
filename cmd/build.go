@@ -17,13 +17,15 @@ import (
 var (
 	imgTag string
 	wg     sync.WaitGroup
+	done   chan bool
 )
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&imgTag, "t", "", "The image tag. (i.e. the newImageName)")
 	rootCmd.MarkFlagRequired("t")
-
 	rootCmd.AddCommand(build())
+
+	done = make(chan bool)
 }
 
 func build() *cobra.Command {
@@ -62,10 +64,10 @@ func build() *cobra.Command {
 			naviofileDir := args[0]
 			baseImage, source, destiny, commands := naviofile.ReadNaviofile(naviofileDir)
 
-			fmt.Printf("FROM %s\n", baseImage)
-			fmt.Printf("ADD %s %s\n", source, destiny)
-			fmt.Printf("RUN %v\n", commands)
-			fmt.Println("------------------")
+			fmt.Printf(magenta("FROM %s\n"), baseImage)
+			fmt.Printf(magenta("ADD %s %s\n"), source, destiny)
+			fmt.Printf(magenta("RUN %v\n"), commands)
+			fmt.Printf("---------------------------------------------------------------\n")
 
 			containerID := fmt.Sprintf("%d", rand.Int31n(1000000000))
 			containerName := imgTag
@@ -78,18 +80,20 @@ func build() *cobra.Command {
 			containerRootFS := filepath.Join(utilities.RootFSPath, containerName)
 
 			// FROM
-			wg.Add(1)
-			images.BuildANewBaseImg(imgTag, baseImage, &wg)
+			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
+			go images.UntarImg(imgTag, baseImage, done)
 
 			// ADD
 			if !utilities.IsEmpty(source) && !utilities.IsEmpty(destiny) {
 				fullDestinyPath := filepath.Join(containerRootFS, destiny)
 				wg.Add(1)
-				err := utilities.Copy(source, fullDestinyPath, &wg)
-				if err != nil {
-					l.Log("ERROR", "on ADD "+source+" to "+destiny)
-				}
+				go utilities.Copy(source, fullDestinyPath, &wg)
 			}
+
+			// Wait the copy of the IMAGE complete
+			wg.Add(1)
+			go utilities.Loader(done, &wg)
+			wg.Wait()
 
 			// ENTRYPOINT
 			// [TODO]
@@ -103,18 +107,23 @@ func build() *cobra.Command {
 			// CMD
 			// [TODO]
 
-			wg.Wait()
 			// RUN
 			args = append([]string{baseImage, containerID, containerName, "echo"}, []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}...)
 			container.CreateContainer(args)
 
 			for _, command := range commands {
+				fmt.Printf(green("RUN %v\n"), command)
 				container.Exec(append([]string{containerName}, command...))
 			}
 
 			// saving the image.tarin tarPath ...
 			imageFile := filepath.Join(utilities.ImagesPath, imgTag+".tar")
-			utilities.Must(utilities.Tar(containerRootFS, imageFile))
+
+			fmt.Printf(green("Generating the [%s] image ...\n"), imgTag)
+			wg.Add(1)
+			go utilities.Loader(done, &wg)
+			go utilities.Tar(containerRootFS, imageFile, done)
+			wg.Wait()
 
 			images.InsertImage(imgTag, baseImage)
 			err := container.RemoveContainer(containerName)

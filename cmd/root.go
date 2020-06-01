@@ -5,12 +5,16 @@ import (
 	"os"
 	"time"
 
+	"github.com/mgutz/ansi"
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/logger"
 )
 
 var (
-	l = logger.New(time.Kitchen, true)
+	l       = logger.New(time.Kitchen, true)
+	red     = ansi.ColorFunc("red+")
+	green   = ansi.ColorFunc("green+")
+	magenta = ansi.ColorFunc("magenta+")
 )
 
 var (
