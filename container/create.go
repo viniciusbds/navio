@@ -25,10 +25,11 @@ func init() {
 }
 
 // CreateContainer creates a container based on a baseImg, containerName and command with params
-func CreateContainer(args []string) error {
+func CreateContainer(args []string, prepare chan bool) error {
 	baseImage, containerID, containerName, command, params := args[0], args[1], args[2], args[3], args[4:]
 	prepareImage(baseImage, containerName)
 	saveContainer(baseImage, containerID, containerName, command, params)
+	prepare <- true
 	return run(containerName, command, params)
 }
 

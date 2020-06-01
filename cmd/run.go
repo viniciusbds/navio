@@ -60,9 +60,13 @@ func createContainer() *cobra.Command {
 				os.Exit(1)
 			}
 
-			l.Log("INFO", fmt.Sprintf("Image: %s, Command: %s, Params: %v", image, command, params))
+			fmt.Printf(green("Image: %s, Command: %s, Params: %v\n"), image, command, params)
 			args = append([]string{image, containerID, containerName, command}, params...)
-			container.CreateContainer(args)
+
+			fmt.Printf(green("Creating [%s] container ...\n"), containerName)
+			wg.Add(1)
+			go utilities.Loader(done, &wg)
+			container.CreateContainer(args, done)
 
 			return nil
 		},

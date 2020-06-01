@@ -109,7 +109,12 @@ func build() *cobra.Command {
 
 			// RUN
 			args = append([]string{baseImage, containerID, containerName, "echo"}, []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}...)
-			container.CreateContainer(args)
+			go container.CreateContainer(args, done)
+
+			fmt.Printf(green("Prepare container ...\n"))
+			wg.Add(1)
+			go utilities.Loader(done, &wg)
+			wg.Wait()
 
 			for _, command := range commands {
 				fmt.Printf(green("RUN %v\n"), command)
