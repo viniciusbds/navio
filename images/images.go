@@ -103,25 +103,27 @@ func InsertImage(name, baseImage string) {
 	insertImageDB(newImg)
 }
 
-// RemoveImage ...
-func RemoveImage(image string) error {
-	if utilities.IsOfficialImage(image) {
-		return errors.New("Cannot remove a official image")
+// RemoveImage a especific non official image
+func RemoveImage(name string) error {
+	if utilities.IsOfficialImage(name) {
+		return errors.New("Cannot remove the " + name + " official image")
 	}
-	if utilities.IsEmpty(image) {
+	if utilities.IsEmpty(name) {
 		return errors.New("Cannot remove a empty image")
 	}
-	// delete the image.tar file
-	if Exists(image) {
-		if err := os.RemoveAll(filepath.Join(utilities.ImagesPath, image+".tar")); err != nil {
-			return err
+	if !Exists(name) {
+		return errors.New("Image " + name + " doesn't exist")
+	}
+	return removeImage(name)
+}
+
+// RemoveAllImages remove all non official images
+func RemoveAllImages() {
+	for _, image := range images {
+		if !utilities.IsOfficialImage(image.Name) {
+			removeImage(image.Name)
 		}
 	}
-	// remove it from the data structure
-	delete(images, image)
-	// update the database
-	removeImageDB(image)
-	return nil
 }
 
 // Describe ...
@@ -154,4 +156,13 @@ func UntarImg(name, baseImg string, done chan bool) error {
 // IsValid receive a imageName and return true if is a valid image.
 func IsValid(image string) bool {
 	return getImage(image) != nil
+}
+
+func removeImage(name string) error {
+	// remove it from the data structure
+	delete(images, name)
+	// update the database
+	removeImageDB(name)
+	// remove the .tar image file
+	return os.RemoveAll(filepath.Join(utilities.ImagesPath, name+".tar"))
 }

@@ -34,7 +34,44 @@ func TestPull(t *testing.T) {
 
 // [TODO: test] InsertImage ...
 
-// [TODO: test] RemoveImage ...
+func TestRemoveImage(t *testing.T) {
+
+	// BASIC TESTS ------------------------------------------------------
+	t.Run("Fail on remove a official Image", func(t *testing.T) {
+		imageName := "ubuntu"
+		err := RemoveImage(imageName)
+		expected := "Cannot remove the " + imageName + " official image"
+		result := err.Error()
+		check(t, expected, result)
+	})
+	t.Run("Empty Image", func(t *testing.T) {
+		imageName := "       "
+		err := RemoveImage(imageName)
+		expected := "Cannot remove a empty image"
+		result := err.Error()
+		check(t, expected, result)
+
+	})
+	t.Run("Image that doesn't exists", func(t *testing.T) {
+		imageName := "ubuntuxxx"
+		err := RemoveImage(imageName)
+		expected := "Image " + imageName + " doesn't exist"
+		result := err.Error()
+		check(t, expected, result)
+
+	})
+	// END BASIC TESTS ------------------------------------------------------
+
+	// ----------------------------------------------------------------- TODO
+	t.Run("Remove a valid image", func(t *testing.T) {
+		//imageName := "ubuntu-pyhtone"
+		// CRIAR A IMAGEM COM O BUILD
+		// VERIFICAR QUE ELA EXISTE
+		// REMOVE-LA
+	})
+	// ----------------------------------------------------------------- TODO
+
+}
 
 // [TODO: test] Describe ...
 
