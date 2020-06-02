@@ -20,6 +20,7 @@ func remove() *cobra.Command {
 				return
 			}
 
+			var id string
 			for _, arg := range args {
 
 				if !container.Exists(arg) {
@@ -27,11 +28,13 @@ func remove() *cobra.Command {
 					continue
 				}
 
-				if !container.IsID(arg) {
-					arg = container.GetContainerID(arg)
+				if container.IsID(arg) {
+					id = arg
+				} else {
+					id = container.GetContainerID(arg)
 				}
 
-				err := container.RemoveContainer(arg)
+				err := container.RemoveContainer(id)
 				if err != nil {
 					l.Log("ERROR", err.Error())
 				}
