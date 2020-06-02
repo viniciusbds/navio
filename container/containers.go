@@ -51,7 +51,7 @@ func RemoveContainer(ID string) error {
 	return removeContainer(ID)
 }
 
-// Exists receives containerName or a containerID and return true if it exists on the system
+// Exists receives a [containerName or containerID] and return true if the Container exists on the system
 func Exists(arg string) bool {
 	for _, container := range containers {
 		if container.Name == arg || container.ID == arg {
@@ -61,8 +61,8 @@ func Exists(arg string) bool {
 	return false
 }
 
-// IsID verifies if the string is a ID of some container
-func IsID(ID string) bool {
+// IsaID verifies if a string is the ID of some container
+func IsaID(ID string) bool {
 	for _, container := range containers {
 		if container.ID == ID {
 			return true
