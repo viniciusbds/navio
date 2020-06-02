@@ -8,12 +8,12 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(ps())
+	rootCmd.AddCommand(containers())
 }
 
-func ps() *cobra.Command {
+func containers() *cobra.Command {
 	return &cobra.Command{
-		Use:   "ps",
+		Use:   "containers",
 		Short: "List containers",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("ID\t\tNAME\t\t\tIMAGE\t\t\tCOMMAND\t\t\tSTATUS")
