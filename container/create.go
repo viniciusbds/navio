@@ -37,7 +37,7 @@ func prepareImage(baseImg, containerID string) {
 	if !images.Exists(baseImg) {
 		utilities.Must(images.Pull(baseImg))
 	}
-	if !RootfsExists(containerID) {
+	if !RootFSExists(containerID) {
 		images.PrepareRootfs(baseImg, containerID)
 	}
 	if baseImg == "ubuntu" {

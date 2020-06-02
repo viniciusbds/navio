@@ -40,7 +40,7 @@ func exec() *cobra.Command {
 				containerID = container.GetContainerID(containerName)
 			}
 
-			if !container.RootfsExists(containerID) {
+			if !container.RootFSExists(containerID) {
 				l.Log("WARNING", fmt.Sprintf("%s is not a valid container. Run navio containers to see the available ones.", containerName))
 				return nil
 			}

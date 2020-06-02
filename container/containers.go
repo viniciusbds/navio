@@ -45,7 +45,7 @@ func RemoveContainer(ID string) error {
 	if !Exists(ID) {
 		return errors.New("Invalid container ID: " + ID)
 	}
-	if !RootfsExists(ID) {
+	if !RootFSExists(ID) {
 		return errors.New("RootFS of container" + ID + " doesn't exist")
 	}
 	return removeContainer(ID)
@@ -102,12 +102,10 @@ func GetContainerName(ID string) string {
 	return result
 }
 
-// RootfsExists receives a container ID and verifies if exists a RootFS
-func RootfsExists(ID string) bool {
-	if _, err := os.Stat(filepath.Join(utilities.RootFSPath, ID)); os.IsNotExist(err) {
-		return false
-	}
-	return true
+// RootFSExists receives a container ID and verifies if exists a RootFS
+func RootFSExists(ID string) bool {
+	_, err := os.Stat(filepath.Join(utilities.RootFSPath, ID))
+	return !os.IsNotExist(err)
 }
 
 func removeContainer(ID string) error {

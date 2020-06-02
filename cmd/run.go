@@ -55,7 +55,7 @@ func createContainer() *cobra.Command {
 				containerName = containerID
 			}
 
-			if container.RootfsExists(containerID) {
+			if container.RootFSExists(containerID) {
 				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
 				os.Exit(1)
 			}
