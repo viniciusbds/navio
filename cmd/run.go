@@ -49,7 +49,13 @@ func createContainer() *cobra.Command {
 
 			command := args[1]
 			params := args[2:]
-			containerID := fmt.Sprintf("%d", rand.Int31n(1000000000))
+
+			rand.Seed(time.Now().UnixNano())
+			min := 99999999
+			max := 1000000000
+			containerID := fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
+
+			fmt.Println(containerID)
 
 			if containerName == "" {
 				containerName = containerID

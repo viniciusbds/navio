@@ -68,7 +68,11 @@ func build() *cobra.Command {
 			fmt.Printf(magenta("RUN %v\n"), commands)
 			fmt.Printf("---------------------------------------------------------------\n")
 
-			containerID := fmt.Sprintf("%d", rand.Int31n(1000000000))
+			rand.Seed(time.Now().UnixNano())
+			min := 99999999
+			max := 1000000000
+			containerID := fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
+
 			containerRootFS := filepath.Join(utilities.RootFSPath, containerID)
 
 			// FROM
