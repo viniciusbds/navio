@@ -57,8 +57,23 @@ func Exists(arg string) bool {
 	return false
 }
 
-func getContainer(name string) *Container {
-	return containers[name]
+// IsID verifies if the string is a ID of some container
+func IsID(ID string) bool {
+	for _, container := range containers {
+		if container.ID == ID {
+			return true
+		}
+	}
+	return false
+}
+
+func getContainer(arg string) *Container {
+	for _, container := range containers {
+		if container.Name == arg || container.ID == arg {
+			return containers[arg]
+		}
+	}
+	return nil
 }
 
 // GetContainerID receive a container name and returns the respective ID

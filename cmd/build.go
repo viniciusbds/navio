@@ -131,7 +131,7 @@ func build() *cobra.Command {
 			wg.Wait()
 
 			images.InsertImage(imgTag, baseImage)
-			err := container.RemoveContainer(containerName)
+			err := container.RemoveContainer(containerID)
 			if err != nil {
 				l.Log("ERROR", err.Error())
 			}

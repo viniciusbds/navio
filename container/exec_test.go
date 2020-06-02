@@ -37,7 +37,8 @@ func TestExec(t *testing.T) {
 
 		// Cleaning before start
 		if cont := getContainer(containerName); cont != nil {
-			RemoveContainer(containerName)
+			id := GetContainerID(containerName)
+			RemoveContainer(id)
 		}
 
 		err := Exec([]string{containerName, "echo", "Ola", "Menino", "Jesus", "de", "Atocha"})
@@ -60,7 +61,8 @@ func TestExec(t *testing.T) {
 		}
 
 		// Cleaning
-		RemoveContainer(containerName)
+		id := GetContainerID(containerName)
+		RemoveContainer(id)
 	})
 
 }

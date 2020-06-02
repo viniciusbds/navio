@@ -5,19 +5,19 @@ import (
 )
 
 func TestRemoveContainer(t *testing.T) {
-	t.Run("Invalid containerName", func(t *testing.T) {
-		name := "atata"
-		err := RemoveContainer(name)
+	t.Run("Invalid ID", func(t *testing.T) {
+		id := "45252423432"
+		err := RemoveContainer(id)
 		if err != nil {
 			result := err.Error()
-			expected := "Invalid container name: " + name
+			expected := "Invalid container ID: " + id
 			check(t, expected, result)
 		}
 	})
-	t.Run("Empty name", func(t *testing.T) {
+	t.Run("Empty ID", func(t *testing.T) {
 		err := RemoveContainer("    ")
 		result := err.Error()
-		expected := "Empty container name"
+		expected := "Empty container ID"
 		check(t, expected, result)
 	})
 }
