@@ -33,28 +33,28 @@ func InsertContainer(container *Container) {
 	insertContainersDB(container)
 }
 
-// RemoveContainer remove the rootfs directory of a container and remove it from the database.
-func RemoveContainer(name string) error {
-	if utilities.IsEmpty(name) {
-		return errors.New("Empty container name")
+// RemoveContainer remove a container by her ID
+func RemoveContainer(ID string) error {
+	if utilities.IsEmpty(ID) {
+		return errors.New("Empty container ID")
 	}
-	if !exists(name) {
-		return errors.New("Invalid container name: " + name)
+	if !Exists(ID) {
+		return errors.New("Invalid container ID: " + ID)
 	}
-	// remove the rootFS
-	if RootfsExists(name) {
-		if err := os.RemoveAll(filepath.Join(utilities.RootFSPath, name)); err != nil {
-			return err
-		}
+	if !RootfsExists(ID) {
+		return errors.New("RootFS of container" + ID + " doesn't exist")
 	}
-	// remove the container from data structure
-	delete(containers, name)
-	// update the database
-	return removeContainerDB(name)
+	return removeContainer(ID)
 }
 
-func exists(name string) bool {
-	return getContainer(name) != nil
+// Exists receives containerName or a containerID and return true if it exists on the system
+func Exists(arg string) bool {
+	for _, container := range containers {
+		if container.Name == arg || container.ID == arg {
+			return true
+		}
+	}
+	return false
 }
 
 func getContainer(name string) *Container {
@@ -89,4 +89,13 @@ func RootfsExists(containerName string) bool {
 		return false
 	}
 	return true
+}
+
+func removeContainer(ID string) error {
+	// remove it from the data structure
+	delete(containers, ID)
+	// update the database
+	removeContainerDB(ID)
+	// remove the rootFS
+	return os.RemoveAll(filepath.Join(utilities.RootFSPath, ID))
 }
