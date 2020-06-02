@@ -55,7 +55,7 @@ func saveContainer(baseImage string, containerID string, containerName string, c
 		Command: command,
 		Params:  params,
 	}
-	InsertContainer(container)
+	Insert(container)
 }
 
 func run(containerName string, command string, params []string) error {

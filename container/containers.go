@@ -27,10 +27,14 @@ func List() (string, error) {
 	return result, nil
 }
 
-// InsertContainer insert a new container on the data structure and in the database
-func InsertContainer(container *Container) {
-	containers[container.Name] = container
-	insertContainersDB(container)
+// Insert inserts a new container on the data structure and update the database
+func Insert(container *Container) {
+	if container != nil {
+		containers[container.Name] = container
+		insertContainersDB(container)
+	} else {
+		l.Log("ERROR", "NIL container")
+	}
 }
 
 // RemoveContainer remove a container by her ID
