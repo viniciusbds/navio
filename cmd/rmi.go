@@ -14,21 +14,27 @@ func rmi() *cobra.Command {
 		Use:   "rmi",
 		Short: "Remove a Image",
 		Long:  "ex: navio remove image <image_name> remove a downloaded images located in the ./images directory.",
-		RunE: func(cmd *cobra.Command, args []string) error {
+		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(args) == 0 {
 				l.Log("WARNING", "You must insert at least a image name!")
-			} else {
+				return
+			}
 
-				for _, image := range args {
-					if image != "" {
-						images.RemoveImage(image)
+			if args[0] == "all" {
+				images.RemoveAllImages()
+			} else {
+				for _, arg := range args {
+					if arg != "" {
+						err := images.RemoveImage(arg)
+						if err != nil {
+							l.Log("ERROR", err.Error())
+						}
 					}
 				}
 
 			}
 
-			return nil
 		},
 	}
 }
