@@ -3,6 +3,7 @@ package cmd
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"math/rand"
 
@@ -54,8 +55,6 @@ func createContainer() *cobra.Command {
 			min := 99999999
 			max := 1000000000
 			containerID := fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
-
-			fmt.Println(containerID)
 
 			if containerName == "" {
 				containerName = containerID
