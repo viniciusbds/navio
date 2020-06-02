@@ -27,21 +27,21 @@ func init() {
 // CreateContainer creates a container based on a baseImg, containerName and command with params
 func CreateContainer(args []string, prepare chan bool) error {
 	baseImage, containerID, containerName, command, params := args[0], args[1], args[2], args[3], args[4:]
-	prepareImage(baseImage, containerName)
+	prepareImage(baseImage, containerID)
 	saveContainer(baseImage, containerID, containerName, command, params)
 	prepare <- true
-	return run(containerName, command, params)
+	return run(containerID, containerName, command, params)
 }
 
-func prepareImage(baseImg, containerName string) {
+func prepareImage(baseImg, containerID string) {
 	if !images.Exists(baseImg) {
 		utilities.Must(images.Pull(baseImg))
 	}
-	if !RootfsExists(containerName) {
-		images.PrepareRootfs(baseImg, containerName)
+	if !RootfsExists(containerID) {
+		images.PrepareRootfs(baseImg, containerID)
 	}
 	if baseImg == "ubuntu" {
-		images.ConfigureNetworkForUbuntu(containerName)
+		images.ConfigureNetworkForUbuntu(containerID)
 	}
 }
 
@@ -58,8 +58,8 @@ func saveContainer(baseImage string, containerID string, containerName string, c
 	Insert(container)
 }
 
-func run(containerName string, command string, params []string) error {
-	cmd := reexec.Command(append([]string{"child", containerName, command}, params...)...)
+func run(containerID, containerName, command string, params []string) error {
+	cmd := reexec.Command(append([]string{"child", containerID, containerName, command}, params...)...)
 	cmd.SysProcAttr = &syscall.SysProcAttr{
 		Cloneflags:   syscall.CLONE_NEWUTS | syscall.CLONE_NEWPID | syscall.CLONE_NEWNS,
 		Unshareflags: syscall.CLONE_NEWNS,
@@ -71,10 +71,10 @@ func run(containerName string, command string, params []string) error {
 }
 
 func child() {
-	containerName, command, params := os.Args[1], os.Args[2], os.Args[3:]
+	containerID, containerName, command, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
 	utilities.Must(syscall.Sethostname([]byte(containerName)))
 	configureCgroups()
-	pivotRoot(filepath.Join(utilities.RootFSPath, containerName))
+	pivotRoot(filepath.Join(utilities.RootFSPath, containerID))
 	mountProc()
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin

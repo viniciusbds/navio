@@ -28,7 +28,7 @@ func remove() *cobra.Command {
 					continue
 				}
 
-				if container.IsID(arg) {
+				if container.IsaID(arg) {
 					id = arg
 				} else {
 					id = container.GetContainerID(arg)

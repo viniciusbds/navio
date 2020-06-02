@@ -102,9 +102,9 @@ func GetContainerName(ID string) string {
 	return result
 }
 
-// RootfsExists ...
-func RootfsExists(containerName string) bool {
-	if _, err := os.Stat(filepath.Join(utilities.RootFSPath, containerName)); os.IsNotExist(err) {
+// RootfsExists receives a container ID and verifies if exists a RootFS
+func RootfsExists(ID string) bool {
+	if _, err := os.Stat(filepath.Join(utilities.RootFSPath, ID)); os.IsNotExist(err) {
 		return false
 	}
 	return true

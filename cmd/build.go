@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"math/rand"
-	"os"
 	"path/filepath"
 	"sync"
 
@@ -70,14 +69,7 @@ func build() *cobra.Command {
 			fmt.Printf("---------------------------------------------------------------\n")
 
 			containerID := fmt.Sprintf("%d", rand.Int31n(1000000000))
-			containerName := imgTag
-
-			if container.RootfsExists(containerName) {
-				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
-				os.Exit(1)
-			}
-
-			containerRootFS := filepath.Join(utilities.RootFSPath, containerName)
+			containerRootFS := filepath.Join(utilities.RootFSPath, containerID)
 
 			// FROM
 			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
@@ -108,6 +100,7 @@ func build() *cobra.Command {
 			// [TODO]
 
 			// RUN
+			containerName := imgTag
 			args = append([]string{baseImage, containerID, containerName, "echo"}, []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}...)
 			go container.CreateContainer(args, done)
 

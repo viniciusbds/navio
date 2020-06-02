@@ -54,8 +54,8 @@ func Pull(imageName string) error {
 }
 
 // PrepareRootfs ...
-func PrepareRootfs(baseImage, containerName string) error {
-	rootfsPath := filepath.Join(utilities.RootFSPath, containerName)
+func PrepareRootfs(baseImage, containerID string) error {
+	rootfsPath := filepath.Join(utilities.RootFSPath, containerID)
 	tarFile := filepath.Join(utilities.ImagesPath, baseImage) + ".tar"
 	if err := os.MkdirAll(rootfsPath, 0777); err != nil {
 		return err
@@ -68,8 +68,8 @@ func PrepareRootfs(baseImage, containerName string) error {
 
 // ConfigureNetworkForUbuntu Add the run/systemd/resolve/stub-resolv.conf file with the value "nameserver 8.8.8.8"
 // see for more details: https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error
-func ConfigureNetworkForUbuntu(containerName string) {
-	rootfsPath := filepath.Join(utilities.RootFSPath, containerName)
+func ConfigureNetworkForUbuntu(containerID string) {
+	rootfsPath := filepath.Join(utilities.RootFSPath, containerID)
 	resolveFile := filepath.Join(rootfsPath, "/run/systemd/resolve/stub-resolv.conf")
 	if _, err := os.Stat(resolveFile); os.IsNotExist(err) {
 		utilities.Must(os.MkdirAll(rootfsPath+"/run/systemd/resolve", 0777))

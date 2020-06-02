@@ -36,19 +36,19 @@ func exec() *cobra.Command {
 				return nil
 			}
 
-			if utilities.IsEmpty(containerName) {
-				containerName = container.GetContainerName(containerID)
+			if utilities.IsEmpty(containerID) {
+				containerID = container.GetContainerID(containerName)
 			}
 
-			if !container.RootfsExists(containerName) {
-				l.Log("WARNING", fmt.Sprintf("%s is not a valid container. Run navio ps to see the available ones.", containerName))
+			if !container.RootfsExists(containerID) {
+				l.Log("WARNING", fmt.Sprintf("%s is not a valid container. Run navio containers to see the available ones.", containerName))
 				return nil
 			}
 			command := args[0]
 			params := args[1:]
 
 			l.Log("INFO", fmt.Sprintf("Container: %s, Command: %s, Params: %v", containerName, command, params))
-			args = append([]string{containerName, command}, params...)
+			args = append([]string{containerID, containerName, command}, params...)
 			container.Exec(args)
 
 			return nil
