@@ -74,7 +74,7 @@ func IsaID(ID string) bool {
 func getContainer(arg string) *Container {
 	for _, container := range containers {
 		if container.Name == arg || container.ID == arg {
-			return containers[arg]
+			return container
 		}
 	}
 	return nil
