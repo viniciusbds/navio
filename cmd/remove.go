@@ -27,6 +27,10 @@ func remove() *cobra.Command {
 					continue
 				}
 
+				if !container.IsID(arg) {
+					arg = container.GetContainerID(arg)
+				}
+
 				err := container.RemoveContainer(arg)
 				if err != nil {
 					l.Log("ERROR", err.Error())
