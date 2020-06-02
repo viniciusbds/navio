@@ -18,8 +18,8 @@ func init() {
 	readContainersDB()
 }
 
-// Ps return a string with all availables container images that was created. see it like "containers"
-func Ps() (string, error) {
+// List return a string with all containers.
+func List() (string, error) {
 	result := ""
 	for _, container := range containers {
 		result += "\n" + magenta(container.ToStr())

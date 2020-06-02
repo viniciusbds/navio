@@ -17,8 +17,8 @@ func containers() *cobra.Command {
 		Short: "List containers",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("ID\t\tNAME\t\t\tIMAGE\t\t\tCOMMAND\t\t\tSTATUS")
-			containers, _ := container.Ps()
-			fmt.Println(containers)
+			list, _ := container.List()
+			fmt.Println(list)
 		},
 	}
 }
