@@ -67,9 +67,9 @@ func run(containerID, containerName, command string, params []string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	UpdateStatus(containerID, "Running")
+	updateStatus(containerID, "Running")
 	err := cmd.Run()
-	UpdateStatus(containerID, "Stopped")
+	updateStatus(containerID, "Stopped")
 	return err
 }
 

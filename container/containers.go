@@ -118,7 +118,7 @@ func removeContainer(ID string) error {
 }
 
 // UpdateStatus update the Status of a Container
-func UpdateStatus(ID, status string) {
+func updateStatus(ID, status string) {
 	container := getContainer(ID)
 	if container != nil {
 		container.Status = status
