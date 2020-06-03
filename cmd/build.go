@@ -34,8 +34,6 @@ func build() *cobra.Command {
 		Short: "Build an image from a Naviofile",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			// navio build [directory] -t [image-name]
-
 			if utilities.IsEmpty(imgTag) {
 				l.Log("WARNING", "You must insert a image name. for ex.: --t python-ubuntu")
 				return
@@ -70,10 +68,9 @@ func build() *cobra.Command {
 			fmt.Printf("---------------------------------------------------------------\n")
 
 			rand.Seed(time.Now().UnixNano())
-			min := 99999999
-			max := 1000000000
+			min := 11111111
+			max := 99999999
 			containerID := fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
-
 			containerRootFS := filepath.Join(utilities.RootFSPath, containerID)
 
 			// FROM
