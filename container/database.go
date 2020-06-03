@@ -58,14 +58,14 @@ func insertContainersDB(container *Container) {
 	insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.Root, container.Command, params)
 }
 
-func removeContainerDB(name string) error {
+func removeContainerDB(ID string) error {
 	db := openDBConn()
 	defer db.Close()
 
-	delForm, err := db.Prepare("DELETE FROM containers WHERE name=?")
+	delForm, err := db.Prepare("DELETE FROM containers WHERE id=?")
 	if err != nil {
 		return err
 	}
-	delForm.Exec(name)
+	delForm.Exec(ID)
 	return nil
 }
