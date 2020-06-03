@@ -159,10 +159,14 @@ func IsValid(image string) bool {
 }
 
 func removeImage(name string) error {
+	// remove the .tar image file
+	err := os.RemoveAll(filepath.Join(utilities.ImagesPath, name+".tar"))
+	if err != nil {
+		return err
+	}
 	// remove it from the data structure
 	delete(images, name)
 	// update the database
 	removeImageDB(name)
-	// remove the .tar image file
-	return os.RemoveAll(filepath.Join(utilities.ImagesPath, name+".tar"))
+	return nil
 }

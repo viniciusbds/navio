@@ -109,12 +109,16 @@ func RootFSExists(ID string) bool {
 }
 
 func removeContainer(ID string) error {
+	// remove the rootFS
+	err := os.RemoveAll(filepath.Join(utilities.RootFSPath, ID))
+	if err != nil {
+		return err
+	}
 	// remove it from the data structure
 	delete(containers, ID)
 	// update the database
 	removeContainerDB(ID)
-	// remove the rootFS
-	return os.RemoveAll(filepath.Join(utilities.RootFSPath, ID))
+	return nil
 }
 
 // UpdateStatus update the Status of a Container
