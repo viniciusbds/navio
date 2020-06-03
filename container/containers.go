@@ -51,6 +51,17 @@ func RemoveContainer(ID string) error {
 	return removeContainer(ID)
 }
 
+// RemoveAll remove all containers
+func RemoveAll() error {
+	for _, container := range containers {
+		err := removeContainer(container.ID)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
 // Exists receives a [containerName or containerID] and return true if the Container exists on the system
 func Exists(arg string) bool {
 	for _, container := range containers {

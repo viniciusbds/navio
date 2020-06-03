@@ -20,23 +20,30 @@ func remove() *cobra.Command {
 				return
 			}
 
-			var id string
-			for _, arg := range args {
-
-				if !container.Exists(arg) {
-					l.Log("WARNING", "The container "+arg+" doesn't exists!")
-					continue
-				}
-
-				if container.IsaID(arg) {
-					id = arg
-				} else {
-					id = container.GetContainerID(arg)
-				}
-
-				err := container.RemoveContainer(id)
+			if args[0] == "all" {
+				err := container.RemoveAll()
 				if err != nil {
 					l.Log("ERROR", err.Error())
+				}
+			} else {
+				var id string
+				for _, arg := range args {
+
+					if !container.Exists(arg) {
+						l.Log("WARNING", "The container "+arg+" doesn't exists!")
+						continue
+					}
+
+					if container.IsaID(arg) {
+						id = arg
+					} else {
+						id = container.GetContainerID(arg)
+					}
+
+					err := container.RemoveContainer(id)
+					if err != nil {
+						l.Log("ERROR", err.Error())
+					}
 				}
 			}
 
