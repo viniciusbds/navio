@@ -117,13 +117,17 @@ func RemoveImage(name string) error {
 	return removeImage(name)
 }
 
-// RemoveAllImages remove all non official images
-func RemoveAllImages() {
+// RemoveAll remove all non official images
+func RemoveAll() error {
 	for _, image := range images {
 		if !utilities.IsOfficialImage(image.Name) {
-			removeImage(image.Name)
+			err := removeImage(image.Name)
+			if err != nil {
+				return err
+			}
 		}
 	}
+	return nil
 }
 
 // Describe ...

@@ -22,7 +22,10 @@ func rmi() *cobra.Command {
 			}
 
 			if args[0] == "all" {
-				images.RemoveAllImages()
+				err := images.RemoveAll()
+				if err != nil {
+					l.Log("ERROR", err.Error())
+				}
 			} else {
 				for _, arg := range args {
 					if arg != "" {
@@ -32,9 +35,7 @@ func rmi() *cobra.Command {
 						}
 					}
 				}
-
 			}
-
 		},
 	}
 }
