@@ -133,17 +133,10 @@ func removeContainer(ID string) error {
 }
 
 // UpdateStatus update the Status of a Container
-func updateStatus(ID, status string) {
-	container := getContainer(ID)
-	if container != nil {
-		container.Status = status
-		updateContainer(container)
+func updateStatus(ID, status string) error {
+	if !IsaID(ID) {
+		return errors.New("ERROR: Container not exists")
 	}
-}
-
-func updateContainer(container *Container) {
-	if container != nil {
-		containers[container.ID] = container
-		updateContainerDB(container)
-	}
+	containers[ID].SetStatus(status)
+	return updateContainerStatusDB(ID, status)
 }

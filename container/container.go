@@ -37,3 +37,13 @@ func (c *Container) ToStr() string {
 	image := c.Image + strings.Repeat(" ", utilities.MaxImageNameLength-len(c.Image))
 	return fmt.Sprintf("%s\t%s %s\t%s\t\t\t%s", c.ID, name, image, c.Command, c.Status)
 }
+
+// IsRunning ...
+func (c *Container) IsRunning() bool {
+	return c.Status == "Running"
+}
+
+// SetStatus ...
+func (c *Container) SetStatus(status string) bool {
+	return c.Status == status
+}
