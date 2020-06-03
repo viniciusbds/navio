@@ -58,6 +58,23 @@ func insertContainersDB(container *Container) {
 	insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.Root, container.Command, params)
 }
 
+func updateContainerDB(container *Container) {
+	db := openDBConn()
+	defer db.Close()
+
+	// Is possiblie update only the name of container and the status
+	sqlStatement := `
+	UPDATE containers
+	SET name = ?, status = ?
+	WHERE id = ?;`
+
+	insForm, err := db.Prepare(sqlStatement)
+	if err != nil {
+		panic(err.Error())
+	}
+	insForm.Exec(container.Name, container.Status, container.ID)
+}
+
 func removeContainerDB(ID string) error {
 	db := openDBConn()
 	defer db.Close()

@@ -50,7 +50,7 @@ func saveContainer(baseImage string, containerID string, containerName string, c
 		ID:      containerID,
 		Name:    containerName,
 		Image:   baseImage,
-		Status:  "Up",
+		Status:  "-",
 		Root:    filepath.Join(utilities.RootFSPath, containerName),
 		Command: command,
 		Params:  params,
@@ -67,7 +67,10 @@ func run(containerID, containerName, command string, params []string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	UpdateStatus(containerID, "Running")
+	err := cmd.Run()
+	UpdateStatus(containerID, "Stopped")
+	return err
 }
 
 func child() {

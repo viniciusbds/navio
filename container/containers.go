@@ -30,7 +30,7 @@ func List() (string, error) {
 // Insert inserts a new container on the data structure and update the database
 func Insert(container *Container) {
 	if container != nil {
-		containers[container.Name] = container
+		containers[container.ID] = container
 		insertContainersDB(container)
 	} else {
 		l.Log("ERROR", "NIL container")
@@ -115,4 +115,20 @@ func removeContainer(ID string) error {
 	removeContainerDB(ID)
 	// remove the rootFS
 	return os.RemoveAll(filepath.Join(utilities.RootFSPath, ID))
+}
+
+// UpdateStatus update the Status of a Container
+func UpdateStatus(ID, status string) {
+	container := getContainer(ID)
+	if container != nil {
+		container.Status = status
+		updateContainer(container)
+	}
+}
+
+func updateContainer(container *Container) {
+	if container != nil {
+		containers[container.ID] = container
+		updateContainerDB(container)
+	}
 }
