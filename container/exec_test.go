@@ -22,7 +22,9 @@ func TestExec(t *testing.T) {
 	t.Run("Try EXEC a invalid container (i.e:  that doesn't exists)", func(t *testing.T) {
 		containerName := "someIncommunnamiss"
 		containerID := GetContainerID(containerName)
-		err := Exec([]string{containerID, containerName, "echo", "Ola", "Menino", "Jesus", "de", "Atocha"})
+		command := "echo"
+		params := []string{"Ola", "Menino", "Jesus", "de", "Atocha"}
+		err := Exec(containerID, containerName, command, params)
 		if err == nil {
 			t.Errorf("Here we expected that err != nil, because the containerName doesn't exists!!!")
 		}
@@ -36,6 +38,8 @@ func TestExec(t *testing.T) {
 	t.Run("EXEC a valid container (i.e:  that exists)", func(t *testing.T) {
 		containerName := "galan-alpine"
 		containerID := GetContainerID(containerName)
+		command := "echo"
+		params := []string{"Ola", "Menino", "Jesus", "de", "Atocha"}
 
 		// Cleaning before start
 		if cont := getContainer(containerName); cont != nil {
@@ -43,7 +47,7 @@ func TestExec(t *testing.T) {
 			RemoveContainer(containerID)
 		}
 
-		err := Exec([]string{containerID, containerName, "echo", "Ola", "Menino", "Jesus", "de", "Atocha"})
+		err := Exec(containerID, containerName, command, params)
 
 		if err != nil {
 			expected := "The container " + containerName + " doesn't exist"
@@ -53,11 +57,11 @@ func TestExec(t *testing.T) {
 
 		baseImg := "alpine"
 		containerID = "98989898989"
-		go CreateContainer([]string{baseImg, containerID, containerName, "echo", "creating container"}, done)
+		go CreateContainer(containerID, containerName, baseImg, command, params, done)
 		<-done
 
 		// Testing exec
-		err = Exec([]string{containerID, containerName, "echo", "Ola", "Menino", "Jesus", "de", "Atocha"})
+		err = Exec(containerID, containerName, command, params)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
