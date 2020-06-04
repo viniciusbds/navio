@@ -5,16 +5,9 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
-	"github.com/viniciusbds/navio/utilities"
-)
-
-var (
-	// Used for id flag.
-	containerID string
 )
 
 func init() {
-	rootCmd.PersistentFlags().StringVar(&containerID, "id", "", "The ID of the container")
 	rootCmd.AddCommand(exec())
 }
 
@@ -23,24 +16,33 @@ func exec() *cobra.Command {
 		Use:   "exec",
 		Short: "Run a command in a running container",
 		Run: func(cmd *cobra.Command, args []string) {
-			if utilities.IsEmpty(containerID) {
-				l.Log("WARNING", "You must insert a container id. (ex --id 9999987)")
-				return
-			}
-			if !utilities.IsEmpty(containerID) && !container.IsaID(containerID) {
-				l.Log("WARNING", "Invalid container id. Run [navio containers] to see the available ones.")
-				return
-			}
-			if len(args) < 1 {
-				l.Log("WARNING", "You must insert a command!")
+			containerID, indexID := getContainerID(args)
+			if containerID == "" {
+				l.Log("WARNING", "Insert a valid container id.")
 				return
 			}
 
-			command := args[0]
-			params := args[1:]
+			// remove the containerID of args
+			args = append(args[:indexID], args[indexID+1:]...)
+			if len(args) == 0 {
+				l.Log("WARNING", "You must insert a command.")
+				return
+			}
 
+			command, params := args[0], args[1:]
 			l.Log("INFO", fmt.Sprintf("Container: %s, Command: %s, Params: %v", containerName, command, params))
 			container.Exec(containerID, containerName, command, params)
 		},
 	}
+}
+
+func getContainerID(args []string) (containerID string, index int) {
+	var arg string
+	for index, arg = range args {
+		if container.IsaID(arg) {
+			containerID = arg
+			break
+		}
+	}
+	return
 }
