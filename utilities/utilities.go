@@ -67,18 +67,19 @@ func Tar(directory, file string, done chan bool) error {
 
 // Copy Copy a directory or a file from origen to a specific destiny
 // (for ex: insidy the rootFS of a container)
-func Copy(source, destiny string, wg *sync.WaitGroup) error {
-	defer wg.Done()
-	if !FileExists(destiny) {
-		err := os.MkdirAll(destiny, 0777)
+func Copy(source, destination string, done chan bool) error {
+	if !FileExists(destination) {
+		err := os.MkdirAll(destination, 0777)
 		if err != nil {
 			return err
 		}
 	}
-	cmd := exec.Command("cp", "-r", source, destiny)
+	cmd := exec.Command("cp", "-r", source, destination)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	return cmd.Run()
+	err := cmd.Run()
+	done <- true
+	return err
 }
 
 // IsEmpty ...

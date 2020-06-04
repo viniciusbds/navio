@@ -60,10 +60,10 @@ func build() *cobra.Command {
 			}
 
 			naviofileDir := args[0]
-			baseImage, source, destiny, commands := naviofile.ReadNaviofile(naviofileDir)
+			baseImage, source, destination, commands := naviofile.ReadNaviofile(naviofileDir)
 
 			fmt.Printf(magenta("FROM %s\n"), baseImage)
-			fmt.Printf(magenta("ADD %s %s\n"), source, destiny)
+			fmt.Printf(magenta("ADD %s %s\n"), source, destination)
 			fmt.Printf(magenta("RUN %v\n"), commands)
 			fmt.Printf("---------------------------------------------------------------\n")
 
@@ -75,19 +75,20 @@ func build() *cobra.Command {
 
 			// FROM
 			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
-			go images.UntarImg(imgTag, baseImage, done)
-
-			// ADD
-			if !utilities.IsEmpty(source) && !utilities.IsEmpty(destiny) {
-				fullDestinyPath := filepath.Join(containerRootFS, destiny)
-				wg.Add(1)
-				go utilities.Copy(source, fullDestinyPath, &wg)
-			}
-
-			// Wait the copy of the IMAGE complete
 			wg.Add(1)
 			go utilities.Loader(done, &wg)
+			go images.UntarImg(baseImage, containerRootFS, done)
 			wg.Wait()
+
+			// ADD
+			if !utilities.IsEmpty(source) && !utilities.IsEmpty(destination) {
+				fmt.Printf(green("ADD %s %s\n"), source, destination)
+				fullDestinyPath := filepath.Join(containerRootFS, destination)
+				wg.Add(1)
+				go utilities.Loader(done, &wg)
+				go utilities.Copy(source, fullDestinyPath, done)
+				wg.Wait()
+			}
 
 			// ENTRYPOINT
 			// [TODO]
@@ -115,7 +116,7 @@ func build() *cobra.Command {
 			for _, c := range commands {
 				command := c[0]
 				params := c[1:]
-				fmt.Printf(green("RUN %v\n"), command)
+				fmt.Printf(green("RUN %v\n"), append([]string{command}, params...))
 				container.Exec(containerID, containerName, command, params)
 			}
 

@@ -144,13 +144,12 @@ func getImage(name string) *Image {
 }
 
 // UntarImg extract the baseImage to create another one
-func UntarImg(name, baseImg string, done chan bool) error {
-	newImgPath := filepath.Join(utilities.RootFSPath, name)
-	tarFile := filepath.Join(utilities.ImagesPath, baseImg) + ".tar"
-	if err := os.Mkdir(newImgPath, 0777); err != nil {
+func UntarImg(image, containerRootFS string, done chan bool) error {
+	tarFile := filepath.Join(utilities.ImagesPath, image) + ".tar"
+	if err := os.Mkdir(containerRootFS, 0777); err != nil {
 		return err
 	}
-	if err := utilities.Untar(newImgPath, tarFile); err != nil {
+	if err := utilities.Untar(containerRootFS, tarFile); err != nil {
 		return err
 	}
 	done <- true

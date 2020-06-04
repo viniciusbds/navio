@@ -15,7 +15,7 @@ var (
 )
 
 // ReadNaviofile ...
-func ReadNaviofile(path string) (baseImage, source, destiny string, commands [][]string) {
+func ReadNaviofile(path string) (baseImage, source, destination string, commands [][]string) {
 
 	naviofile, err := ioutil.ReadFile(filepath.Join(path, "Naviofile")) // just pass the file name
 	if err != nil {
@@ -32,7 +32,7 @@ func ReadNaviofile(path string) (baseImage, source, destiny string, commands [][
 			baseImage = l[1]
 		} else if cmd == "ADD" {
 			source = l[1]
-			destiny = l[2]
+			destination = l[2]
 		} else if cmd == "RUN" {
 			l = strings.Split(line, "&&")
 			// expected example: [RUN apt update,  apt -y upgrade, apt install -y python]
@@ -49,5 +49,5 @@ func ReadNaviofile(path string) (baseImage, source, destiny string, commands [][
 			}
 		}
 	}
-	return baseImage, source, destiny, commands
+	return baseImage, source, destination, commands
 }
