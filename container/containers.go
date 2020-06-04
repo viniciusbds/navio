@@ -52,14 +52,11 @@ func RemoveContainer(ID string) error {
 }
 
 // RemoveAll remove all containers
-func RemoveAll() error {
+func RemoveAll(done chan bool) {
 	for _, container := range containers {
-		err := removeContainer(container.ID)
-		if err != nil {
-			return err
-		}
+		removeContainer(container.ID)
 	}
-	return nil
+	done <- true
 }
 
 // UsedName receives a containerName and return true if the name already was used

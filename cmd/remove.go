@@ -1,8 +1,11 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
+	"github.com/viniciusbds/navio/utilities"
 )
 
 func init() {
@@ -21,10 +24,11 @@ func remove() *cobra.Command {
 			}
 
 			if args[0] == "all" {
-				err := container.RemoveAll()
-				if err != nil {
-					l.Log("ERROR", err.Error())
-				}
+				wg.Add(1)
+				fmt.Println("Removing all containers ...")
+				go container.RemoveAll(done)
+				utilities.Loader(done, &wg)
+				wg.Wait()
 			} else {
 				var id string
 				for _, arg := range args {
