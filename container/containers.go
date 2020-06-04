@@ -72,6 +72,16 @@ func Exists(arg string) bool {
 	return false
 }
 
+// UsedName receives a containerName and return true if the name already was used
+func UsedName(name string) bool {
+	for _, container := range containers {
+		if container.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
 // IsaID verifies if a string is the ID of some container
 func IsaID(ID string) bool {
 	for _, container := range containers {

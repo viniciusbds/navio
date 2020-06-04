@@ -28,28 +28,26 @@ func createContainer() *cobra.Command {
 	return &cobra.Command{
 		Use:   "run",
 		Short: "Run a command in a new container",
-		RunE: func(cmd *cobra.Command, args []string) error {
-			// navio run IMAGE COMMAND PARAMS...
-
-			if len(args) < 2 {
-				l.Log("WARNING", "You must insert at least a image name and a command!")
-				return nil
-			}
+		Run: func(cmd *cobra.Command, args []string) {
 
 			if len(containerName) > utilities.MaxContainerNameLength {
 				l.Log("WARNING", "Container name is too long, please enter a shorter name.")
-				return nil
+				return
 			}
 
-			image := args[0]
-
-			if !images.IsValid(image) {
-				l.Log("WARNING", fmt.Sprintf("%s is not a base Image. See navio get images", image))
-				return nil
+			image, index := getImage(args)
+			if image == "" {
+				l.Log("WARNING", "Insert a valid image name.")
+				return
 			}
 
-			command := args[1]
-			params := args[2:]
+			// remove the image of args
+			args = append(args[:index], args[index+1:]...)
+			if len(args) == 0 {
+				l.Log("WARNING", "You must insert a command.")
+				return
+			}
+			command, params := args[0], args[1:]
 
 			rand.Seed(time.Now().UnixNano())
 			min := 99999999
@@ -60,8 +58,8 @@ func createContainer() *cobra.Command {
 				containerName = containerID
 			}
 
-			if container.RootFSExists(containerID) {
-				l.Log("WARNING", fmt.Sprintf("The containerName %s already was used. Enter a new name.", containerName))
+			if container.UsedName(containerName) {
+				l.Log("WARNING", fmt.Sprintf("The containerName %s was already used. Enter a new name.", containerName))
 				os.Exit(1)
 			}
 
@@ -72,7 +70,17 @@ func createContainer() *cobra.Command {
 			go utilities.Loader(done, &wg)
 			container.CreateContainer(containerID, containerName, image, command, params, done)
 
-			return nil
 		},
 	}
+}
+
+func getImage(args []string) (image string, index int) {
+	var arg string
+	for index, arg = range args {
+		if images.IsValid(arg) {
+			image = arg
+			break
+		}
+	}
+	return
 }
