@@ -40,8 +40,7 @@ func exec() *cobra.Command {
 			params := args[1:]
 
 			l.Log("INFO", fmt.Sprintf("Container: %s, Command: %s, Params: %v", containerName, command, params))
-			args = append([]string{containerID, containerName, command}, params...)
-			container.Exec(args)
+			container.Exec(containerID, containerName, command, params)
 		},
 	}
 }

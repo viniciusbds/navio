@@ -103,17 +103,20 @@ func build() *cobra.Command {
 
 			// RUN
 			containerName := imgTag
-			args = append([]string{baseImage, containerID, containerName, "echo"}, []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}...)
-			go container.CreateContainer(args, done)
+			command := "echo"
+			params := []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}
+			go container.CreateContainer(containerID, containerName, baseImage, command, params, done)
 
 			fmt.Printf(green("Prepare container ...\n"))
 			wg.Add(1)
 			go utilities.Loader(done, &wg)
 			wg.Wait()
 
-			for _, command := range commands {
+			for _, c := range commands {
+				command := c[0]
+				params := c[1:]
 				fmt.Printf(green("RUN %v\n"), command)
-				container.Exec(append([]string{containerName}, command...))
+				container.Exec(containerID, containerName, command, params)
 			}
 
 			// saving the image.tarin tarPath ...
