@@ -42,7 +42,7 @@ func RemoveContainer(ID string) error {
 	if utilities.IsEmpty(ID) {
 		return errors.New("Empty container ID")
 	}
-	if !Exists(ID) {
+	if !IsaID(ID) {
 		return errors.New("Invalid container ID: " + ID)
 	}
 	if !RootFSExists(ID) {
@@ -62,16 +62,6 @@ func RemoveAll() error {
 	return nil
 }
 
-// Exists receives a [containerName or containerID] and return true if the Container exists on the system
-func Exists(arg string) bool {
-	for _, container := range containers {
-		if container.Name == arg || container.ID == arg {
-			return true
-		}
-	}
-	return false
-}
-
 // UsedName receives a containerName and return true if the name already was used
 func UsedName(name string) bool {
 	for _, container := range containers {
@@ -82,7 +72,7 @@ func UsedName(name string) bool {
 	return false
 }
 
-// IsaID verifies if a string is the ID of some container
+// IsaID vreceives a containerID and return true if there's an container associated
 func IsaID(ID string) bool {
 	for _, container := range containers {
 		if container.ID == ID {
