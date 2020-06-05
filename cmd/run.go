@@ -8,6 +8,7 @@ import (
 	"math/rand"
 
 	"github.com/spf13/cobra"
+	"github.com/viniciusbds/isroot"
 	"github.com/viniciusbds/navio/constants"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
@@ -30,6 +31,11 @@ func createContainer() *cobra.Command {
 		Use:   "run",
 		Short: "Run a command in a new container",
 		Run: func(cmd *cobra.Command, args []string) {
+
+			if !isroot.IsRoot() {
+				l.Log("WARNING", "This command requires sudo privileges! please run as super user :)")
+				return
+			}
 
 			if len(containerName) > constants.MaxContainerNameLength {
 				l.Log("WARNING", "Container name is too long, please enter a shorter name.")

@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
+	"github.com/viniciusbds/isroot"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/pkg/loader"
 )
@@ -17,6 +18,11 @@ func remove() *cobra.Command {
 		Use:   "remove",
 		Short: "Remove one or more containers",
 		Run: func(cmd *cobra.Command, args []string) {
+
+			if !isroot.IsRoot() {
+				l.Log("WARNING", "This command requires sudo privileges! please run as super user :)")
+				return
+			}
 
 			if len(args) == 0 {
 				l.Log("WARNING", "You must insert the containerName!")
