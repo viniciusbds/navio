@@ -9,8 +9,7 @@ import (
 	"github.com/viniciusbds/navio/utilities"
 )
 
-// Função openDBConn, abre a conexão com o banco de dados
-func openDBConn() (db *sql.DB) {
+func openDB() (db *sql.DB) {
 	db, err := sql.Open("mysql", utilities.DBuser+":"+utilities.DBpass+"@/"+utilities.DBname)
 	if err != nil {
 		panic(err.Error())
@@ -19,7 +18,7 @@ func openDBConn() (db *sql.DB) {
 }
 
 func readContainersDB() {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	selDB, err := db.Query("SELECT * FROM containers ORDER BY name DESC")
@@ -38,7 +37,7 @@ func readContainersDB() {
 }
 
 func insertContainersDB(container *Container) {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	params := ""
@@ -59,7 +58,7 @@ func insertContainersDB(container *Container) {
 }
 
 func updateContainerNameDB(ID, name string) error {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	sqlStatement := `
@@ -76,7 +75,7 @@ func updateContainerNameDB(ID, name string) error {
 }
 
 func updateContainerStatusDB(ID, status string) error {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	sqlStatement := `
@@ -93,13 +92,13 @@ func updateContainerStatusDB(ID, status string) error {
 }
 
 func removeContainerDB(ID string) error {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	delForm, err := db.Prepare("DELETE FROM containers WHERE id=?")
 	if err != nil {
 		return err
 	}
-	delForm.Exec(ID)
-	return nil
+	_, err = delForm.Exec(ID)
+	return err
 }

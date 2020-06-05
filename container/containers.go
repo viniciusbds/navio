@@ -45,7 +45,7 @@ func RemoveContainer(ID string) error {
 	if !IsaID(ID) {
 		return errors.New("Invalid container ID: " + ID)
 	}
-	if !RootFSExists(ID) {
+	if !rootFSExists(ID) {
 		return errors.New("RootFS of container" + ID + " doesn't exist")
 	}
 	return removeContainer(ID)
@@ -59,17 +59,7 @@ func RemoveAll(done chan bool) {
 	done <- true
 }
 
-// UsedName receives a containerName and return true if the name already was used
-func UsedName(name string) bool {
-	for _, container := range containers {
-		if container.Name == name {
-			return true
-		}
-	}
-	return false
-}
-
-// IsaID vreceives a containerID and return true if there's an container associated
+// IsaID receives a containerID and return true if there's a container associated
 func IsaID(ID string) bool {
 	for _, container := range containers {
 		if container.ID == ID {
@@ -79,57 +69,55 @@ func IsaID(ID string) bool {
 	return false
 }
 
-func getContainer(arg string) *Container {
-	for _, container := range containers {
-		if container.Name == arg || container.ID == arg {
-			return container
-		}
-	}
-	return nil
+func getContainer(ID string) *Container {
+	return containers[ID]
 }
 
-// GetContainerID receive a container name and returns the respective ID
+// GetContainerID receive a container name and returns her respective ID
 func GetContainerID(name string) string {
 	result := ""
-	c := getContainer(name)
-	if c != nil {
-		result = c.ID
-	}
-	return result
-}
-
-// GetContainerName receive a container ID and returns the respective name
-func GetContainerName(ID string) string {
-	result := ""
-	for _, c := range containers {
-		if c.ID == ID {
-			result = c.Name
+	for _, container := range containers {
+		if container.Name == name {
+			result = container.ID
 			return result
 		}
 	}
 	return result
 }
 
-// RootFSExists receives a container ID and verifies if exists a RootFS
-func RootFSExists(ID string) bool {
+// GetContainerName receive a container ID and returns her respective name
+func GetContainerName(ID string) string {
+	result := ""
+	container := getContainer(ID)
+	if container != nil {
+		result = container.Name
+	}
+	return result
+}
+
+// UsedName receives a containerName and return true if the name already was used
+func UsedName(name string) bool {
+	return GetContainerName(name) != ""
+}
+
+func rootFSExists(ID string) bool {
 	_, err := os.Stat(filepath.Join(utilities.RootFSPath, ID))
 	return !os.IsNotExist(err)
 }
 
 func removeContainer(ID string) error {
-	// remove the rootFS
+	// First we try to remove the container rootFS
 	err := os.RemoveAll(filepath.Join(utilities.RootFSPath, ID))
 	if err != nil {
 		return err
 	}
 	// remove it from the data structure
 	delete(containers, ID)
-	// update the database
+	// remove it from the database
 	removeContainerDB(ID)
 	return nil
 }
 
-// UpdateStatus update the Status of a Container
 func updateStatus(ID, status string) error {
 	if !IsaID(ID) {
 		return errors.New("ERROR: Container not exists")

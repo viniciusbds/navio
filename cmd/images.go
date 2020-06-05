@@ -16,7 +16,7 @@ func listImages() *cobra.Command {
 		Use:   "images",
 		Short: "List images",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("NAME\t\t\tBASE\t\t\tVERSION\t\tSIZE\t" + images.GetImages())
+			fmt.Println("NAME\t\t\tBASE\t\t\tVERSION\t\tSIZE\t" + images.ListImages())
 		},
 	}
 }

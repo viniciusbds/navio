@@ -29,7 +29,7 @@ func Pull(imageName string) error {
 		return errors.New(imageName + " is not a official Image.")
 	}
 
-	image := getImage(imageName)
+	image := GetImage(imageName)
 
 	if Exists(image.Name) {
 		return errors.New("The image " + image.Name + " already was downloaded")
@@ -53,8 +53,8 @@ func Pull(imageName string) error {
 	return nil
 }
 
-// PrepareRootfs ...
-func PrepareRootfs(baseImage, containerID string) error {
+// PrepareRootFS ...
+func PrepareRootFS(baseImage, containerID string) error {
 	rootfsPath := filepath.Join(utilities.RootFSPath, containerID)
 	tarFile := filepath.Join(utilities.ImagesPath, baseImage) + ".tar"
 	if err := os.MkdirAll(rootfsPath, 0777); err != nil {
@@ -87,8 +87,8 @@ func Exists(image string) bool {
 	return true
 }
 
-// GetImages return a string with all base images
-func GetImages() (result string) {
+// ListImages return a string with all available images
+func ListImages() (result string) {
 	for _, img := range images {
 		result += "\n" + magenta(img.ToStr())
 	}
@@ -96,11 +96,14 @@ func GetImages() (result string) {
 }
 
 // InsertImage ...
-func InsertImage(name, baseImage string) {
-	baseImg := getImage(baseImage)
+func InsertImage(name, baseImage string) error {
+	baseImg := GetImage(baseImage)
+	if baseImg == nil {
+		return errors.New("ERROR: NIL Image ... ")
+	}
 	newImg := NewImage(name, baseImage, baseImg.Version, baseImg.Size, baseImg.URL)
 	images[name] = newImg
-	insertImageDB(newImg)
+	return insertImageDB(newImg)
 }
 
 // RemoveImage a especific non official image
@@ -130,16 +133,8 @@ func RemoveAll() error {
 	return nil
 }
 
-// Describe ...
-func Describe(imageName string) (string, error) {
-	image := getImage(imageName)
-	if image == nil {
-		return "", errors.New("Invalid image! Cannot describe" + imageName)
-	}
-	return image.ToStr(), nil
-}
-
-func getImage(name string) *Image {
+// GetImage returns a image from the data structure
+func GetImage(name string) *Image {
 	return images[name]
 }
 
@@ -156,20 +151,15 @@ func UntarImg(image, containerRootFS string, done chan bool) error {
 	return nil
 }
 
-// IsValid receive a imageName and return true if is a valid image.
-func IsValid(image string) bool {
-	return getImage(image) != nil
-}
-
 func removeImage(name string) error {
-	// remove the .tar image file
+	// First we remove the image.tar file
 	err := os.RemoveAll(filepath.Join(utilities.ImagesPath, name+".tar"))
 	if err != nil {
 		return err
 	}
 	// remove it from the data structure
 	delete(images, name)
-	// update the database
+	// update it from the database
 	removeImageDB(name)
 	return nil
 }

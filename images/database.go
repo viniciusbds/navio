@@ -8,8 +8,7 @@ import (
 	"github.com/viniciusbds/navio/utilities"
 )
 
-// Função openDBConn, abre a conexão com o banco de dados
-func openDBConn() (db *sql.DB) {
+func openDB() (db *sql.DB) {
 	db, err := sql.Open("mysql", utilities.DBuser+":"+utilities.DBpass+"@/"+utilities.DBname)
 	if err != nil {
 		panic(err.Error())
@@ -18,7 +17,7 @@ func openDBConn() (db *sql.DB) {
 }
 
 func readImagesDB() {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	selDB, err := db.Query("SELECT * FROM images ORDER BY name DESC")
@@ -37,19 +36,20 @@ func readImagesDB() {
 	}
 }
 
-func insertImageDB(image *Image) {
-	db := openDBConn()
+func insertImageDB(image *Image) error {
+	db := openDB()
 	defer db.Close()
 
 	insForm, err := db.Prepare("INSERT INTO images(name, base, version, size, url) VALUES(?,?,?,?,?)")
 	if err != nil {
-		panic(err.Error())
+		return err
 	}
-	insForm.Exec(image.Name, image.Base, image.Version, image.Size, image.URL)
+	_, err = insForm.Exec(image.Name, image.Base, image.Version, image.Size, image.URL)
+	return err
 }
 
 func removeImageDB(imgName string) {
-	db := openDBConn()
+	db := openDB()
 	defer db.Close()
 
 	delForm, err := db.Prepare("DELETE FROM images WHERE name=?")

@@ -77,7 +77,7 @@ func createContainer() *cobra.Command {
 func getImage(args []string) (image string, index int) {
 	var arg string
 	for index, arg = range args {
-		if images.IsValid(arg) {
+		if images.GetImage(arg) != nil {
 			image = arg
 			break
 		}

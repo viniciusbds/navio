@@ -36,8 +36,8 @@ func prepareImage(baseImg, containerID string) {
 	if !images.Exists(baseImg) {
 		utilities.Must(images.Pull(baseImg))
 	}
-	if !RootFSExists(containerID) {
-		images.PrepareRootfs(baseImg, containerID)
+	if !rootFSExists(containerID) {
+		images.PrepareRootFS(baseImg, containerID)
 	}
 	if baseImg == "ubuntu" {
 		images.ConfigureNetworkForUbuntu(containerID)
