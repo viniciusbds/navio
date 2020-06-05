@@ -17,7 +17,7 @@ It is also possible to limit the amount of resources that each container can use
 
 
 ### Why?
-Just for science, do not use this code in production !!! :D.
+Just for science, do not use this code in production :satisfied:
 
 ## Available Images
 
