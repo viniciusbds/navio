@@ -1,11 +1,9 @@
 package utilities
 
 import (
-	"fmt"
 	"os"
 	"os/exec"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/viniciusbds/navio/logger"
@@ -106,30 +104,4 @@ func IsOfficialImage(image string) bool {
 		}
 	}
 	return false
-}
-
-// Loader ...
-func Loader(done chan bool, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	i := 0
-	load := []rune(`|\-/`)
-
-	for {
-		select {
-		case <-done:
-			fmt.Printf("\r")
-			fmt.Println("Done :)")
-			return
-		default:
-			fmt.Printf("\r")
-			fmt.Printf(string(load[i]))
-			time.Sleep(time.Millisecond * 100)
-			i++
-			if i == len(load) {
-				i = 0
-			}
-		}
-	}
-
 }

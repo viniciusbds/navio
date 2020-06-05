@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
+	"github.com/viniciusbds/navio/pkg/loader"
 	"github.com/viniciusbds/navio/utilities"
 )
 
@@ -67,7 +68,7 @@ func createContainer() *cobra.Command {
 
 			fmt.Printf(green("Creating [%s] container ...\n"), containerName)
 			wg.Add(1)
-			go utilities.Loader(done, &wg)
+			go loader.Loader("Done :)", done, &wg)
 			container.CreateContainer(containerID, containerName, image, command, params, done)
 
 		},

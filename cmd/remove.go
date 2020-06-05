@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/container"
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/pkg/loader"
 )
 
 func init() {
@@ -27,7 +27,7 @@ func remove() *cobra.Command {
 				wg.Add(1)
 				fmt.Println("Removing all containers ...")
 				go container.RemoveAll(done)
-				utilities.Loader(done, &wg)
+				loader.Loader("Done :)", done, &wg)
 				wg.Wait()
 			} else {
 				var id string

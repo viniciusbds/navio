@@ -11,6 +11,7 @@ import (
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/naviofile"
+	"github.com/viniciusbds/navio/pkg/loader"
 	"github.com/viniciusbds/navio/utilities"
 )
 
@@ -76,7 +77,7 @@ func build() *cobra.Command {
 			// FROM
 			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
 			wg.Add(1)
-			go utilities.Loader(done, &wg)
+			go loader.Loader("Done :)", done, &wg)
 			go images.UntarImg(baseImage, containerRootFS, done)
 			wg.Wait()
 
@@ -85,7 +86,7 @@ func build() *cobra.Command {
 				fmt.Printf(green("ADD %s %s\n"), source, destination)
 				fullDestinyPath := filepath.Join(containerRootFS, destination)
 				wg.Add(1)
-				go utilities.Loader(done, &wg)
+				go loader.Loader("Done :)", done, &wg)
 				go utilities.Copy(source, fullDestinyPath, done)
 				wg.Wait()
 			}
@@ -110,7 +111,7 @@ func build() *cobra.Command {
 
 			fmt.Printf(green("Prepare container ...\n"))
 			wg.Add(1)
-			go utilities.Loader(done, &wg)
+			go loader.Loader("Done :)", done, &wg)
 			wg.Wait()
 
 			for _, c := range commands {
@@ -125,7 +126,7 @@ func build() *cobra.Command {
 
 			fmt.Printf(green("Generating the [%s] image ...\n"), imgTag)
 			wg.Add(1)
-			go utilities.Loader(done, &wg)
+			go loader.Loader("Done :)", done, &wg)
 			go utilities.Tar(containerRootFS, imageFile, done)
 			wg.Wait()
 
