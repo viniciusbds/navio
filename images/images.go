@@ -9,8 +9,10 @@ import (
 	"time"
 
 	"github.com/mgutz/ansi"
+	"github.com/viniciusbds/navio/constants"
+	"github.com/viniciusbds/navio/pkg/io"
 	"github.com/viniciusbds/navio/pkg/logger"
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/pkg/util"
 )
 
 var (
@@ -25,7 +27,7 @@ func init() {
 
 // Pull Downloads the .tar file from the official site
 func Pull(imageName string) error {
-	if !utilities.IsOfficialImage(imageName) {
+	if !constants.IsOfficialImage(imageName) {
 		return errors.New(imageName + " is not a official Image.")
 	}
 
@@ -38,16 +40,16 @@ func Pull(imageName string) error {
 	l.Log("INFO", fmt.Sprintf("Pulling %s  from %s ...", image.Name, image.URL))
 
 	dir, _ := os.Getwd()
-	if tarsPathExists := utilities.FileExists(utilities.ImagesPath); !tarsPathExists {
-		utilities.Must(os.MkdirAll(utilities.ImagesPath, 0777))
+	if tarsPathExists := io.FileExists(constants.ImagesPath); !tarsPathExists {
+		util.Must(os.MkdirAll(constants.ImagesPath, 0777))
 	}
-	utilities.Must(os.Chdir(utilities.ImagesPath))
-	err := utilities.Wget(image.URL, image.Name+".tar")
+	util.Must(os.Chdir(constants.ImagesPath))
+	err := io.Wget(image.URL, image.Name+".tar")
 	if err != nil {
 		l.Log("ERROR", fmt.Sprintf("The image %s was not Pulled\n %s", image.Name, err.Error()))
 		return err
 	}
-	utilities.Must(os.Chdir(dir))
+	util.Must(os.Chdir(dir))
 
 	l.Log("INFO", "Pulled successfully :)\n")
 	return nil
@@ -55,12 +57,12 @@ func Pull(imageName string) error {
 
 // PrepareRootFS ...
 func PrepareRootFS(baseImage, containerID string) error {
-	rootfsPath := filepath.Join(utilities.RootFSPath, containerID)
-	tarFile := filepath.Join(utilities.ImagesPath, baseImage) + ".tar"
+	rootfsPath := filepath.Join(constants.RootFSPath, containerID)
+	tarFile := filepath.Join(constants.ImagesPath, baseImage) + ".tar"
 	if err := os.MkdirAll(rootfsPath, 0777); err != nil {
 		return err
 	}
-	if err := utilities.Untar(rootfsPath, tarFile); err != nil {
+	if err := io.Untar(rootfsPath, tarFile); err != nil {
 		return err
 	}
 	return nil
@@ -69,19 +71,19 @@ func PrepareRootFS(baseImage, containerID string) error {
 // ConfigureNetworkForUbuntu Add the run/systemd/resolve/stub-resolv.conf file with the value "nameserver 8.8.8.8"
 // see for more details: https://askubuntu.com/questions/91543/apt-get-update-fails-to-fetch-files-temporary-failure-resolving-error
 func ConfigureNetworkForUbuntu(containerID string) {
-	rootfsPath := filepath.Join(utilities.RootFSPath, containerID)
+	rootfsPath := filepath.Join(constants.RootFSPath, containerID)
 	resolveFile := filepath.Join(rootfsPath, "/run/systemd/resolve/stub-resolv.conf")
 	if _, err := os.Stat(resolveFile); os.IsNotExist(err) {
-		utilities.Must(os.MkdirAll(rootfsPath+"/run/systemd/resolve", 0777))
+		util.Must(os.MkdirAll(rootfsPath+"/run/systemd/resolve", 0777))
 		//add a known DNS server to your system
-		utilities.Must(ioutil.WriteFile(resolveFile, []byte("nameserver 8.8.8.8\n"), 0644))
+		util.Must(ioutil.WriteFile(resolveFile, []byte("nameserver 8.8.8.8\n"), 0644))
 	}
 }
 
 // Exists receive a imageName as argument and return TRUE if the imageName.tar file exists
-// on the default TarsPath directory (see it on utilities.contants)
+// on the default TarsPath directory (see it on constants)
 func Exists(image string) bool {
-	if _, err := os.Stat(filepath.Join(utilities.ImagesPath, image) + ".tar"); os.IsNotExist(err) {
+	if _, err := os.Stat(filepath.Join(constants.ImagesPath, image) + ".tar"); os.IsNotExist(err) {
 		return false
 	}
 	return true
@@ -108,10 +110,10 @@ func InsertImage(name, baseImage string) error {
 
 // RemoveImage a especific non official image
 func RemoveImage(name string) error {
-	if utilities.IsOfficialImage(name) {
+	if constants.IsOfficialImage(name) {
 		return errors.New("Cannot remove the " + name + " official image")
 	}
-	if utilities.IsEmpty(name) {
+	if util.IsEmpty(name) {
 		return errors.New("Cannot remove a empty image")
 	}
 	if !Exists(name) {
@@ -123,7 +125,7 @@ func RemoveImage(name string) error {
 // RemoveAll remove all non official images
 func RemoveAll() error {
 	for _, image := range images {
-		if !utilities.IsOfficialImage(image.Name) {
+		if !constants.IsOfficialImage(image.Name) {
 			err := removeImage(image.Name)
 			if err != nil {
 				return err
@@ -140,11 +142,11 @@ func GetImage(name string) *Image {
 
 // UntarImg extract the baseImage to create another one
 func UntarImg(image, containerRootFS string, done chan bool) error {
-	tarFile := filepath.Join(utilities.ImagesPath, image) + ".tar"
+	tarFile := filepath.Join(constants.ImagesPath, image) + ".tar"
 	if err := os.Mkdir(containerRootFS, 0777); err != nil {
 		return err
 	}
-	if err := utilities.Untar(containerRootFS, tarFile); err != nil {
+	if err := io.Untar(containerRootFS, tarFile); err != nil {
 		return err
 	}
 	done <- true
@@ -153,7 +155,7 @@ func UntarImg(image, containerRootFS string, done chan bool) error {
 
 func removeImage(name string) error {
 	// First we remove the image.tar file
-	err := os.RemoveAll(filepath.Join(utilities.ImagesPath, name+".tar"))
+	err := os.RemoveAll(filepath.Join(constants.ImagesPath, name+".tar"))
 	if err != nil {
 		return err
 	}

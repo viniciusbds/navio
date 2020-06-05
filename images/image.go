@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/constants"
 )
 
 // Image holds the structure defining a image object.
@@ -29,7 +29,7 @@ func NewImage(name string, base string, version string, size string, url string)
 
 // ToStr of the Image
 func (i *Image) ToStr() string {
-	name := i.Name + strings.Repeat(" ", utilities.MaxImageNameLength-len(i.Name))
-	base := i.Base + strings.Repeat(" ", utilities.MaxImageNameLength-len(i.Base))
+	name := i.Name + strings.Repeat(" ", constants.MaxImageNameLength-len(i.Name))
+	base := i.Base + strings.Repeat(" ", constants.MaxImageNameLength-len(i.Base))
 	return fmt.Sprintf("%s %s %s\t\t%s", name, base, i.Version, i.Size)
 }

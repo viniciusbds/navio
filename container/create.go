@@ -9,10 +9,11 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/viniciusbds/navio/constants"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/pkg/logger"
 	"github.com/viniciusbds/navio/pkg/reexec"
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/pkg/util"
 )
 
 var l = logger.New(time.Kitchen, true)
@@ -34,7 +35,7 @@ func CreateContainer(containerID, containerName, baseImage, command string, para
 
 func prepareImage(baseImg, containerID string) {
 	if !images.Exists(baseImg) {
-		utilities.Must(images.Pull(baseImg))
+		util.Must(images.Pull(baseImg))
 	}
 	if !rootFSExists(containerID) {
 		images.PrepareRootFS(baseImg, containerID)
@@ -50,7 +51,7 @@ func saveContainer(baseImage string, containerID string, containerName string, c
 		Name:    containerName,
 		Image:   baseImage,
 		Status:  "-",
-		Root:    filepath.Join(utilities.RootFSPath, containerName),
+		Root:    filepath.Join(constants.RootFSPath, containerName),
 		Command: command,
 		Params:  params,
 	}
@@ -74,15 +75,15 @@ func run(containerID, containerName, command string, params []string) error {
 
 func child() {
 	containerID, containerName, command, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
-	utilities.Must(syscall.Sethostname([]byte(containerName)))
+	util.Must(syscall.Sethostname([]byte(containerName)))
 	configureCgroups()
-	pivotRoot(filepath.Join(utilities.RootFSPath, containerID))
+	pivotRoot(filepath.Join(constants.RootFSPath, containerID))
 	mountProc()
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	utilities.Must(cmd.Run())
+	util.Must(cmd.Run())
 	unmountProc()
 }
 
@@ -93,13 +94,13 @@ func child() {
 func pivotRoot(imagePath string) {
 	newRoot := imagePath
 	putOld := imagePath + "/put_old"
-	utilities.Must(syscall.Mount(newRoot, newRoot, "", syscall.MS_BIND, ""))
-	utilities.Must(os.MkdirAll(putOld, 0700))
-	utilities.Must(syscall.PivotRoot(newRoot, putOld))
-	utilities.Must(os.Chdir("/"))
+	util.Must(syscall.Mount(newRoot, newRoot, "", syscall.MS_BIND, ""))
+	util.Must(os.MkdirAll(putOld, 0700))
+	util.Must(syscall.PivotRoot(newRoot, putOld))
+	util.Must(os.Chdir("/"))
 	putOld = "/put_old"
-	utilities.Must(syscall.Unmount(putOld, syscall.MNT_DETACH))
-	utilities.Must(os.RemoveAll(putOld))
+	util.Must(syscall.Unmount(putOld, syscall.MNT_DETACH))
+	util.Must(os.RemoveAll(putOld))
 }
 
 func mountProc() {
@@ -128,8 +129,8 @@ func configureCgroups() {
 	pids := filepath.Join(cgroups, "pids")
 	os.Mkdir(filepath.Join(pids, "vini"), 0755)
 	//fmt.Println(filepath.Join(pids, "vini"))
-	utilities.Must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("24"), 0700))
+	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("24"), 0700))
 	// Removes the new cgroup in place after the container exits
-	utilities.Must(ioutil.WriteFile(filepath.Join(pids, "vini/notify_on_release"), []byte("1"), 0700))
-	utilities.Must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/notify_on_release"), []byte("1"), 0700))
+	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
 }

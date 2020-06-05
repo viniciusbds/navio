@@ -6,7 +6,8 @@ import (
 	"path/filepath"
 
 	"github.com/mgutz/ansi"
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/constants"
+	"github.com/viniciusbds/navio/pkg/util"
 )
 
 var (
@@ -39,7 +40,7 @@ func Insert(container *Container) {
 
 // RemoveContainer remove a container by her ID
 func RemoveContainer(ID string) error {
-	if utilities.IsEmpty(ID) {
+	if util.IsEmpty(ID) {
 		return errors.New("Empty container ID")
 	}
 	if !IsaID(ID) {
@@ -101,13 +102,13 @@ func UsedName(name string) bool {
 }
 
 func rootFSExists(ID string) bool {
-	_, err := os.Stat(filepath.Join(utilities.RootFSPath, ID))
+	_, err := os.Stat(filepath.Join(constants.RootFSPath, ID))
 	return !os.IsNotExist(err)
 }
 
 func removeContainer(ID string) error {
 	// First we try to remove the container rootFS
-	err := os.RemoveAll(filepath.Join(utilities.RootFSPath, ID))
+	err := os.RemoveAll(filepath.Join(constants.RootFSPath, ID))
 	if err != nil {
 		return err
 	}

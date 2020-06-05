@@ -8,10 +8,10 @@ import (
 	"math/rand"
 
 	"github.com/spf13/cobra"
+	"github.com/viniciusbds/navio/constants"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/pkg/loader"
-	"github.com/viniciusbds/navio/utilities"
 )
 
 var (
@@ -31,7 +31,7 @@ func createContainer() *cobra.Command {
 		Short: "Run a command in a new container",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			if len(containerName) > utilities.MaxContainerNameLength {
+			if len(containerName) > constants.MaxContainerNameLength {
 				l.Log("WARNING", "Container name is too long, please enter a shorter name.")
 				return
 			}

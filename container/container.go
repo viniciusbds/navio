@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/constants"
 )
 
 // Container holds the structure defining a container object.
@@ -33,8 +33,8 @@ func NewContainer(id, name, image, status, root, command string, params []string
 
 // ToStr ...
 func (c *Container) ToStr() string {
-	name := c.Name + strings.Repeat(" ", utilities.MaxContainerNameLength-len(c.Name))
-	image := c.Image + strings.Repeat(" ", utilities.MaxImageNameLength-len(c.Image))
+	name := c.Name + strings.Repeat(" ", constants.MaxContainerNameLength-len(c.Name))
+	image := c.Image + strings.Repeat(" ", constants.MaxImageNameLength-len(c.Image))
 	return fmt.Sprintf("%s\t%s %s\t%s\t\t\t%s", c.ID, name, image, c.Command, c.Status)
 }
 

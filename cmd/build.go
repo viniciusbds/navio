@@ -8,11 +8,13 @@ import (
 	"time"
 
 	"github.com/spf13/cobra"
+	"github.com/viniciusbds/navio/constants"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/naviofile"
+	"github.com/viniciusbds/navio/pkg/io"
 	"github.com/viniciusbds/navio/pkg/loader"
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/pkg/util"
 )
 
 var (
@@ -35,11 +37,11 @@ func build() *cobra.Command {
 		Short: "Build an image from a Naviofile",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			if utilities.IsEmpty(imgTag) {
+			if util.IsEmpty(imgTag) {
 				l.Log("WARNING", "You must insert a image name. for ex.: --t python-ubuntu")
 				return
 			}
-			if len(imgTag) > utilities.MaxImageNameLength {
+			if len(imgTag) > constants.MaxImageNameLength {
 				l.Log("WARNING", "Image name is too long, please enter a shorter name.")
 				return
 			}
@@ -55,7 +57,7 @@ func build() *cobra.Command {
 				l.Log("WARNING", "You only need insert a directory of your Naviofile!")
 				return
 			}
-			if !utilities.FileExists(args[0] + "/Naviofile") {
+			if !io.FileExists(args[0] + "/Naviofile") {
 				l.Log("WARNING", "You must insert a directory of your Naviofile!")
 				return
 			}
@@ -72,7 +74,7 @@ func build() *cobra.Command {
 			min := 11111111
 			max := 99999999
 			containerID := fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
-			containerRootFS := filepath.Join(utilities.RootFSPath, containerID)
+			containerRootFS := filepath.Join(constants.RootFSPath, containerID)
 
 			// FROM
 			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
@@ -82,12 +84,12 @@ func build() *cobra.Command {
 			wg.Wait()
 
 			// ADD
-			if !utilities.IsEmpty(source) && !utilities.IsEmpty(destination) {
+			if !util.IsEmpty(source) && !util.IsEmpty(destination) {
 				fmt.Printf(green("ADD %s %s\n"), source, destination)
 				fullDestinyPath := filepath.Join(containerRootFS, destination)
 				wg.Add(1)
 				go loader.Loader("Done :)", done, &wg)
-				go utilities.Copy(source, fullDestinyPath, done)
+				go io.Copy(source, fullDestinyPath, done)
 				wg.Wait()
 			}
 
@@ -122,12 +124,12 @@ func build() *cobra.Command {
 			}
 
 			// saving the image.tarin tarPath ...
-			imageFile := filepath.Join(utilities.ImagesPath, imgTag+".tar")
+			imageFile := filepath.Join(constants.ImagesPath, imgTag+".tar")
 
 			fmt.Printf(green("Generating the [%s] image ...\n"), imgTag)
 			wg.Add(1)
 			go loader.Loader("Done :)", done, &wg)
-			go utilities.Tar(containerRootFS, imageFile, done)
+			go io.Tar(containerRootFS, imageFile, done)
 			wg.Wait()
 
 			images.InsertImage(imgTag, baseImage)

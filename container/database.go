@@ -6,11 +6,11 @@ import (
 
 	// Mysql Driver
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/constants"
 )
 
 func openDB() (db *sql.DB) {
-	db, err := sql.Open("mysql", utilities.DBuser+":"+utilities.DBpass+"@/"+utilities.DBname)
+	db, err := sql.Open("mysql", constants.DBuser+":"+constants.DBpass+"@/"+constants.DBname)
 	if err != nil {
 		panic(err.Error())
 	}

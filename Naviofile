@@ -1,8 +1,5 @@
-// EXAMPLE OF A NAVIOFILE 
-// --------------------------------------
+FROM ubuntu
 
-FROM [baseImage]
+ADD . /tempes
 
-ADD . /path/to/a/dir/inside/the/container
-
-RUN command1 && command2 && command3
+RUN apt update && apt upgrade -y && apt install python -y
