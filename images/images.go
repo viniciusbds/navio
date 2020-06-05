@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"github.com/mgutz/ansi"
-	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/pkg/logger"
 	"github.com/viniciusbds/navio/utilities"
 )
 

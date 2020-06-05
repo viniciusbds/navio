@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/pkg/logger"
 )
 
 var l = logger.New(time.Kitchen, true)

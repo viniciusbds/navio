@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/viniciusbds/navio/images"
-	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/pkg/logger"
 	"github.com/viniciusbds/navio/pkg/reexec"
 	"github.com/viniciusbds/navio/utilities"
 )

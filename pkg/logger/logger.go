@@ -12,20 +12,18 @@ var red = ansi.ColorFunc("red+")
 var green = ansi.ColorFunc("green+")
 var magenta = ansi.ColorFunc("magenta+")
 
-// Logger ...
+// Logger holds the structure defining a logger object.
 type Logger struct {
 	timeFormat string
 	debug      bool
 }
 
-// New ...
-// [TODO]: Document the constructor
+// New creates and return a new Logger object
 func New(timeFormat string, debug bool) *Logger {
 	return &Logger{timeFormat: timeFormat, debug: debug}
 }
 
-// Log ...
-// [TODO]: Document this function
+// Log log a message in a specific level
 func (l *Logger) Log(level, message string) {
 	switch strings.ToLower(level) {
 	case "info":

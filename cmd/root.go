@@ -7,7 +7,7 @@ import (
 
 	"github.com/mgutz/ansi"
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/logger"
+	"github.com/viniciusbds/navio/pkg/logger"
 )
 
 var (
