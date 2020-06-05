@@ -5,29 +5,28 @@ import (
 
 	// Mysql Driver
 	_ "github.com/go-sql-driver/mysql"
-
-	"github.com/viniciusbds/navio/utilities"
+	"github.com/viniciusbds/navio/constants"
 )
 
 func main() {
 
-	db, err := sql.Open("mysql", utilities.DBuser+":"+utilities.DBpass+"@tcp(127.0.0.1:3306)/")
+	db, err := sql.Open("mysql", constants.DBuser+":"+constants.DBpass+"@tcp(127.0.0.1:3306)/")
 	if err != nil {
 		panic(err.Error())
 	}
 	defer db.Close()
 
-	_, err = db.Exec("DROP DATABASE IF EXISTS " + utilities.DBname)
+	_, err = db.Exec("DROP DATABASE IF EXISTS " + constants.DBname)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = db.Exec("CREATE DATABASE " + utilities.DBname)
+	_, err = db.Exec("CREATE DATABASE " + constants.DBname)
 	if err != nil {
 		panic(err)
 	}
 
-	_, err = db.Exec("USE " + utilities.DBname)
+	_, err = db.Exec("USE " + constants.DBname)
 	if err != nil {
 		panic(err)
 	}
