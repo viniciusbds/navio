@@ -1,6 +1,5 @@
 package container
 
-
 import (
 	"testing"
 )
@@ -12,11 +11,11 @@ func TestCreateContainer(t *testing.T) {
 		AssertContainerDontExists(ID, t)
 	}
 
-	go CreateContainer(id1, "alpix", "alpine", "echo", []string{"alpix"}, done)
+	go CreateContainer(id1, "alpix", "alpine", "echo", []string{"echoedalpix"}, done)
 	<-done
-	go CreateContainer(id2, "alpex", "alpine", "echo", []string{"alpex"}, done)
+	go CreateContainer(id2, "alpex", "alpine", "echo", []string{"echoedalpex"}, done)
 	<-done
-	go CreateContainer(id3, "alpux", "alpine", "echo", []string{"alpux"}, done)
+	go CreateContainer(id3, "alpux", "alpine", "echo", []string{"echoedalpux"}, done)
 	<-done
 
 	for _, ID := range []string{id1, id2, id3} {

@@ -61,11 +61,11 @@ func TestRemoveAll(t *testing.T) {
 	}
 
 	id1, id2, id3 := GenerateNewID(), GenerateNewID(), GenerateNewID()
-	go CreateContainer(id1, "gbn", "alpine", "echo", []string{"zizo"}, done)
+	go CreateContainer(id1, "name1", "alpine", "echo", []string{"echoed1"}, done)
 	<-done
-	go CreateContainer(id2, "gep", "alpine", "echo", []string{"aaaa"}, done)
+	go CreateContainer(id2, "name2", "alpine", "echo", []string{"echoed2"}, done)
 	<-done
-	go CreateContainer(id3, "ges", "alpine", "echo", []string{"xhotaozing"}, done)
+	go CreateContainer(id3, "name3", "alpine", "echo", []string{"echoed3"}, done)
 	<-done
 	if numbeOfContainers() != 3 {
 		t.Error("ERROR on Test RemoveAll: we create 3 containers and the numbeofcontainers != 3")
