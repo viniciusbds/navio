@@ -8,11 +8,9 @@ func TestRemoveContainer(t *testing.T) {
 	t.Run("Invalid ID", func(t *testing.T) {
 		id := "45252423432"
 		err := RemoveContainer(id)
-		if err != nil {
-			result := err.Error()
-			expected := "Invalid container ID: " + id
-			check(t, expected, result)
-		}
+		result := err.Error()
+		expected := "Invalid container ID: " + id
+		check(t, expected, result)
 	})
 	t.Run("Empty ID", func(t *testing.T) {
 		err := RemoveContainer("    ")
@@ -20,10 +18,26 @@ func TestRemoveContainer(t *testing.T) {
 		expected := "Empty container ID"
 		check(t, expected, result)
 	})
-}
+	t.Run("Valid ID", func(t *testing.T) {
+		ID := "4351987343"
 
-// [TODO: test] Ps return a string with all availables container images that was created. see it like "containers"
-func TestPs(t *testing.T) {
+		go CreateContainer(ID, "gbn13am", "alpine", "echo", []string{"zizo"}, done)
+		<-done
+
+		if container := getContainer(ID); container == nil {
+			t.Error("ERROR on Test RemoveContainer")
+		}
+
+		RemoveContainer(ID)
+
+		if container := getContainer(ID); container != nil {
+			t.Error("ERROR on Test RemoveContainer")
+		}
+
+		if IsaID(ID) {
+			t.Error("ERROR on Test RemoveContainer")
+		}
+	})
 }
 
 // [TODO: test] InsertContainer ...

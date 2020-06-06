@@ -126,3 +126,11 @@ func updateStatus(ID, status string) error {
 	containers[ID].SetStatus(status)
 	return updateContainerStatusDB(ID, status)
 }
+
+// GenerateNewID gerenates a new random Container ID
+func GenerateNewID() string {
+	rand.Seed(time.Now().UnixNano())
+	min := 11111111
+	max := 99999999
+	return fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
+}

@@ -2,10 +2,8 @@ package cmd
 
 import (
 	"fmt"
-	"math/rand"
 	"path/filepath"
 	"sync"
-	"time"
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/isroot"
@@ -76,10 +74,7 @@ func build() *cobra.Command {
 			fmt.Printf(magenta("RUN %v\n"), commands)
 			fmt.Printf("---------------------------------------------------------------\n")
 
-			rand.Seed(time.Now().UnixNano())
-			min := 11111111
-			max := 99999999
-			containerID := fmt.Sprintf("%d", rand.Intn(max-min+1)+min)
+			containerID := container.GenerateNewID()
 			containerRootFS := filepath.Join(constants.RootFSPath, containerID)
 
 			// FROM
