@@ -9,7 +9,7 @@ import (
 	"github.com/viniciusbds/navio/constants"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
-	"github.com/viniciusbds/navio/pkg/loader"
+	"github.com/viniciusbds/navio/pkg/spinner"
 )
 
 var (
@@ -68,9 +68,8 @@ func createContainer() *cobra.Command {
 
 			fmt.Printf(green("Creating [%s] container ...\n"), containerName)
 			wg.Add(1)
-			go loader.Loader("Done :)", done, &wg)
+			go spinner.Spinner("Done :)", done, &wg)
 			container.CreateContainer(containerID, containerName, image, command, params, done)
-
 		},
 	}
 }
