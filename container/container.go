@@ -43,7 +43,12 @@ func (c *Container) IsRunning() bool {
 	return c.Status == "Running"
 }
 
+// GetStatus ...
+func (c *Container) GetStatus() string {
+	return c.Status
+}
+
 // SetStatus ...
-func (c *Container) SetStatus(status string) bool {
-	return c.Status == status
+func (c *Container) SetStatus(status string) {
+	c.Status = status
 }

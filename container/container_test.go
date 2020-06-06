@@ -13,3 +13,27 @@ func TestNewContainer(t *testing.T) {
 		t.Errorf("Coisas estranhas aconteceram")
 	}
 }
+
+func TestIsRunning(t *testing.T) {
+	cont := NewContainer("45216326", "conteiir", "ubuntu", "Stopped", filepath.Join(constants.RootFSPath, "conteiir"), "echo", []string{"oi", "oi"})
+	result := cont.IsRunning()
+	expected := false
+	if expected != result {
+		t.Errorf("Expected %v != Result %v", expected, result)
+	}
+
+	cont.SetStatus("Running")
+	result = cont.IsRunning()
+	expected = true
+	if expected != result {
+		t.Errorf("Expected %v != Result %v", expected, result)
+	}
+}
+
+func TestSetStatus(t *testing.T) {
+	cont := NewContainer("5425146", "conteiir", "ubuntu", "Running", filepath.Join(constants.RootFSPath, "conteiir"), "echo", []string{"oi", "oi"})
+	cont.SetStatus("Stopped")
+	result := cont.GetStatus()
+	expected := "Stopped"
+	check(t, expected, result)
+}

@@ -2,8 +2,11 @@ package container
 
 import (
 	"errors"
+	"fmt"
+	"math/rand"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/mgutz/ansi"
 	"github.com/viniciusbds/navio/constants"
@@ -98,7 +101,8 @@ func GetContainerName(ID string) string {
 
 // UsedName receives a containerName and return true if the name already was used
 func UsedName(name string) bool {
-	return GetContainerName(name) != ""
+	ID := GetContainerID(name)
+	return GetContainerName(ID) != ""
 }
 
 func rootFSExists(ID string) bool {
@@ -125,6 +129,10 @@ func updateStatus(ID, status string) error {
 	}
 	containers[ID].SetStatus(status)
 	return updateContainerStatusDB(ID, status)
+}
+
+func numbeOfContainers() int {
+	return len(containers)
 }
 
 // GenerateNewID gerenates a new random Container ID
