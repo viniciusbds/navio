@@ -92,6 +92,18 @@ func TestInsert(t *testing.T) {
 }
 
 func TestIsAvailable(t *testing.T) {
+	if !IsAvailable("alpine") {
+		Pull("alpine")
+	}
+
+	if !IsAvailable("busybox") {
+		Pull("busybox")
+	}
+
+	if !IsAvailable("ubuntu") {
+		Pull("ubuntu")
+	}
+
 	if !IsAvailable("alpine") || !IsAvailable("busybox") || !IsAvailable("ubuntu") {
 		t.Error("ERROR: on Test IsAvailable")
 	}
