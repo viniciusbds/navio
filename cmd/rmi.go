@@ -35,7 +35,7 @@ func rmi() *cobra.Command {
 			} else {
 				for _, arg := range args {
 					if arg != "" {
-						err := images.RemoveImage(arg)
+						err := images.Remove(arg)
 						if err != nil {
 							l.Log("ERROR", err.Error())
 						}

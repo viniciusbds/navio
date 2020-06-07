@@ -33,7 +33,7 @@ func Pull(imageName string) error {
 
 	image := GetImage(imageName)
 
-	if Exists(image.Name) {
+	if IsAvailable(image.Name) {
 		return errors.New("The image " + image.Name + " already was downloaded")
 	}
 
@@ -80,25 +80,25 @@ func ConfigureNetworkForUbuntu(containerID string) {
 	}
 }
 
-// Exists receive a imageName as argument and return TRUE if the imageName.tar file exists
+// IsAvailable receive a imageName as argument and return TRUE if the imageName.tar file exists
 // on the default TarsPath directory (see it on constants)
-func Exists(image string) bool {
+func IsAvailable(image string) bool {
 	if _, err := os.Stat(filepath.Join(constants.ImagesPath, image) + ".tar"); os.IsNotExist(err) {
 		return false
 	}
 	return true
 }
 
-// ListImages return a string with all available images
-func ListImages() (result string) {
+// List return a string with all available images
+func List() (result string) {
 	for _, img := range images {
 		result += "\n" + magenta(img.ToStr())
 	}
 	return
 }
 
-// InsertImage ...
-func InsertImage(name, baseImage string) error {
+// Insert inserts a new image on the data structure and update the database
+func Insert(name, baseImage string) error {
 	baseImg := GetImage(baseImage)
 	if baseImg == nil {
 		return errors.New("ERROR: NIL Image ... ")
@@ -108,15 +108,15 @@ func InsertImage(name, baseImage string) error {
 	return insertImageDB(newImg)
 }
 
-// RemoveImage a especific non official image
-func RemoveImage(name string) error {
+// Remove a especific non official image
+func Remove(name string) error {
 	if constants.IsOfficialImage(name) {
 		return errors.New("Cannot remove the " + name + " official image")
 	}
 	if util.IsEmpty(name) {
 		return errors.New("Cannot remove a empty image")
 	}
-	if !Exists(name) {
+	if !IsAvailable(name) {
 		return errors.New("Image " + name + " doesn't exist")
 	}
 	return removeImage(name)
@@ -140,8 +140,8 @@ func GetImage(name string) *Image {
 	return images[name]
 }
 
-// UntarImg extract the baseImage to create another one
-func UntarImg(image, containerRootFS string, done chan bool) error {
+// Untar extract the baseImage to create another one
+func Untar(image, containerRootFS string, done chan bool) error {
 	tarFile := filepath.Join(constants.ImagesPath, image) + ".tar"
 	if err := os.Mkdir(containerRootFS, 0777); err != nil {
 		return err

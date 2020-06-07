@@ -34,7 +34,7 @@ func CreateContainer(containerID, containerName, baseImage, command string, para
 }
 
 func prepareImage(baseImg, containerID string) {
-	if !images.Exists(baseImg) {
+	if !images.IsAvailable(baseImg) {
 		util.Must(images.Pull(baseImg))
 	}
 	if !rootFSExists(containerID) {

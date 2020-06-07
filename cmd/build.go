@@ -49,7 +49,7 @@ func build() *cobra.Command {
 				l.Log("WARNING", "Image name is too long, please enter a shorter name.")
 				return
 			}
-			if images.Exists(imgTag) {
+			if images.IsAvailable(imgTag) {
 				l.Log("WARNING", "This image name already exists.")
 				return
 			}
@@ -81,7 +81,7 @@ func build() *cobra.Command {
 			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
-			go images.UntarImg(baseImage, containerRootFS, done)
+			go images.Untar(baseImage, containerRootFS, done)
 			wg.Wait()
 
 			// ADD
@@ -133,7 +133,7 @@ func build() *cobra.Command {
 			go io.Tar(containerRootFS, imageFile, done)
 			wg.Wait()
 
-			images.InsertImage(imgTag, baseImage)
+			images.Insert(imgTag, baseImage)
 			err := container.RemoveContainer(containerID)
 			if err != nil {
 				l.Log("ERROR", err.Error())

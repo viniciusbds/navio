@@ -2,6 +2,8 @@ package images
 
 import (
 	"testing"
+
+	"github.com/viniciusbds/navio/constants"
 )
 
 var check = func(t *testing.T, expected string, result string) {
@@ -24,29 +26,19 @@ func TestPull(t *testing.T) {
 	})
 }
 
-// [TODO: test] PrepareRootfs ...
-
-// [TODO: test] ConfigureNetworkForUbuntu ...
-
-// [TODO: test] Exists receive a imageName as argument and return TRUE if the imageName.tar file exists
-
-// [TODO: test] GetImages ...
-
-// [TODO: test] InsertImage ...
-
 func TestRemoveImage(t *testing.T) {
 
 	// BASIC TESTS ------------------------------------------------------
 	t.Run("Fail on remove a official Image", func(t *testing.T) {
 		imageName := "ubuntu"
-		err := RemoveImage(imageName)
+		err := Remove(imageName)
 		expected := "Cannot remove the " + imageName + " official image"
 		result := err.Error()
 		check(t, expected, result)
 	})
 	t.Run("Empty Image", func(t *testing.T) {
 		imageName := "       "
-		err := RemoveImage(imageName)
+		err := Remove(imageName)
 		expected := "Cannot remove a empty image"
 		result := err.Error()
 		check(t, expected, result)
@@ -54,7 +46,7 @@ func TestRemoveImage(t *testing.T) {
 	})
 	t.Run("Image that doesn't exists", func(t *testing.T) {
 		imageName := "ubuntuxxx"
-		err := RemoveImage(imageName)
+		err := Remove(imageName)
 		expected := "Image " + imageName + " doesn't exist"
 		result := err.Error()
 		check(t, expected, result)
@@ -73,8 +65,41 @@ func TestRemoveImage(t *testing.T) {
 
 }
 
-// [TODO: test] Describe ...
+func AssertImageDontExists(name string, t *testing.T) {
+	if IsAvailable(name) {
+		t.Errorf("ERROR: here we expected that the image don't exists")
+	}
+	if image := GetImage(name); image != nil {
+		t.Errorf("ERROR: here we expected a nil image. image: %s", image)
+	}
+}
 
-// [TODO: test] BuildANewBaseImg ...
+func AssertImageExists(name string, t *testing.T) {
+	if image := GetImage(name); image == nil {
+		t.Error("ERROR: here we expected a non nil image.")
+	}
+}
 
-// [TODO: test] IsValid receive a imageName and return true if is a valid image.
+func TestInsert(t *testing.T) {
+	imageName := "novaaply"
+	imageBase := "alpine"
+	AssertImageDontExists(imageName, t)
+	Insert(imageName, imageBase)
+	AssertImageExists(imageName, t)
+
+	// clear
+	Remove(imageName)
+}
+
+func TestIsAvailable(t *testing.T) {
+	if !IsAvailable("alpine") || !IsAvailable("busybox") || !IsAvailable("ubuntu") {
+		t.Error("ERROR: on Test IsAvailable")
+	}
+}
+
+func TestRemoveAll(t *testing.T) {
+	RemoveAll()
+	if len(images) != len(constants.OfficialImages) {
+		t.Errorf("ERROR on RemoveAll")
+	}
+}
