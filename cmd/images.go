@@ -14,7 +14,7 @@ func init() {
 func listImages() *cobra.Command {
 	return &cobra.Command{
 		Use:   "images",
-		Short: "List images",
+		Short: "List all images",
 		Run: func(cmd *cobra.Command, args []string) {
 			fmt.Println("NAME\t\t\tBASE\t\t\tVERSION\t\tSIZE\t" + images.ListImages())
 		},

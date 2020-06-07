@@ -15,7 +15,7 @@ func init() {
 func exec() *cobra.Command {
 	return &cobra.Command{
 		Use:   "exec",
-		Short: "Run a command in a running container",
+		Short: "Run a command in a container",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if !isroot.IsRoot() {

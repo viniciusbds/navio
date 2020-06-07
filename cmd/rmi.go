@@ -13,7 +13,7 @@ func init() {
 func rmi() *cobra.Command {
 	return &cobra.Command{
 		Use:   "rmi",
-		Short: "Remove a Image",
+		Short: "Remove a image",
 		Long:  "ex: navio remove image <image_name> remove a downloaded images located in the ./images directory.",
 		Run: func(cmd *cobra.Command, args []string) {
 

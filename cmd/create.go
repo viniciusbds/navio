@@ -25,8 +25,8 @@ func init() {
 
 func createContainer() *cobra.Command {
 	return &cobra.Command{
-		Use:   "run",
-		Short: "Run a command in a new container",
+		Use:   "create",
+		Short: "Create a new container",
 		Run: func(cmd *cobra.Command, args []string) {
 
 			if !isroot.IsRoot() {
