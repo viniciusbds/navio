@@ -57,7 +57,7 @@ func saveContainer(baseImage string, containerID string, containerName string, c
 		Name:    containerName,
 		Image:   baseImage,
 		Status:  "-",
-		Root:    filepath.Join(constants.RootFSPath, containerName),
+		Root:    filepath.Join(constants.RootFSPath, containerID),
 		Command: command,
 		Params:  params,
 	}
