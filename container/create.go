@@ -43,6 +43,12 @@ func prepareImage(baseImg, containerID string) {
 	if baseImg == "ubuntu" {
 		images.ConfigureNetworkForUbuntu(containerID)
 	}
+	if baseImg == "alpine" {
+		// [TODO] images.ConfigureNetworkForAlpine(containerID)
+	}
+	if baseImg == "busybox" {
+		// [TODO] images.ConfigureNetworkForBusybox(containerID)
+	}
 }
 
 func saveContainer(baseImage string, containerID string, containerName string, command string, params []string) {
