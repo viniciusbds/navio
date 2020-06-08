@@ -103,21 +103,17 @@ what the processes can use
   
 ## Example Commands
 
-`navio get images`
+`navio images`
 
-`sudo navio rmi alpine`
-
-`navio pull alpine`
-
-`sudo navio run alpine sh --name mycontainer`
+`sudo navio create alpine sh --name mycontainer`
 
 `sudo navio exec mycontainer sh` 
 
 ...
 
-`sudo navio run busybox sh`
+`sudo navio create busybox sh`
 
-`sudo navio run ubuntu /bin/bash --name python3apps`
+`sudo navio create ubuntu /bin/bash --name python3apps`
 
   
 ## Contributing
