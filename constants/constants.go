@@ -39,3 +39,6 @@ func IsOfficialImage(image string) bool {
 	}
 	return false
 }
+
+// DefaultMaxProcessCreation ...
+var DefaultMaxProcessCreation string = "30"

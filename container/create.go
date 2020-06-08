@@ -82,7 +82,7 @@ func run(containerID, containerName, command string, params []string) error {
 func child() {
 	containerID, containerName, command, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
 	util.Must(syscall.Sethostname([]byte(containerName)))
-	configureCgroups()
+	limitProcessCreation(containerID)
 	pivotRoot(filepath.Join(constants.RootFSPath, containerID))
 	mountProc()
 	cmd := exec.Command(command, params...)
@@ -130,13 +130,15 @@ func unmountProc() {
 	}
 }
 
-func configureCgroups() {
-	cgroups := "/sys/fs/cgroup/"
-	pids := filepath.Join(cgroups, "pids")
-	os.Mkdir(filepath.Join(pids, "vini"), 0755)
-	//fmt.Println(filepath.Join(pids, "vini"))
-	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/pids.max"), []byte("24"), 0700))
+func limitProcessCreation(containerID string) {
+	cgroup := "/sys/fs/cgroup/"
+	containerPids := filepath.Join(cgroup, "pids", containerID)
+	os.Mkdir(containerPids, 0755)
+
+	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "pids.max"), []byte(constants.DefaultMaxProcessCreation), 0700))
+
 	// Removes the new cgroup in place after the container exits
-	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/notify_on_release"), []byte("1"), 0700))
-	util.Must(ioutil.WriteFile(filepath.Join(pids, "vini/cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "notify_on_release"), []byte("1"), 0700))
+	// Attach the process on the cgroup.
+	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
 }
