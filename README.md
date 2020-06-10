@@ -31,30 +31,11 @@ Just for science, do not use this code in production :satisfied:
 
 what the processes can see
 
-**CLONE_NEWUTS** : The UTS namespace provides isolation of the hostname and domainname system identifiers
-
-**CLONE_NEWPID** : PID namespace isolates the process ID number space. This means that two processes running on the same host can have the same PID!
-
-**CLONE_NEWNS** : The Mount namespace isolate the filesystem mount points
-
----
-
-
 - [x] UTS - isolate **hostname and domainname**
 
 - [x] PID - isolate the **PID number space**
 
 - [x] MNT - isolate **filesystem mount points**
-
-- [ ] IPC - isolate **interprocess communication (IPC)** resources
-
-- [ ] NET - isolate **network interfaces**
-
-- [ ] User - isolate **UID/GID number spaces**
-
-- [ ] Cgroup - isolate **cgroup root directory**
-
-- [ ] Time Namespace - allows processes to see **different system times** in a way similar to the UTS namespace.
 
 
 ## [Cgroups](https://en.wikipedia.org/wiki/Cgroups)
@@ -67,8 +48,16 @@ what the processes can use
 
 - [ ] I/O
 
-- [ ] Process numbers
+- [x] Process numbers
 
+
+
+
+## Limitations
+
+- The network is not being isolated and is only working on the **ubuntu** image.
+- The Navio does not allow containers to run in the background.
+- The Navio only limits the number of processes.
 
 ## Requirements
 
@@ -114,21 +103,17 @@ what the processes can use
   
 ## Example Commands
 
-`navio get images`
+`navio images`
 
-`sudo navio rmi alpine`
-
-`navio pull alpine`
-
-`sudo navio run alpine sh --name mycontainer`
+`sudo navio create alpine sh --name mycontainer`
 
 `sudo navio exec mycontainer sh` 
 
 ...
 
-`sudo navio run busybox sh`
+`sudo navio create busybox sh`
 
-`sudo navio run ubuntu /bin/bash --name python3apps`
+`sudo navio create ubuntu /bin/bash --name python3apps`
 
   
 ## Contributing
