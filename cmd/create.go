@@ -5,11 +5,11 @@ import (
 	"os"
 
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/isroot"
 	"github.com/viniciusbds/navio/constants"
 	"github.com/viniciusbds/navio/container"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/pkg/spinner"
+	"github.com/viniciusbds/navio/pkg/util"
 )
 
 var (
@@ -29,7 +29,7 @@ func createContainer() *cobra.Command {
 		Short: "Create a new container",
 		Run: func(cmd *cobra.Command, args []string) {
 
-			if !isroot.IsRoot() {
+			if !util.IsRoot() {
 				l.Log("WARNING", "This command requires sudo privileges! please run as super user :)")
 				return
 			}

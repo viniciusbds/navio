@@ -26,3 +26,8 @@ func IsEmpty(imageName string) bool {
 	}
 	return false
 }
+
+// IsRoot check if the process is running as root user, for example, one started with sudo
+func IsRoot() bool {
+	return os.Geteuid() == 0
+}
