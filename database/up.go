@@ -35,9 +35,10 @@ func main() {
 		"name varchar(30) NOT NULL," +
 		"image varchar(30) NOT NULL," +
 		"status varchar(10) NOT NULL," +
-		"root varchar(300) NOT NULL," +
+		"rootfs varchar(300) NOT NULL," +
 		"command varchar(300) NOT NULL," +
 		"params varchar(300)," +
+		"cgroups varchar(300)," +
 		"PRIMARY KEY (id) )  DEFAULT CHARSET=latin1")
 	if err != nil {
 		panic(err)

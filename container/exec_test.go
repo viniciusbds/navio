@@ -57,7 +57,7 @@ func TestExec(t *testing.T) {
 
 		baseImg := "alpine"
 		containerID = "98989898989"
-		go CreateContainer(containerID, containerName, baseImg, command, params, done)
+		go CreateContainer(containerID, containerName, baseImg, command, params, done, nil)
 		<-done
 
 		// Testing exec

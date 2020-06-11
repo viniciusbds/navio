@@ -15,10 +15,21 @@ import (
 var (
 	// Used for name flag.
 	containerName string
+
+	pids      string
+	cpus      string
+	cpushares string
+	memory    string
 )
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&containerName, "name", "", "The name of the container")
+
+	rootCmd.PersistentFlags().StringVar(&pids, "pids", "", "Maximum number of pids")
+	rootCmd.PersistentFlags().StringVar(&cpus, "cpus", "", "Number of CPUs")
+	rootCmd.PersistentFlags().StringVar(&cpushares, "cpu-shares", "", "CPU shares (relative weight)")
+	rootCmd.PersistentFlags().StringVar(&memory, "memory", "", "Memory limit")
+
 	rootCmd.MarkFlagRequired("name")
 	rootCmd.AddCommand(createContainer())
 }
@@ -69,7 +80,8 @@ func createContainer() *cobra.Command {
 			fmt.Printf(green("Creating [%s] container ...\n"), containerName)
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
-			container.CreateContainer(containerID, containerName, image, command, params, done)
+			cgroups := container.NewCGroup(pids, cpus, cpushares, memory)
+			container.CreateContainer(containerID, containerName, image, command, params, done, cgroups)
 		},
 	}
 }

@@ -27,12 +27,14 @@ func readContainersDB() {
 	}
 
 	for selDB.Next() {
-		var id, name, image, status, root, command, params string
-		err := selDB.Scan(&id, &name, &image, &status, &root, &command, &params)
+		var id, name, image, status, rootfs, command, params, cgroups string
+		err := selDB.Scan(&id, &name, &image, &status, &rootfs, &command, &params, &cgroups)
 		if err != nil {
 			panic(err.Error())
 		}
-		containers[id] = NewContainer(id, name, image, status, root, command, strings.Split(params, ","))
+		cgroupItens := strings.Split(cgroups, ",")
+		cg := NewCGroup(cgroupItens[0], cgroupItens[1], cgroupItens[2], cgroupItens[3])
+		containers[id] = NewContainer(id, name, image, status, rootfs, command, strings.Split(params, ","), cg)
 	}
 }
 
@@ -50,11 +52,16 @@ func insertContainersDB(container *Container) {
 		}
 	}
 
-	insForm, err := db.Prepare("INSERT INTO containers(id, name, image, status, root, command, params) VALUES(?,?,?,?,?,?,?)")
+	cgroups := ""
+	if container.CGroup != nil {
+		cgroups = container.GetMaxpids() + "," + container.GetCPUS() + "," + container.GetCPUshares() + "," + container.GetMemory()
+	}
+
+	insForm, err := db.Prepare("INSERT INTO containers(id, name, image, status, rootfs, command, params, cgroups) VALUES(?,?,?,?,?,?,?,?)")
 	if err != nil {
 		panic(err.Error())
 	}
-	insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.Root, container.Command, params)
+	insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.RootFS, container.Command, params, cgroups)
 }
 
 func updateContainerNameDB(ID, name string) error {

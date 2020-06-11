@@ -26,9 +26,9 @@ func init() {
 }
 
 // CreateContainer creates a container based on a baseImg, containerName and command with params
-func CreateContainer(containerID, containerName, baseImage, command string, params []string, prepare chan bool) error {
+func CreateContainer(containerID, containerName, baseImage, command string, params []string, prepare chan bool, cgroup *CGroup) error {
 	prepareImage(baseImage, containerID)
-	saveContainer(baseImage, containerID, containerName, command, params)
+	saveContainer(baseImage, containerID, containerName, command, params, cgroup)
 	prepare <- true
 	return run(containerID, containerName, command, params)
 }
@@ -51,16 +51,8 @@ func prepareImage(baseImg, containerID string) {
 	}
 }
 
-func saveContainer(baseImage string, containerID string, containerName string, command string, params []string) {
-	container := &Container{
-		ID:      containerID,
-		Name:    containerName,
-		Image:   baseImage,
-		Status:  "-",
-		Root:    filepath.Join(constants.RootFSPath, containerID),
-		Command: command,
-		Params:  params,
-	}
+func saveContainer(baseImage string, containerID string, containerName string, command string, params []string, cgroup *CGroup) {
+	container := NewContainer(containerID, containerName, baseImage, "-", filepath.Join(constants.RootFSPath, containerID), command, params, cgroup)
 	Insert(container)
 }
 
@@ -81,9 +73,16 @@ func run(containerID, containerName, command string, params []string) error {
 
 func child() {
 	containerID, containerName, command, params := os.Args[1], os.Args[2], os.Args[3], os.Args[4:]
+	container := getContainer(containerID)
+
 	util.Must(syscall.Sethostname([]byte(containerName)))
-	limitProcessCreation(containerID)
-	pivotRoot(filepath.Join(constants.RootFSPath, containerID))
+
+	limitProcessCreation(container)
+	limitCpus(container)
+	limitCpushares(container)
+	limitMemory(container)
+
+	pivotRoot(container.RootFS)
 	mountProc()
 	cmd := exec.Command(command, params...)
 	cmd.Stdin = os.Stdin
@@ -130,15 +129,71 @@ func unmountProc() {
 	}
 }
 
-func limitProcessCreation(containerID string) {
+func limitProcessCreation(container *Container) {
 	cgroup := "/sys/fs/cgroup/"
-	containerPids := filepath.Join(cgroup, "pids", containerID)
+	containerPids := filepath.Join(cgroup, "pids", container.ID)
 	os.Mkdir(containerPids, 0755)
 
-	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "pids.max"), []byte(constants.DefaultMaxProcessCreation), 0700))
+	maxpids := container.GetMaxpids()
+	if maxpids == "" {
+		maxpids = constants.DefaultMaxProcessCreation
+	}
 
+	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "pids.max"), []byte(maxpids), 0700))
 	// Removes the new cgroup in place after the container exits
 	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "notify_on_release"), []byte("1"), 0700))
 	// Attach the process on the cgroup.
 	util.Must(ioutil.WriteFile(filepath.Join(containerPids, "cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+}
+
+func limitCpus(container *Container) {
+	cgroup := "/sys/fs/cgroup/"
+	containerCPUSet := filepath.Join(cgroup, "cpuset", container.ID)
+	os.Mkdir(containerCPUSet, 0755)
+
+	cpus := container.GetCPUS()
+	if cpus == "" {
+		cpus = constants.DefaultCPUS
+	}
+	// 0 means use all memory for this cgroup
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUSet, "cpuset.mems"), []byte("0"), 0700))
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUSet, "cpuset.cpus"), []byte(cpus), 0700))
+	// Removes the new cgroup in place after the container exits
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUSet, "notify_on_release"), []byte("1"), 0700))
+	// Attach the process on the cgroup.
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUSet, "cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+}
+
+func limitCpushares(container *Container) {
+	cgroup := "/sys/fs/cgroup/"
+	containerCPUShares := filepath.Join(cgroup, "cpu", container.ID)
+	os.Mkdir(containerCPUShares, 0755)
+
+	cpushares := container.GetCPUshares()
+	if cpushares == "" {
+		cpushares = constants.DefaultCPUshares
+	}
+
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUShares, "cpu.shares"), []byte(cpushares), 0700))
+	// Removes the new cgroup in place after the container exits
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUShares, "notify_on_release"), []byte("1"), 0700))
+	// Attach the process on the cgroup.
+	util.Must(ioutil.WriteFile(filepath.Join(containerCPUShares, "cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
+}
+
+func limitMemory(container *Container) {
+	cgroup := "/sys/fs/cgroup/"
+	containerMemory := filepath.Join(cgroup, "memory", container.ID)
+	os.Mkdir(containerMemory, 0755)
+
+	maxmemmory := container.GetMemory()
+	if maxmemmory == "" {
+		maxmemmory = constants.DefaultMemlimit
+	}
+
+	util.Must(ioutil.WriteFile(filepath.Join(containerMemory, "memory.limit_in_bytes"), []byte(maxmemmory), 0700))
+	// Removes the new cgroup in place after the container exits
+	util.Must(ioutil.WriteFile(filepath.Join(containerMemory, "notify_on_release"), []byte("1"), 0700))
+	// Attach the process on the cgroup.
+	util.Must(ioutil.WriteFile(filepath.Join(containerMemory, "cgroup.procs"), []byte(strconv.Itoa(os.Getpid())), 0700))
 }

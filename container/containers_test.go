@@ -9,7 +9,7 @@ import (
 
 func TestInsert(t *testing.T) {
 	ID := GenerateNewID()
-	cont := NewContainer(ID, "conteiir", "alpine", "Test", filepath.Join(constants.RootFSPath, "conteiir"), "echo", []string{"oi", "oi"})
+	cont := NewContainer(ID, "conteiir", "alpine", "Test", filepath.Join(constants.RootFSPath, "conteiir"), "echo", []string{"oi", "oi"}, nil)
 
 	AssertContainerDontExists(ID, t)
 	Insert(cont)
@@ -33,7 +33,7 @@ func TestRemoveContainer(t *testing.T) {
 	t.Run("Valid ID", func(t *testing.T) {
 		ID := GenerateNewID()
 
-		go CreateContainer(ID, "gbn13am", "alpine", "echo", []string{"zizo"}, done)
+		go CreateContainer(ID, "gbn13am", "alpine", "echo", []string{"zizo"}, done, nil)
 		<-done
 
 		if container := getContainer(ID); container == nil {
@@ -61,11 +61,11 @@ func TestRemoveAll(t *testing.T) {
 	}
 
 	id1, id2, id3 := GenerateNewID(), GenerateNewID(), GenerateNewID()
-	go CreateContainer(id1, "name1", "alpine", "echo", []string{"echoed1"}, done)
+	go CreateContainer(id1, "name1", "alpine", "echo", []string{"echoed1"}, done, nil)
 	<-done
-	go CreateContainer(id2, "name2", "alpine", "echo", []string{"echoed2"}, done)
+	go CreateContainer(id2, "name2", "alpine", "echo", []string{"echoed2"}, done, nil)
 	<-done
-	go CreateContainer(id3, "name3", "alpine", "echo", []string{"echoed3"}, done)
+	go CreateContainer(id3, "name3", "alpine", "echo", []string{"echoed3"}, done, nil)
 	<-done
 	if numbeOfContainers() != 3 {
 		t.Error("ERROR on Test RemoveAll: we create 3 containers and the numbeofcontainers != 3")
@@ -94,7 +94,7 @@ func TestIsaID(t *testing.T) {
 	result, expected := IsaID(ID), false
 	checkbool(t, expected, result)
 
-	go CreateContainer(ID, "gbn", "alpine", "echo", []string{"zizo"}, done)
+	go CreateContainer(ID, "gbn", "alpine", "echo", []string{"zizo"}, done, nil)
 	<-done
 
 	result, expected = IsaID(ID), true
@@ -103,7 +103,7 @@ func TestIsaID(t *testing.T) {
 
 func TestGetContainerID(t *testing.T) {
 	ID := GenerateNewID()
-	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done)
+	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
 	<-done
 	expected := ID
 	result := GetContainerID("paraybba")
@@ -112,7 +112,7 @@ func TestGetContainerID(t *testing.T) {
 
 func TestGetContainerName(t *testing.T) {
 	ID := GenerateNewID()
-	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done)
+	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
 	<-done
 	expected := "paraybba"
 	result := GetContainerName(ID)
@@ -122,7 +122,7 @@ func TestGetContainerName(t *testing.T) {
 // [TODO: test] UsedName receives a containerName and return true if the name already was used
 func TestUsedName(t *testing.T) {
 	ID := GenerateNewID()
-	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done)
+	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
 	<-done
 
 	expected := true
