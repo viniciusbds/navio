@@ -1,6 +1,5 @@
- ![](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![](https://github.com/viniciusbds/navio/workflows/unit-tests/badge.svg) [![godocs](https://godoc.org/github.com/viniciusbds/navio?status.svg)](https://godoc.org/github.com/viniciusbds/navio) 
+ ![build badge](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![tests badge](https://github.com/viniciusbds/navio/workflows/unit-tests/badge.svg) [![godocs](https://godoc.org/github.com/viniciusbds/navio?status.svg)](https://godoc.org/github.com/viniciusbds/navio) 
 
- 
 # Navio
 
 <img src="/cargueiro.png" alt="drawing" width="120"/>
@@ -14,7 +13,6 @@ The Navio creates containers, that is, **a set of processes isolated by Linux na
 All created containers have their own **rootfs** (a mini operating system) associated, so that a change (for example, an installation of any library) in a container does not affect others ones.
 
 It is also possible to limit the amount of resources that each container can use, this is done through Cgroups.
-
 
 ### Why?
 Just for science, do not use this code in production :satisfied:
@@ -37,27 +35,22 @@ what the processes can see
 
 - [x] MNT - isolate **filesystem mount points**
 
-
 ## [Cgroups](https://en.wikipedia.org/wiki/Cgroups)
 
 what the processes can use
 
-- [ ] Memory
+- [x] Memory
 
-- [ ] CPU
-
-- [ ] I/O
+- [x] CPU
 
 - [x] Process numbers
-
-
-
 
 ## Limitations
 
 - The network is not being isolated and is only working on the **ubuntu** image.
 - The Navio does not allow containers to run in the background.
 - The Navio only limits the number of processes.
+- The Navio does not limit the use of I / O
 
 ## Requirements
 
@@ -70,33 +63,33 @@ what the processes can use
 
 ## How to install
 
-#### If you just want use, is very simples: 
+### If you just want use, is very simples
 
-```
+``` bash
  git clone https://github.com/viniciusbds/navio.git
  cd navio
  ./install.sh
 ```
 
-#### If you want compile the code before install:
+### If you want compile the code before install
 
-```
+``` bash
  git clone https://github.com/viniciusbds/navio.git
  cd navio
  make
  ./install.sh
 ```
 
-#### To run all unit tests, type:
+### To run all unit tests, type
 
-```
+``` bash
  cd /path/to/project/navio
  sudo make unit-tests
 ```
 
-#### To uninstall:
+### To uninstall
 
- ```
+``` bash
  cd navio
  ./uninstall.sh
 ```
@@ -115,7 +108,6 @@ what the processes can use
 
 `sudo navio create ubuntu /bin/bash --name python3apps`
 
-  
 ## Contributing
 
 You can contribute to the project in any way you want, either by fixing bugs, implementing new features, improving the documentation or proposing new features through issues
@@ -124,14 +116,14 @@ See [Contributting](/CONTRIBUTING.md) for more details
 
 ## References
 
-  - [Containers from Scratch • Liz Rice](https://www.youtube.com/watch?v=8fi7uSYlOdc)
+- [Containers from Scratch • Liz Rice](https://www.youtube.com/watch?v=8fi7uSYlOdc)
   
-  - [Containers from Scratch](https://ericchiang.github.io/post/containers-from-scratch/)
+- [Containers from Scratch](https://ericchiang.github.io/post/containers-from-scratch/)
   
-  - [Building a container with less than 100 lines in Go](https://www.infoq.com/br/articles/build-a-container-golang/)
+- [Building a container with less than 100 lines in Go](https://www.infoq.com/br/articles/build-a-container-golang/)
 
-  - [Linux Namespaces](https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a)
+- [Linux Namespaces](https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a)
   
-  - [Namespaces](https://escotilhalivre.wordpress.com/2015/08/12/namespaces/)
+- [Namespaces](https://escotilhalivre.wordpress.com/2015/08/12/namespaces/)
   
-  - <div><a href="/cargueiro.png" title="Icon">Icon</a> made by <a href="https://www.flaticon.com/br/autores/freepik" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/br/" title="Flaticon">www.flaticon.com</a></div>
+- [Icon](./cargueiro.png) made by [Freepik](https://www.flaticon.com/br/autores/freepik) from [www.flaticon.com](https://www.flaticon.com/br/)
