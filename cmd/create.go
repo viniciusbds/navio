@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/constants"
-	"github.com/viniciusbds/navio/container"
+	"github.com/viniciusbds/navio/containers"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/pkg/spinner"
 	"github.com/viniciusbds/navio/pkg/util"
@@ -64,13 +64,13 @@ func createContainer() *cobra.Command {
 			}
 			command, params := args[0], args[1:]
 
-			containerID := container.GenerateNewID()
+			containerID := containers.GenerateNewID()
 
 			if containerName == "" {
 				containerName = containerID
 			}
 
-			if container.UsedName(containerName) {
+			if containers.UsedName(containerName) {
 				l.Log("WARNING", fmt.Sprintf("The containerName %s was already used. Enter a new name.", containerName))
 				os.Exit(1)
 			}
@@ -80,8 +80,8 @@ func createContainer() *cobra.Command {
 			fmt.Printf(green("Creating [%s] container ...\n"), containerName)
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
-			cgroups := container.NewCGroup(pids, cpus, cpushares, memory)
-			container.CreateContainer(containerID, containerName, image, command, params, done, cgroups)
+			cgroups := containers.NewCGroup(pids, cpus, cpushares, memory)
+			containers.CreateContainer(containerID, containerName, image, command, params, done, cgroups)
 		},
 	}
 }

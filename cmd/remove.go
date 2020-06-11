@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/container"
+	"github.com/viniciusbds/navio/containers"
 	"github.com/viniciusbds/navio/pkg/spinner"
 	"github.com/viniciusbds/navio/pkg/util"
 )
@@ -32,25 +32,25 @@ func remove() *cobra.Command {
 			if args[0] == "all" {
 				wg.Add(1)
 				fmt.Println("Removing all containers ...")
-				go container.RemoveAll(done)
+				go containers.RemoveAll(done)
 				spinner.Spinner("Done :)", done, &wg)
 				wg.Wait()
 			} else {
 				var id string
 				for _, arg := range args {
 
-					if !container.IsaID(arg) && !container.UsedName(arg) {
+					if !containers.IsaID(arg) && !containers.UsedName(arg) {
 						l.Log("WARNING", "The container "+arg+" doesn't exists!")
 						continue
 					}
 
-					if container.IsaID(arg) {
+					if containers.IsaID(arg) {
 						id = arg
 					} else {
-						id = container.GetContainerID(arg)
+						id = containers.GetContainerID(arg)
 					}
 
-					if err := container.RemoveContainer(id); err != nil {
+					if err := containers.RemoveContainer(id); err != nil {
 						l.Log("ERROR", err.Error())
 					}
 				}

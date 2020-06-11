@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"github.com/viniciusbds/navio/constants"
-	"github.com/viniciusbds/navio/container"
+	"github.com/viniciusbds/navio/containers"
 	"github.com/viniciusbds/navio/images"
 	"github.com/viniciusbds/navio/naviofile"
 	"github.com/viniciusbds/navio/pkg/io"
@@ -73,7 +73,7 @@ func build() *cobra.Command {
 			fmt.Printf(magenta("RUN %v\n"), commands)
 			fmt.Printf("---------------------------------------------------------------\n")
 
-			containerID := container.GenerateNewID()
+			containerID := containers.GenerateNewID()
 			containerRootFS := filepath.Join(constants.RootFSPath, containerID)
 
 			// FROM
@@ -108,12 +108,12 @@ func build() *cobra.Command {
 			// RUN
 			containerName := imgTag
 			command := "echo"
-			params := []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}
+			params := []string{"Creating", "this", "containers", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}
 
-			cgroups := container.NewCGroup(pids, cpus, cpushares, memory)
-			go container.CreateContainer(containerID, containerName, baseImage, command, params, done, cgroups)
+			cgroups := containers.NewCGroup(pids, cpus, cpushares, memory)
+			go containers.CreateContainer(containerID, containerName, baseImage, command, params, done, cgroups)
 
-			fmt.Printf(green("Prepare container ...\n"))
+			fmt.Printf(green("Prepare containers	 ...\n"))
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
 			wg.Wait()
@@ -122,7 +122,7 @@ func build() *cobra.Command {
 				command := c[0]
 				params := c[1:]
 				fmt.Printf(green("RUN %v\n"), append([]string{command}, params...))
-				container.Exec(containerID, containerName, command, params)
+				containers.Exec(containerID, containerName, command, params)
 			}
 
 			// saving the image.tarin tarPath ...
@@ -135,7 +135,7 @@ func build() *cobra.Command {
 			wg.Wait()
 
 			images.Insert(imgTag, baseImage)
-			err := container.RemoveContainer(containerID)
+			err := containers.RemoveContainer(containerID)
 			if err != nil {
 				l.Log("ERROR", err.Error())
 			}
