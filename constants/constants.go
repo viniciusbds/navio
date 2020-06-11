@@ -44,7 +44,7 @@ func IsOfficialImage(image string) bool {
 var DefaultMaxProcessCreation string = "30"
 
 // DefaultCPUS ...
-var DefaultCPUS string = "0-7"
+var DefaultCPUS string = "0"
 
 // DefaultCPUshares ...
 var DefaultCPUshares string = "1024"
