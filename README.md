@@ -35,7 +35,7 @@ what the processes can see
 
 - [x] MNT - isolate **filesystem mount points**
 
-## [Cgroups](https://en.wikipedia.org/wiki/Cgroups)
+## [Cgroups](https://www.kernel.org/doc/Documentation/cgroup-v1/cgroups.txt)
 
 what the processes can use
 
@@ -50,7 +50,7 @@ what the processes can use
 - The network is not being isolated and is only working on the **ubuntu** image.
 - The Navio does not allow containers to run in the background.
 - The Navio only limits the number of processes.
-- The Navio does not limit the use of I / O
+- The Navio does not limit the use of I/O
 
 ## Requirements
 
@@ -63,7 +63,7 @@ what the processes can use
 
 ## How to install
 
-### If you just want use, is very simples
+#### If you just want use, is very simples
 
 ``` bash
  git clone https://github.com/viniciusbds/navio.git
@@ -71,7 +71,7 @@ what the processes can use
  ./install.sh
 ```
 
-### If you want compile the code before install
+#### If you want compile the code before install
 
 ``` bash
  git clone https://github.com/viniciusbds/navio.git
@@ -80,14 +80,14 @@ what the processes can use
  ./install.sh
 ```
 
-### To run all unit tests, type
+#### To run all unit tests, type
 
 ``` bash
  cd /path/to/project/navio
  sudo make unit-tests
 ```
 
-### To uninstall
+#### To uninstall
 
 ``` bash
  cd navio
