@@ -108,12 +108,12 @@ func build() *cobra.Command {
 			// RUN
 			containerName := imgTag
 			command := "echo"
-			params := []string{"Creating", "this", "containers", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}
+			params := []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}
 
 			cgroups := containers.NewCGroup(pids, cpus, cpushares, memory)
 			go containers.CreateContainer(containerID, containerName, baseImage, command, params, done, cgroups)
 
-			fmt.Printf(green("Prepare containers	 ...\n"))
+			fmt.Printf(green("Prepare container	 ...\n"))
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
 			wg.Wait()

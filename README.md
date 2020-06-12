@@ -49,7 +49,6 @@ what the processes can use
 
 - The network is not being isolated and is only working on the **ubuntu** image.
 - The Navio does not allow containers to run in the background.
-- The Navio only limits the number of processes.
 - The Navio does not limit the use of I/O
 
 ## Requirements
