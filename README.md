@@ -10,9 +10,9 @@
 
 The Navio creates containers, that is, **a set of processes isolated by Linux namespaces**, for example: PID to isolate the processes and Mount to isolate the file systems.
 
-All created containers have their own **rootfs** (a mini operating system) associated, so that a change (for example, an installation of any library) in a container does not affect others ones.
+All created containers have their own **rootfs** (a "mini operating system") associated, so that a change (for example, an installation of any library) in a container does not affect others ones.
 
-It is also possible to limit the amount of resources that each container can use, this is done through Cgroups.
+It is also possible use Cgroups to limit the amount of resources that each container can use.
 
 ### Why?
 Just for science, do not use this code in production :satisfied:
@@ -57,7 +57,7 @@ what the processes can use
 - [golang environment](https://golang.org/)
 - make
 - wget
-- mysql
+- **mysql** configured with `user == root` and `passwd == root`
 - some of commands (ex.: `navio build`, `navio run`, `navio rmi` and `navio exec`) must be executed with sudo privilegies.
 
 ## How to install
@@ -124,5 +124,9 @@ See [Contributting](/CONTRIBUTING.md) for more details
 - [Linux Namespaces](https://medium.com/@teddyking/namespaces-in-go-basics-e3f0fc1ff69a)
   
 - [Namespaces](https://escotilhalivre.wordpress.com/2015/08/12/namespaces/)
+
+- [Understanding Containerization By Recreating Docker](https://itnext.io/linux-container-from-scratch-339c3ba0411d)
+
+- [Doqueru kun](https://github.com/joseims/doqueru-kun)
   
 - [Icon](./cargueiro.png) made by [Freepik](https://www.flaticon.com/br/autores/freepik) from [www.flaticon.com](https://www.flaticon.com/br/)
