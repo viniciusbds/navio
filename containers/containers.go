@@ -41,8 +41,8 @@ func Insert(container *Container) {
 	}
 }
 
-// RemoveContainer remove a container by her ID
-func RemoveContainer(ID string) error {
+// Remove removes a container by her ID
+func Remove(ID string) error {
 	if util.IsEmpty(ID) {
 		return errors.New("Empty container ID")
 	}

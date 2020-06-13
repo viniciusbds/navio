@@ -50,7 +50,7 @@ func remove() *cobra.Command {
 						id = containers.GetContainerID(arg)
 					}
 
-					if err := containers.RemoveContainer(id); err != nil {
+					if err := containers.Remove(id); err != nil {
 						l.Log("ERROR", err.Error())
 					}
 				}

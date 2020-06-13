@@ -19,13 +19,13 @@ func TestInsert(t *testing.T) {
 func TestRemoveContainer(t *testing.T) {
 	t.Run("Invalid ID", func(t *testing.T) {
 		id := GenerateNewID()
-		err := RemoveContainer(id)
+		err := Remove(id)
 		result := err.Error()
 		expected := "Invalid container ID: " + id
 		check(t, expected, result)
 	})
 	t.Run("Empty ID", func(t *testing.T) {
-		err := RemoveContainer("    ")
+		err := Remove("    ")
 		result := err.Error()
 		expected := "Empty container ID"
 		check(t, expected, result)
@@ -40,7 +40,7 @@ func TestRemoveContainer(t *testing.T) {
 			t.Error("ERROR on Test RemoveContainer")
 		}
 
-		RemoveContainer(ID)
+		Remove(ID)
 
 		if container := getContainer(ID); container != nil {
 			t.Error("ERROR on Test RemoveContainer")
