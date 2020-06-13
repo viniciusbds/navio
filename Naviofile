@@ -1,5 +1,10 @@
+## Naviofile exemple
+
+## Select the base image
 FROM ubuntu
 
-ADD . /tempes
+## adding files to the image
+ADD . /mydir
 
+## install libs on the image
 RUN apt update && apt upgrade -y && apt install python -y
