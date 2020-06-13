@@ -122,7 +122,7 @@ func build() *cobra.Command {
 				command := c[0]
 				params := c[1:]
 				fmt.Printf(green("RUN %v\n"), append([]string{command}, params...))
-				containers.Exec(containerID, containerName, command, params)
+				containers.Exec(containerID, command, params)
 			}
 
 			// saving the image.tarin tarPath ...

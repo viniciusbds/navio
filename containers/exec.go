@@ -5,9 +5,10 @@ import (
 )
 
 // Exec runs an existing container.
-func Exec(containerID, containerName, command string, params []string) error {
+func Exec(containerID, command string, params []string) error {
 	if IsaID(containerID) {
+		containerName := GetContainerName(containerID)
 		return run(containerID, containerName, command, params)
 	}
-	return errors.New("The container " + containerName + " doesn't exist")
+	return errors.New("The container " + containerID + " doesn't exist")
 }

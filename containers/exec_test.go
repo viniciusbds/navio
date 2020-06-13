@@ -24,12 +24,12 @@ func TestExec(t *testing.T) {
 		containerID := GetContainerID(containerName)
 		command := "echo"
 		params := []string{"Ola", "Menino", "Jesus", "de", "Atocha"}
-		err := Exec(containerID, containerName, command, params)
+		err := Exec(containerID, command, params)
 		if err == nil {
 			t.Errorf("Here we expected that err != nil, because the containerName doesn't exists!!!")
 		}
 		if err != nil {
-			expected := "The container " + containerName + " doesn't exist"
+			expected := "The container " + containerID + " doesn't exist"
 			result := err.Error()
 			check(t, expected, result)
 		}
@@ -47,10 +47,10 @@ func TestExec(t *testing.T) {
 			RemoveContainer(containerID)
 		}
 
-		err := Exec(containerID, containerName, command, params)
+		err := Exec(containerID, command, params)
 
 		if err != nil {
-			expected := "The container " + containerName + " doesn't exist"
+			expected := "The container " + containerID + " doesn't exist"
 			result := err.Error()
 			check(t, expected, result)
 		}
@@ -61,7 +61,7 @@ func TestExec(t *testing.T) {
 		<-done
 
 		// Testing exec
-		err = Exec(containerID, containerName, command, params)
+		err = Exec(containerID, command, params)
 		if err != nil {
 			t.Errorf(err.Error())
 		}
