@@ -1,7 +1,7 @@
 package constants
 
 // NavioVersion is the current version of Navio
-var NavioVersion = "v1.1"
+var NavioVersion = "v2.0"
 
 // RootDir is the place where we store all Navio's data
 var RootDir = "/usr/local/navio"
