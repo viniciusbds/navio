@@ -97,24 +97,24 @@ what the processes can use
 
 `navio images`
 
-`sudo navio create alpine sh --name mycontainer`
+`sudo navio create ubuntu bash --name mycontainer`
 
 `navio containers`
 
 ```
 ID	   NAME	   	   IMAGE  	COMMAND  	STATUS
 
-14806622   mycontainer     alpine  	sh    		Stopped
+14806622   mycontainer     ubuntu  	bash  		Stopped
 
 ```
 
-`sudo navio exec 14806622 sh` 
+`sudo navio exec 14806622 bash` 
 
 ...
 
 `sudo navio create busybox sh`
 
-`sudo navio create ubuntu /bin/bash --name python3apps`
+`sudo navio create alpine /bin/sh --name levezin`
 
 ## Contributing
 
