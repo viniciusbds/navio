@@ -101,7 +101,7 @@ But you can use some flags, ex:
 - [golang environment](https://golang.org/)
 - make
 - wget
-- **mysql** configured with `user == root` and `passwd == root`
+- **mysql** configured with the root password == `root`
 - some of commands (ex.: `navio build`, `navio run`, `navio rmi` and `navio exec`) must be executed with sudo privilegies.
 
 ## How to install
