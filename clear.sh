@@ -5,11 +5,11 @@
 
 
 # REMOVE NAVIO FILES (ROOTFS + IMAGES.tar's)
-sudo rm -r /usr/local/navio
-
-# Re-open (reset) the database
-mysqlversion=`mysql --version`
-goversion=`go version`
-if [ -n "$goversion"  ] && [ -n "$mysqlversion"  ]; then 
-    go run ./database/up.go
+if sudo rm -r /usr/local/navio; then
+    echo "Remove /usr/local/navio  ok"
+else
+    echo "Remove /usr/local/navio  fail"
 fi
+
+
+go run ./database/up.go
