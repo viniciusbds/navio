@@ -25,6 +25,11 @@ Just for science, do not use this code in production :satisfied:
 | busybox| v4.0| 1.5M|
 | ubuntu| v20.04| 90M|
 
+## Demo
+
+![4 cpus](./gifs/demo.gif)
+
+
 ## [Namespaces](https://en.wikipedia.org/wiki/Linux_namespaces)
 
 what the processes can see
@@ -44,6 +49,38 @@ what the processes can use
 - [x] CPU
 
 - [x] Process numbers
+
+
+
+## Commands 
+
+![4 cpus](./gifs/commands.png)
+
+
+
+## How to use
+
+To create a basic container just type:
+
+`sudo navio create ubuntu bash`
+
+But you can use some flags, ex:
+
+`--name ubuone` to define the name of container
+
+`--pids 25`  to limit the maximum number of processes that the container can create
+
+`--cpus 0-3` to limit the cpu cores that the container can use. For example, in this case (0-3) if you computer have at least 4 cores, **this flag will permit that the process of container use only 4 cores, no more**
+
+`--cpus-share 100`
+
+`--memory 1G`  to limit the maximum memory **RAM** that the container can use
+
+### Limiting the container to use only 4 cpu cores
+
+![4 cpus](./gifs/cpus2.gif)
+
+
 
 ## Limitations
 
