@@ -82,6 +82,13 @@ But you can use some flags, ex:
 
 
 
+### Building new Images
+
+ To build a image you need first create a [Naviofile](./Naviofile) with the base image and the commands. see a example:
+
+![build new images](./gifs/build-new-images.gif)
+
+
 ## Limitations
 
 - The network is not being isolated and is only working on the **ubuntu** image.
