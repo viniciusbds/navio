@@ -1,5 +1,17 @@
 #!/bin/bash
 
+## This scripts check if the [golang, wget and mysql] are instaled.
+## If yes, it create the Navio database and copy the binary to /usr/local/bin
+
+
+# Check golang ...
+if  go version  > /dev/null; then
+    echo "Check golang                     ok"
+else 
+    echo "Check golang                     fail"
+    echo "Install it an run this script again."
+    exit 1
+fi
 
 # Check wget ...
 if  wget --version > /dev/null ; then
@@ -20,11 +32,7 @@ else
 fi
 
 #CREATE NAVIO DATABASE
-mysqlversion=`mysql --version`
-goversion=`go version`
-if [ -n "$goversion"  ] && [ -n "$mysqlversion"  ]; then 
-    go run ./database/up.go
-fi
+go run ./database/up.go
 
 # Check navio database ...
 navio=`mysql --user=root --password=root -e 'show databases;' | grep navio`
@@ -37,11 +45,9 @@ else
     echo "Expected Database passwd: root" 
 fi
 
-
 # INSTALL THE BINARY
 if sudo cp ./navio /usr/local/bin; then
     echo "Copy ./navio --> /usr/local/bin  ok"
 else 
     echo "Copy ./navio --> /usr/local/bin  fail"
 fi
-
