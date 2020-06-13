@@ -99,7 +99,16 @@ what the processes can use
 
 `sudo navio create alpine sh --name mycontainer`
 
-`sudo navio exec mycontainer sh` 
+`navio containers`
+
+```
+ID	   NAME	   	   IMAGE  	COMMAND  	STATUS
+
+14806622   mycontainer     alpine  	sh    		Stopped
+
+```
+
+`sudo navio exec 14806622 sh` 
 
 ...
 
