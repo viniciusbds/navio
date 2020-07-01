@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/signal"
 	"path/filepath"
 	"time"
 
@@ -27,6 +28,24 @@ func init() {
 
 // Pull Downloads the .tar file from the official site
 func Pull(imageName string) error {
+
+	// This code ensures that the image (.tar file) is completely downloaded, if not, it is removed
+	go func() {
+		sc := make(chan os.Signal, 1)
+		signal.Notify(sc, os.Interrupt)
+
+		// wait the signal
+		<-sc
+
+		// Remove the .tar file
+		err := os.RemoveAll(filepath.Join(constants.ImagesPath, imageName+".tar"))
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		os.Exit(0)
+	}()
+
 	if !constants.IsOfficialImage(imageName) {
 		return errors.New(imageName + " is not a official Image.")
 	}
