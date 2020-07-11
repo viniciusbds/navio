@@ -1,10 +1,11 @@
- ![build badge](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![tests badge](https://github.com/viniciusbds/navio/workflows/unit-tests/badge.svg)
+
 
 # Navio
 
+ ![build badge](https://github.com/viniciusbds/navio/workflows/build/badge.svg)  ![tests badge](https://github.com/viniciusbds/navio/workflows/unit-tests/badge.svg)
+
 <img src="/cargueiro.png" alt="drawing" width="120"/>
 
-----------------------------
 
 **Navio** is a simple tool to create linux containers based on the namespace and cgroups features. 
 
