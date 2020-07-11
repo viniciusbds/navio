@@ -7,7 +7,7 @@
 <img src="/cargueiro.png" alt="drawing" width="120"/>
 
 
-**Navio** is a simple tool to create linux containers.
+**Navio** is a simple tool for creating and managing linux containers.
 
 A container is **a set of processes isolated by Linux namespaces**, for example: **PID** to isolate the processes and **MOUNT** to isolate the file systems.
 
@@ -16,7 +16,7 @@ All created containers have their own **rootfs** (a isolated "mini operating sys
 It is also possible use `CGROUPS` to limit the amount of resources that each container can use.
 
 ### Why?
-Just for study and fun, do not use this code in production :satisfied:
+Just for study and fun  :satisfied:
 
 ## Available Images
 
