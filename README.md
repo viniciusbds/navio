@@ -9,14 +9,14 @@
 
 **Navio** is a simple tool for creating and managing linux containers.
 
-A container is **a set of processes isolated by Linux namespaces**. We use, por example, **PID** namespace to isolate the PID number space, the **UTS** to isolate the hostname and the **MOUNT** to isolate the filesystem mount points.
+A container is **a set of processes isolated by Linux namespaces**. We use, for example, **PID** namespace to isolate the PID number space, **UTS** to isolate the hostname and **MOUNT** to isolate the filesystem mount points.
 
-All created containers have their own **rootfs** (a isolated "mini operating system") associated, so that a change (for example, an installation of any library or a creation of a file) in a container does not affect others ones.
+All containers have their own **rootfs** (a isolated "mini operating system") associated, so that a change (for example, an installation of any library or a creation of a file) in a container does not affect others ones.
 
 It is also possible use `CGROUPS` to limit the amount of resources that each container can use.
 
 ### Why?
-Just for study and fun  :satisfied:
+For study purposes only
 
 ## Available Images
 
