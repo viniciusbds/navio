@@ -13,12 +13,12 @@ A container is **a set of processes isolated by Linux namespaces**. We use, for 
 
 All containers have their own **rootfs** (a isolated "mini operating system") associated, so that a change (for example, an installation of any library or a creation of a file) in a container does not affect others ones.
 
-It is also possible use `CGROUPS` to limit the amount of resources that each container can use.
+It is also possible use `Cgroups` to limit the amount of resources that each container can use.
 
 ### Why?
 For study purposes only
 
-## Available Images
+## Available Default Images
 
 | Image| version| size |
 | ---- | -----| ------|
@@ -53,7 +53,7 @@ what the processes can use
 
 
 
-## Commands 
+## Available Commands 
 
 ![4 cpus](./gifs/commands.png)
 
