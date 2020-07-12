@@ -103,7 +103,7 @@ But you can use some flags, ex:
 - make
 - wget
 - **mysql** configured with the root password == `root`
-- some of commands (ex.: `navio build`, `navio run`, `navio rmi` and `navio exec`) must be executed with sudo privilegies.
+- some of commands (ex.: `navio build`, `navio create`, `navio rmi` and `navio exec`) must be executed with sudo privilegies.
 
 ## How to install
 
