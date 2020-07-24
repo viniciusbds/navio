@@ -31,7 +31,7 @@ For study purposes only
 
 These are the default images, but you can easily create your own images with the packages and files you find necessary. For example with the following Naviofile:
 
-```
+``` Dockerfile
 FROM ubuntu    
 
 ADD . /mydir
