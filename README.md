@@ -20,11 +20,30 @@ For study purposes only
 
 ## Available Default Images
 
+
+
 | Image| version| size |
 | ---- | -----| ------|
 | alpine|  v3.11| 2.7M|
 | busybox| v4.0| 1.5M|
 | ubuntu| v20.04| 90M|
+
+
+These are the default images, but you can easily create your own images with the packages and files you find necessary. For example with the following Naviofile:
+
+```
+FROM ubuntu    
+
+ADD . /mydir
+
+RUN apt update && apt upgrade -y && apt install python -y
+```
+
+`sudo navio build ./path/to/Naviofile --t python-image`
+
+we created an image with python installed, so the containers that use this image will already have python installed by default, as well the files from the current directory that will be copied to the `/mydir` directory in the container.
+
+
 
 ## Demo
 
