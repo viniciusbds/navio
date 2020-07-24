@@ -16,7 +16,7 @@ All containers have their own **rootfs** (a isolated "mini operating system") as
 It is also possible use `Cgroups` to limit the amount of resources that each container can use.
 
 ### Why?
-For study purposes only
+For study purposes only. If you want to use real containers use [Docker](https://www.docker.com/) or [Containerd](https://containerd.io/).
 
 ## Available Default Images
 
