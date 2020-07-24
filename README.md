@@ -29,7 +29,7 @@ For study purposes only. If you want to use real containers use [Docker](https:/
 | ubuntu| v20.04| 90M|
 
 
-These are the default images, but you can easily create your own images with the packages and files you find necessary. For example with the following Naviofile:
+These are the default images, but you can easily create your own images with the packages and files you find necessary. For example, with the following Naviofile:
 
 ``` Dockerfile
 FROM ubuntu    
