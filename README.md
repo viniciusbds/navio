@@ -39,7 +39,11 @@ ADD . /mydir
 RUN apt update && apt upgrade -y && apt install python -y
 ```
 
-`sudo navio build ./path/to/Naviofile --t python-image`
+``` bash 
+
+cd /path/to/Naviofile
+sudo navio build . --t python-image
+```
 
 we created an image with python installed, so the containers that use this image will already have python installed by default, as well the files from the current directory that will be copied to the `/mydir` directory in the container.
 
