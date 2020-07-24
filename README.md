@@ -85,8 +85,8 @@ But you can use some flags, ex:
 
 ### Building new Images
 
- To build a image you need first create a [Naviofile](./Naviofile) with the base image and the commands. see a example:
-
+ To build a image you need first create a [Naviofile](./Naviofile) with the base image and the commands.
+ 
 ![build new images](./gifs/build-new-images.gif)
 
 
