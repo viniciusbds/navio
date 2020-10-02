@@ -131,6 +131,14 @@ func updateStatus(ID, status string) error {
 	return updateContainerStatusDB(ID, status)
 }
 
+func UpdateName(ID, name string) error {
+	if !IsaID(ID) {
+		return errors.New("ERROR: Container not exists")
+	}
+	containers[ID].SetName(name)
+	return updateContainerNameDB(ID, name)
+}
+
 func numbeOfContainers() int {
 	return len(containers)
 }

@@ -103,6 +103,11 @@ func (c *Container) SetStatus(status string) {
 	c.Status = status
 }
 
+// SetName ...
+func (c *Container) SetName(name string) {
+	c.Name = name
+}
+
 // GetMaxpids ...
 func (c *Container) GetMaxpids() string {
 	return c.CGroup.Maxpids

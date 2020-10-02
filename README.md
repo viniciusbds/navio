@@ -163,26 +163,39 @@ But you can use some flags, ex:
   
 ## Example Commands
 
-`navio images`
-
-`sudo navio create ubuntu bash --name mycontainer`
-
-`navio containers`
-
+```sh
+$ navio images
 ```
+
+```sh
+$ sudo navio create ubuntu bash --name mycontainer`
+```
+
+```sh
+$ navio containers
+```
+
+```sh
 ID	   NAME	   	   IMAGE  	COMMAND  	STATUS
 
 14806622   mycontainer     ubuntu  	bash  		Stopped
-
 ```
 
-`sudo navio exec 14806622 bash` 
+```sh
+$ sudo navio exec 14806622 bash 
+```
 
-...
+```sh
+$ navio rename 14806622 new_name
+```
 
-`sudo navio create busybox sh`
+```sh
+$ sudo navio create busybox sh
+```
 
-`sudo navio create alpine /bin/sh --name levezin`
+```sh
+$ sudo navio create alpine /bin/sh --name levezin
+```
 
 ## Contributing
 
