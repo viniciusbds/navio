@@ -10,8 +10,7 @@ import (
 )
 
 var (
-	imgTag string
-	l      = logger.New(time.Kitchen, true)
+	l = logger.New(time.Kitchen, true)
 )
 
 // ReadNaviofile ...

@@ -38,7 +38,10 @@ func exec() *cobra.Command {
 
 			command, params := args[0], args[1:]
 			l.Log("INFO", fmt.Sprintf("Container: %s, Command: %s, Params: %v", containers.GetContainerName(containerID), command, params))
-			containers.Exec(containerID, command, params)
+			err := containers.Exec(containerID, command, params)
+			if err != nil {
+				l.Log("ERROR", err.Error())
+			}
 		},
 	}
 }

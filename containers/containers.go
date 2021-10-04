@@ -58,7 +58,10 @@ func Remove(ID string) error {
 // RemoveAll remove all containers
 func RemoveAll(done chan bool) {
 	for _, container := range containers {
-		removeContainer(container.ID)
+		err := removeContainer(container.ID)
+		if err != nil {
+			l.Log("ERROR", err.Error())
+		}
 	}
 	done <- true
 }
@@ -119,7 +122,11 @@ func removeContainer(ID string) error {
 	// remove it from the data structure
 	delete(containers, ID)
 	// remove it from the database
-	removeContainerDB(ID)
+	err = removeContainerDB(ID)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
 	return nil
 }
 

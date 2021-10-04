@@ -21,10 +21,7 @@ func Must(err error) {
 
 // IsEmpty ...
 func IsEmpty(imageName string) bool {
-	if len(strings.TrimSpace(imageName)) == 0 {
-		return true
-	}
-	return false
+	return len(strings.TrimSpace(imageName)) == 0
 }
 
 // IsRoot check if the process is running as root user, for example, one started with sudo

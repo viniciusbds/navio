@@ -56,5 +56,9 @@ func removeImageDB(imgName string) {
 	if err != nil {
 		panic(err.Error())
 	}
-	delForm.Exec(imgName)
+	_, err = delForm.Exec(imgName)
+	if err != nil {
+		panic(err.Error())
+	}
+
 }

@@ -3,8 +3,6 @@ package reexec
 import (
 	"fmt"
 	"os"
-	"os/exec"
-	"path/filepath"
 )
 
 var registeredInitializers = make(map[string]func())
@@ -28,20 +26,4 @@ func Init() bool {
 		return true
 	}
 	return false
-}
-
-func naiveSelf() string {
-	name := os.Args[0]
-	if filepath.Base(name) == name {
-		if lp, err := exec.LookPath(name); err == nil {
-			return lp
-		}
-	}
-	// handle conversion of relative paths to absolute
-	if absName, err := filepath.Abs(name); err == nil {
-		return absName
-	}
-	// if we coudn't get absolute name, return original
-	// (NOTE: Go only errors on Abs() if os.Getwd fails)
-	return name
 }

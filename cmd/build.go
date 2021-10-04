@@ -23,7 +23,11 @@ var (
 
 func init() {
 	rootCmd.PersistentFlags().StringVar(&imgTag, "t", "", "The image tag. (i.e. the newImageName)")
-	rootCmd.MarkFlagRequired("t")
+	err := rootCmd.MarkFlagRequired("t")
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
 	rootCmd.AddCommand(build())
 
 	done = make(chan bool)
@@ -80,8 +84,14 @@ func build() *cobra.Command {
 			fmt.Printf(green("Copying the [%s] image ...\n"), baseImage)
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
-			go images.Untar(baseImage, containerRootFS, done)
+			errs := make(chan error, 1)
+			go func() {
+				errs <- images.Untar(baseImage, containerRootFS, done)
+			}()
 			wg.Wait()
+			if err := <-errs; err != nil {
+				l.Log("ERROR", err.Error())
+			}
 
 			// ADD
 			if !util.IsEmpty(source) && !util.IsEmpty(destination) {
@@ -89,8 +99,14 @@ func build() *cobra.Command {
 				fullDestinyPath := filepath.Join(containerRootFS, destination)
 				wg.Add(1)
 				go spinner.Spinner("Done :)", done, &wg)
-				go io.Copy(source, fullDestinyPath, done)
+				go func() {
+					errs <- io.Copy(source, fullDestinyPath, done)
+				}()
 				wg.Wait()
+				if err := <-errs; err != nil {
+					l.Log("ERROR", err.Error())
+				}
+
 			}
 
 			// ENTRYPOINT
@@ -111,18 +127,26 @@ func build() *cobra.Command {
 			params := []string{"Creating", "this", "container", "just", "to", "run", "the", "commands", "to", "build", "a", "new", "image"}
 
 			cgroups := containers.NewCGroup(pids, cpus, cpushares, memory)
-			go containers.CreateContainer(containerID, containerName, baseImage, command, params, done, cgroups)
-
-			fmt.Printf(green("Prepare container	 ...\n"))
+			go func() {
+				errs <- containers.CreateContainer(containerID, containerName, baseImage, command, params, done, cgroups)
+			}()
+			fmt.Print(green("Prepare container	 ...\n"))
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
 			wg.Wait()
+			if err := <-errs; err != nil {
+				l.Log("ERROR", err.Error())
+			}
 
 			for _, c := range commands {
 				command := c[0]
 				params := c[1:]
 				fmt.Printf(green("RUN %v\n"), append([]string{command}, params...))
-				containers.Exec(containerID, command, params)
+				err := containers.Exec(containerID, command, params)
+				if err != nil {
+					l.Log("ERROR", err.Error())
+				}
+
 			}
 
 			// saving the image.tarin tarPath ...
@@ -131,11 +155,20 @@ func build() *cobra.Command {
 			fmt.Printf(green("Generating the [%s] image ...\n"), imgTag)
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
-			go io.Tar(containerRootFS, imageFile, done)
+			go func() {
+				errs <- io.Tar(containerRootFS, imageFile, done)
+			}()
 			wg.Wait()
+			if err := <-errs; err != nil {
+				l.Log("ERROR", err.Error())
+			}
 
-			images.Insert(imgTag, baseImage)
-			err := containers.Remove(containerID)
+			err := images.Insert(imgTag, baseImage)
+			if err != nil {
+				l.Log("ERROR", err.Error())
+			}
+
+			err = containers.Remove(containerID)
 			if err != nil {
 				l.Log("ERROR", err.Error())
 			}
