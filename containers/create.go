@@ -38,17 +38,20 @@ func prepareImage(baseImg, containerID string) {
 		util.Must(images.Pull(baseImg))
 	}
 	if !rootFSExists(containerID) {
-		images.PrepareRootFS(baseImg, containerID)
+		err := images.PrepareRootFS(baseImg, containerID)
+		if err != nil {
+			l.Log("ERROR", err.Error())
+		}
 	}
 	if baseImg == "ubuntu" {
 		images.ConfigureNetworkForUbuntu(containerID)
 	}
-	if baseImg == "alpine" {
-		// [TODO] images.ConfigureNetworkForAlpine(containerID)
-	}
-	if baseImg == "busybox" {
-		// [TODO] images.ConfigureNetworkForBusybox(containerID)
-	}
+	// if baseImg == "alpine" {
+	// 	// [TODO] images.ConfigureNetworkForAlpine(containerID)
+	// }
+	// if baseImg == "busybox" {
+	// 	// [TODO] images.ConfigureNetworkForBusybox(containerID)
+	// }
 }
 
 func saveContainer(baseImage string, containerID string, containerName string, command string, params []string, cgroup *CGroup) {
@@ -65,9 +68,15 @@ func run(containerID, containerName, command string, params []string) error {
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr
-	updateStatus(containerID, "Running")
-	err := cmd.Run()
-	updateStatus(containerID, "Stopped")
+	err := updateStatus(containerID, "Running")
+	if err != nil {
+		return err
+	}
+	err = cmd.Run()
+	if err != nil {
+		return err
+	}
+	err = updateStatus(containerID, "Stopped")
 	return err
 }
 
@@ -110,7 +119,11 @@ func pivotRoot(imagePath string) {
 
 func mountProc() {
 	if _, err := os.Stat("/proc"); os.IsNotExist(err) {
-		os.Mkdir("/proc", 0700)
+		err = os.Mkdir("/proc", 0700)
+		if err != nil {
+			l.Log("ERROR", err.Error())
+		}
+
 	}
 	// source, target, fstype, flags, data
 	err := syscall.Mount("proc", "/proc", "proc", 0, "")
@@ -132,7 +145,10 @@ func unmountProc() {
 func limitProcessCreation(container *Container) {
 	cgroup := "/sys/fs/cgroup/"
 	containerPids := filepath.Join(cgroup, "pids", container.ID)
-	os.Mkdir(containerPids, 0755)
+	err := os.Mkdir(containerPids, 0755)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
 
 	maxpids := container.GetMaxpids()
 	if maxpids == "" {
@@ -149,7 +165,10 @@ func limitProcessCreation(container *Container) {
 func limitCpus(container *Container) {
 	cgroup := "/sys/fs/cgroup/"
 	containerCPUSet := filepath.Join(cgroup, "cpuset", container.ID)
-	os.Mkdir(containerCPUSet, 0755)
+	err := os.Mkdir(containerCPUSet, 0755)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
 
 	cpus := container.GetCPUS()
 	if cpus == "" {
@@ -167,7 +186,10 @@ func limitCpus(container *Container) {
 func limitCpushares(container *Container) {
 	cgroup := "/sys/fs/cgroup/"
 	containerCPUShares := filepath.Join(cgroup, "cpu", container.ID)
-	os.Mkdir(containerCPUShares, 0755)
+	err := os.Mkdir(containerCPUShares, 0755)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
 
 	cpushares := container.GetCPUshares()
 	if cpushares == "" {
@@ -184,7 +206,10 @@ func limitCpushares(container *Container) {
 func limitMemory(container *Container) {
 	cgroup := "/sys/fs/cgroup/"
 	containerMemory := filepath.Join(cgroup, "memory", container.ID)
-	os.Mkdir(containerMemory, 0755)
+	err := os.Mkdir(containerMemory, 0755)
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
 
 	maxmemmory := container.GetMemory()
 	if maxmemmory == "" {

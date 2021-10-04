@@ -84,24 +84,43 @@ func TestInsert(t *testing.T) {
 	imageName := "novaaply"
 	imageBase := "alpine"
 	AssertImageDontExists(imageName, t)
-	Insert(imageName, imageBase)
+	err := Insert(imageName, imageBase)
+	if err != nil {
+		t.Errorf("Error: problem inserting image, %s", err)
+	}
 	AssertImageExists(imageName, t)
 
 	// clear
-	Remove(imageName)
+	err = Remove(imageName)
+	if err != nil {
+		t.Errorf("Error: problem deleting image, %s", err)
+	}
+
 }
 
 func TestIsAvailable(t *testing.T) {
 	if !IsAvailable("alpine") {
-		Pull("alpine")
+		err := Pull("alpine")
+		if err != nil {
+			t.Errorf("Error: problem pulling image, %s", err)
+		}
+
 	}
 
 	if !IsAvailable("busybox") {
-		Pull("busybox")
+		err := Pull("busybox")
+		if err != nil {
+			t.Errorf("Error: problem pulling image, %s", err)
+		}
+
 	}
 
 	if !IsAvailable("ubuntu") {
-		Pull("ubuntu")
+		err := Pull("ubuntu")
+		if err != nil {
+			t.Errorf("Error: problem pulling image, %s", err)
+		}
+
 	}
 
 	if !IsAvailable("alpine") || !IsAvailable("busybox") || !IsAvailable("ubuntu") {
@@ -110,7 +129,11 @@ func TestIsAvailable(t *testing.T) {
 }
 
 func TestRemoveAll(t *testing.T) {
-	RemoveAll()
+	err := RemoveAll()
+	if err != nil {
+		t.Errorf("Error: problem deleting all images, %s", err)
+	}
+
 	if len(images) != len(constants.OfficialImages) {
 		t.Errorf("ERROR on RemoveAll")
 	}

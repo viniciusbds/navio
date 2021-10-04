@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/viniciusbds/navio/containers"
 	"github.com/viniciusbds/navio/constants"
+	"github.com/viniciusbds/navio/containers"
 )
 
 var (
-	id string
+	id   string
 	name string
 )
 
@@ -28,7 +28,10 @@ func rename() *cobra.Command {
 			} else if len(name) > constants.MaxContainerNameLength {
 				fmt.Println(red("ERROR: Container name is too long, please enter a shorter name."))
 			} else {
-				containers.UpdateName(id, name)
+				err := containers.UpdateName(id, name)
+				if err != nil {
+					l.Log("ERROR", err.Error())
+				}
 				fmt.Println(green("Container renamed successfully!"))
 			}
 		},

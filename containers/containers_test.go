@@ -33,14 +33,22 @@ func TestRemoveContainer(t *testing.T) {
 	t.Run("Valid ID", func(t *testing.T) {
 		ID := GenerateNewID()
 
-		go CreateContainer(ID, "gbn13am", "alpine", "echo", []string{"zizo"}, done, nil)
+		errs := make(chan error, 1)
+		go func() {
+			errs <- CreateContainer(ID, "gbn13am", "alpine", "echo", []string{"zizo"}, done, nil)
+		}()
 		<-done
-
+		if err := <-errs; err != nil {
+			t.Errorf("ERROR on Test RemoveContainer %s", err)
+		}
 		if container := getContainer(ID); container == nil {
 			t.Error("ERROR on Test RemoveContainer")
 		}
 
-		Remove(ID)
+		err := Remove(ID)
+		if err != nil {
+			t.Errorf("Error: %s", err)
+		}
 
 		if container := getContainer(ID); container != nil {
 			t.Error("ERROR on Test RemoveContainer")
@@ -61,12 +69,31 @@ func TestRemoveAll(t *testing.T) {
 	}
 
 	id1, id2, id3 := GenerateNewID(), GenerateNewID(), GenerateNewID()
-	go CreateContainer(id1, "name1", "alpine", "echo", []string{"echoed1"}, done, nil)
+	errs := make(chan error, 1)
+	go func() {
+		errs <- CreateContainer(id1, "name1", "alpine", "echo", []string{"echoed1"}, done, nil)
+	}()
 	<-done
-	go CreateContainer(id2, "name2", "alpine", "echo", []string{"echoed2"}, done, nil)
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test RemoveAll, %s", err)
+	}
+
+	go func() {
+		errs <- CreateContainer(id2, "name2", "alpine", "echo", []string{"echoed2"}, done, nil)
+	}()
 	<-done
-	go CreateContainer(id3, "name3", "alpine", "echo", []string{"echoed3"}, done, nil)
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test RemoveAll, %s", err)
+	}
+
+	go func() {
+		errs <- CreateContainer(id3, "name3", "alpine", "echo", []string{"echoed3"}, done, nil)
+	}()
 	<-done
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test RemoveAll, %s", err)
+	}
+
 	if numbeOfContainers() != 3 {
 		t.Error("ERROR on Test RemoveAll: we create 3 containers and the numbeofcontainers != 3")
 	}
@@ -93,9 +120,14 @@ func TestIsaID(t *testing.T) {
 
 	result, expected := IsaID(ID), false
 	checkbool(t, expected, result)
-
-	go CreateContainer(ID, "gbn", "alpine", "echo", []string{"zizo"}, done, nil)
+	errs := make(chan error, 1)
+	go func() {
+		errs <- CreateContainer(ID, "gbn", "alpine", "echo", []string{"zizo"}, done, nil)
+	}()
 	<-done
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test TestIsaID, %s", err)
+	}
 
 	result, expected = IsaID(ID), true
 	checkbool(t, expected, result)
@@ -103,8 +135,15 @@ func TestIsaID(t *testing.T) {
 
 func TestGetContainerID(t *testing.T) {
 	ID := GenerateNewID()
-	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
+	errs := make(chan error, 1)
+	go func() {
+		errs <- CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
+	}()
 	<-done
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test TestGetContainerID, %s", err)
+	}
+
 	expected := ID
 	result := GetContainerID("paraybba")
 	check(t, expected, result)
@@ -112,8 +151,15 @@ func TestGetContainerID(t *testing.T) {
 
 func TestGetContainerName(t *testing.T) {
 	ID := GenerateNewID()
-	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
+	errs := make(chan error, 1)
+	go func() {
+		errs <- CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
+	}()
 	<-done
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test TestGetContainerName, %s", err)
+	}
+
 	expected := "paraybba"
 	result := GetContainerName(ID)
 	check(t, expected, result)
@@ -122,8 +168,14 @@ func TestGetContainerName(t *testing.T) {
 // [TODO: test] UsedName receives a containerName and return true if the name already was used
 func TestUsedName(t *testing.T) {
 	ID := GenerateNewID()
-	go CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
+	errs := make(chan error, 1)
+	go func() {
+		errs <- CreateContainer(ID, "paraybba", "alpine", "echo", []string{"campina grande é a city"}, done, nil)
+	}()
 	<-done
+	if err := <-errs; err != nil {
+		t.Errorf("ERROR on Test TestUsedName, %s", err)
+	}
 
 	expected := true
 	result := UsedName("paraybba")

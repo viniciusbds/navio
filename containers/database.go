@@ -61,7 +61,11 @@ func insertContainersDB(container *Container) {
 	if err != nil {
 		panic(err.Error())
 	}
-	insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.RootFS, container.Command, params, cgroups)
+	_, err = insForm.Exec(container.ID, container.Name, container.Image, container.Status, container.RootFS, container.Command, params, cgroups)
+	if err != nil {
+		panic(err.Error())
+	}
+
 }
 
 func updateContainerNameDB(ID, name string) error {

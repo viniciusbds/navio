@@ -30,7 +30,11 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cpushares, "cpu-shares", "", "CPU shares (relative weight)")
 	rootCmd.PersistentFlags().StringVar(&memory, "memory", "", "Memory limit")
 
-	rootCmd.MarkFlagRequired("name")
+	err := rootCmd.MarkFlagRequired("name")
+	if err != nil {
+		l.Log("ERROR", err.Error())
+	}
+
 	rootCmd.AddCommand(createContainer())
 }
 
@@ -81,7 +85,11 @@ func createContainer() *cobra.Command {
 			wg.Add(1)
 			go spinner.Spinner("Done :)", done, &wg)
 			cgroups := containers.NewCGroup(pids, cpus, cpushares, memory)
-			containers.CreateContainer(containerID, containerName, image, command, params, done, cgroups)
+			err := containers.CreateContainer(containerID, containerName, image, command, params, done, cgroups)
+			if err != nil {
+				l.Log("ERROR", err.Error())
+			}
+
 		},
 	}
 }

@@ -59,7 +59,16 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	insForm.Exec("alpine", "alpine", "v3.11", "2.7M", "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz")
-	insForm.Exec("busybox", "busybox", "v4.0", "1.5M", "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar")
-	insForm.Exec("ubuntu", "ubuntu", "v20.04", "90.0M", "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz")
+	_, err = insForm.Exec("alpine", "alpine", "v3.11", "2.7M", "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz")
+	if err != nil {
+		panic(err.Error())
+	}
+	_, err = insForm.Exec("busybox", "busybox", "v4.0", "1.5M", "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar")
+	if err != nil {
+		panic(err.Error())
+	}
+	_, err = insForm.Exec("ubuntu", "ubuntu", "v20.04", "90.0M", "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz")
+	if err != nil {
+		panic(err.Error())
+	}
 }

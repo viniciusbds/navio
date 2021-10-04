@@ -21,7 +21,7 @@ func Spinner(finishMsg string, done chan bool, wg *sync.WaitGroup) {
 			return
 		default:
 			fmt.Printf("\r")
-			fmt.Printf(string(load[i]))
+			fmt.Print(string(load[i]))
 			time.Sleep(time.Millisecond * 100)
 			i++
 			if i == len(load) {

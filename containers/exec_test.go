@@ -44,7 +44,10 @@ func TestExec(t *testing.T) {
 		// Cleaning before start
 		if cont := getContainer(containerName); cont != nil {
 			containerID := GetContainerID(containerName)
-			Remove(containerID)
+			err := Remove(containerID)
+			if err != nil {
+				t.Errorf(err.Error())
+			}
 		}
 
 		err := Exec(containerID, command, params)
@@ -57,8 +60,14 @@ func TestExec(t *testing.T) {
 
 		baseImg := "alpine"
 		containerID = "98989898989"
-		go CreateContainer(containerID, containerName, baseImg, command, params, done, nil)
+		errs := make(chan error, 1)
+		go func() {
+			errs <- CreateContainer(containerID, containerName, baseImg, command, params, done, nil)
+		}()
 		<-done
+		if err := <-errs; err != nil {
+			t.Errorf("ERROR on Test TestExec, %s", err)
+		}
 
 		// Testing exec
 		err = Exec(containerID, command, params)
@@ -68,7 +77,11 @@ func TestExec(t *testing.T) {
 
 		// Cleaning
 		containerID = GetContainerID(containerName)
-		Remove(containerID)
+		err = Remove(containerID)
+		if err != nil {
+			t.Errorf(err.Error())
+		}
+
 	})
 
 }
