@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"github.com/mgutz/ansi"
@@ -122,6 +123,11 @@ func Insert(name, baseImage string) error {
 	if baseImg == nil {
 		return errors.New("ERROR: NIL Image ... ")
 	}
+	size, err := io.FileSize(baseImage)
+	if err != nil {
+		return err
+	}
+	baseImg.Size = strconv.FormatInt(size, 10)
 	newImg := NewImage(name, baseImage, baseImg.Version, baseImg.Size, baseImg.URL)
 	images[name] = newImg
 	return insertImageDB(newImg)
