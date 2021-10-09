@@ -34,20 +34,11 @@ jobs:
       uses: actions/checkout@v1
       with:
         path: go/src/github.com/viniciusbds/navio
-        
-    - name: Create Navio database
+
+    - name: Install navio [build, create database]
       run: |
-          go run ./database/up.go
-          mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
+          bash install.sh
         
-    - name: Build linux
-      env:
-        GOPATH: /home/vinicius/go
-        TARGET_OS_ARCH: linux/amd64
-      run: | 
-        sudo make all
-        ./navio version
-    
     - uses: actions/upload-artifact@master
       name: Generating artifact
       with:

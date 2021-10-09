@@ -3,10 +3,6 @@
 ## This scripts check if the [golang, wget and mysql] are instaled.
 ## If yes, it create the Navio database and copy the binary to /usr/local/bin
 
-echo "Creating navio database and navioUser..."
-#Setup database
-bash ./setupDatabase.sh
-echo "ok"
 
 #Make
 make

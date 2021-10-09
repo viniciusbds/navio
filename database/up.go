@@ -10,7 +10,7 @@ import (
 
 func main() {
 
-	db, err := sql.Open("mysql", constants.DBuser+":"+constants.DBpass+"@tcp(127.0.0.1:3306)/")
+	db, err := sql.Open("mysql", "root:root@tcp(127.0.0.1:3306)/")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -22,6 +22,21 @@ func main() {
 	}
 
 	_, err = db.Exec("CREATE DATABASE " + constants.DBname)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec("CREATE USER IF NOT EXISTS '" + constants.DBuser + "'@'localhost' IDENTIFIED BY '" + constants.DBpass + "'")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec("GRANT ALL PRIVILEGES ON " + constants.DBname + " . * TO '" + constants.DBuser + "'@'localhost';")
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = db.Exec("FLUSH PRIVILEGES")
 	if err != nil {
 		panic(err)
 	}
