@@ -41,5 +41,4 @@ jobs:
 
     - name: Run all tests
       run: | 
-        sudo su
-        make unit-tests
+        sudo make unit-tests

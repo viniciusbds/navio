@@ -14,10 +14,10 @@ const (
 	RootFSPath = RootDir + "/roots"
 
 	// DBuser represents the database user
-	DBuser = "navioUser"
+	DBuser = "root"
 
 	// DBpass represents the database password
-	DBpass = "PmO001-nav"
+	DBpass = "root"
 
 	// DBname represents the database name...
 	DBname = "navio"
