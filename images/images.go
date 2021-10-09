@@ -128,7 +128,7 @@ func Insert(name string, size float64, baseImage string) error {
 }
 
 // Remove a especific non official image
-func Remove(name string) error {
+func FullyImageDeletion(name string) error {
 	if constants.IsOfficialImage(name) {
 		return errors.New("cannot remove the " + name + " official image")
 	}
@@ -138,14 +138,29 @@ func Remove(name string) error {
 	if !IsAvailable(name) {
 		return errors.New("Image " + name + " doesn't exist")
 	}
-	return removeImage(name)
+	return fullyImageDeletion(name)
+}
+
+func deleteImageOnDataStructureAndDatabase(name string) error {
+	if constants.IsOfficialImage(name) {
+		return errors.New("cannot remove the " + name + " official image")
+	}
+	if util.IsEmpty(name) {
+		return errors.New("cannot remove a empty image")
+	}
+	// remove it from the data structure
+	removeImageFromDataStructure(name)
+
+	// update it from the database
+	removeImageFromBD(name)
+	return nil
 }
 
 // RemoveAll remove all non official images
 func RemoveAll() error {
 	for _, image := range images {
 		if !constants.IsOfficialImage(image.Name) {
-			err := removeImage(image.Name)
+			err := fullyImageDeletion(image.Name)
 			if err != nil {
 				return err
 			}
@@ -172,15 +187,29 @@ func Untar(image, containerRootFS string, done chan bool) error {
 	return nil
 }
 
-func removeImage(name string) error {
+func fullyImageDeletion(name string) error {
 	// First we remove the image.tar file
-	err := os.RemoveAll(filepath.Join(constants.ImagesPath, name+".tar"))
+	err := removeImageTarFile(name)
 	if err != nil {
 		return err
 	}
+
 	// remove it from the data structure
-	delete(images, name)
+	removeImageFromDataStructure(name)
+
 	// update it from the database
-	removeImageDB(name)
+	removeImageFromBD(name)
 	return nil
+}
+
+func removeImageTarFile(name string) error {
+	return os.RemoveAll(filepath.Join(constants.ImagesPath, name+".tar"))
+}
+
+func removeImageFromDataStructure(name string) {
+	delete(images, name)
+}
+
+func removeImageFromBD(name string) {
+	removeImageDB(name)
 }

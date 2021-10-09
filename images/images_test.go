@@ -31,22 +31,22 @@ func TestRemoveImage(t *testing.T) {
 	// BASIC TESTS ------------------------------------------------------
 	t.Run("Fail on remove a official Image", func(t *testing.T) {
 		imageName := "ubuntu"
-		err := Remove(imageName)
-		expected := "Cannot remove the " + imageName + " official image"
+		err := FullyImageDeletion(imageName)
+		expected := "cannot remove the " + imageName + " official image"
 		result := err.Error()
 		check(t, expected, result)
 	})
 	t.Run("Empty Image", func(t *testing.T) {
 		imageName := "       "
-		err := Remove(imageName)
-		expected := "Cannot remove a empty image"
+		err := FullyImageDeletion(imageName)
+		expected := "cannot remove a empty image"
 		result := err.Error()
 		check(t, expected, result)
 
 	})
 	t.Run("Image that doesn't exists", func(t *testing.T) {
 		imageName := "ubuntuxxx"
-		err := Remove(imageName)
+		err := FullyImageDeletion(imageName)
 		expected := "Image " + imageName + " doesn't exist"
 		result := err.Error()
 		check(t, expected, result)
@@ -91,7 +91,7 @@ func TestInsert(t *testing.T) {
 	AssertImageExists(imageName, t)
 
 	// clear
-	err = Remove(imageName)
+	err = deleteImageOnDataStructureAndDatabase(imageName)
 	if err != nil {
 		t.Errorf("Error: problem deleting image, %s", err)
 	}
