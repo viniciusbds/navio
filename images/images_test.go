@@ -70,7 +70,7 @@ func AssertImageDontExists(name string, t *testing.T) {
 		t.Errorf("ERROR: here we expected that the image don't exists")
 	}
 	if image := GetImage(name); image != nil {
-		t.Errorf("ERROR: here we expected a nil image. image: %s", image)
+		t.Errorf("ERROR: here we expected a nil image. image: %v", image)
 	}
 }
 
