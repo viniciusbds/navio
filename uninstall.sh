@@ -15,7 +15,7 @@ else
 fi
 
 # REMOVE NAVIO DATABASE
-if mysql -u root -p -e "DROP DATABASE navio"; then
+if mysql -uroot -proot -e "DROP DATABASE navio"; then
     echo "Drop database                      ok"
 else 
     echo "Drop database                      fail"    

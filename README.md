@@ -130,6 +130,8 @@ But you can use some flags, ex:
 
 ## How to install
 
+1°: we assume that your root mysql database user and password is 'root', feel free to change it locally.
+
 #### If you just want use, is very simples
 
 ``` bash

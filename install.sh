@@ -43,7 +43,7 @@ fi
 go run ./database/up.go
 
 # Check navio database ...
-navio=`mysql -u root -p -e 'show databases;' | grep navio`
+navio=`mysql -uroot -proot -e 'show databases;' | grep navio`
 if [ "navio" == $navio ]; then
     echo "Up database                      ok"
 else 
