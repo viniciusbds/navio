@@ -35,11 +35,10 @@ jobs:
       with:
         path: go/src/github.com/viniciusbds/navio
         
-    - name: Create Navio database
+    - name: Install navio [build, create database]
       run: |
-          go run ./database/up.go
-          mysql --host 127.0.0.1 --port 3306 -uroot -proot -e "SHOW DATABASES"
-        
+          bash install.sh
+
     - name: Run all tests
       run: | 
         sudo make unit-tests
