@@ -13,6 +13,15 @@ func FileExists(fileName string) bool {
 	return true
 }
 
+// FileSize get file size if a directory or a file exists
+func FileSize(fileName string) (int64, error) {
+	f, err := os.Stat(fileName)
+	if os.IsNotExist(err) {
+		return 0, err
+	}
+	return f.Size(), nil
+}
+
 // Copy Copy a directory or a file from origen to a specific destiny
 // (for ex: insidy the rootFS of a container)
 func Copy(source, destination string, done chan bool) error {
