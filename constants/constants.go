@@ -13,11 +13,11 @@ const (
 	// RootFSPath is the sub-directory where we store all Rootfs directories.
 	RootFSPath = RootDir + "/roots"
 
-	// DBuser represents the database user
-	DBuser = "root"
+	// DBuser represents the root database user
+	DBuser = "navioUser"
 
 	// DBpass represents the database password
-	DBpass = "root"
+	DBpass = "PmO001-nav"
 
 	// DBname represents the database name...
 	DBname = "navio"

@@ -3,6 +3,14 @@
 ## This scripts check if the [golang, wget and mysql] are instaled.
 ## If yes, it create the Navio database and copy the binary to /usr/local/bin
 
+echo "Creating navio database and navioUser..."
+#Setup database
+bash ./setupDatabase.sh
+echo "ok"
+
+#Make
+make
+echo "ok"
 
 # Check golang ...
 if  go version  > /dev/null; then
@@ -35,7 +43,7 @@ fi
 go run ./database/up.go
 
 # Check navio database ...
-navio=`mysql -uroot -proot -e 'show databases;' | grep navio`
+navio=`mysql -u root -p -e 'show databases;' | grep navio`
 if [ "navio" == $navio ]; then
     echo "Up database                      ok"
 else 
