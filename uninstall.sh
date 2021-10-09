@@ -20,3 +20,10 @@ if mysql -uroot -proot -e "DROP DATABASE navio"; then
 else 
     echo "Drop database                      fail"    
 fi
+
+# REMOVE NAVIO USER
+if mysql -uroot -proot -e "DROP USER navioUser@localhost"; then
+    echo "Drop navioUser                      ok"
+else 
+    echo "Drop navioUser                      fail"    
+fi
