@@ -13,7 +13,7 @@ const (
 	// RootFSPath is the sub-directory where we store all Rootfs directories.
 	RootFSPath = RootDir + "/roots"
 
-	// DBuser represents the root database user
+	// DBuser represents the database user
 	DBuser = "navioUser"
 
 	// DBpass represents the database password
