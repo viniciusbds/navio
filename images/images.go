@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
-	"strconv"
 	"time"
 
 	"github.com/mgutz/ansi"
@@ -118,17 +117,12 @@ func List() (result string) {
 }
 
 // Insert inserts a new image on the data structure and update the database
-func Insert(name, baseImage string) error {
+func Insert(name string, size float64, baseImage string) error {
 	baseImg := GetImage(baseImage)
 	if baseImg == nil {
 		return errors.New("ERROR: NIL Image ... ")
 	}
-	size, err := io.FileSize(baseImage)
-	if err != nil {
-		return err
-	}
-	baseImg.Size = strconv.FormatInt(size, 10)
-	newImg := NewImage(name, baseImage, baseImg.Version, baseImg.Size, baseImg.URL)
+	newImg := NewImage(name, baseImage, "0.0.1", size, baseImg.URL)
 	images[name] = newImg
 	return insertImageDB(newImg)
 }
@@ -136,10 +130,10 @@ func Insert(name, baseImage string) error {
 // Remove a especific non official image
 func Remove(name string) error {
 	if constants.IsOfficialImage(name) {
-		return errors.New("Cannot remove the " + name + " official image")
+		return errors.New("cannot remove the " + name + " official image")
 	}
 	if util.IsEmpty(name) {
-		return errors.New("Cannot remove a empty image")
+		return errors.New("cannot remove a empty image")
 	}
 	if !IsAvailable(name) {
 		return errors.New("Image " + name + " doesn't exist")

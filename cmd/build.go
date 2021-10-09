@@ -163,9 +163,15 @@ func build() *cobra.Command {
 				l.Log("ERROR", err.Error())
 			}
 
-			err := images.Insert(imgTag, baseImage)
+			imageSize, err := io.FileSize(imageFile)
 			if err != nil {
-				l.Log("ERROR", err.Error())
+				l.Log("Error in image size calculation", err.Error())
+			}
+			imageSizeInMB := float64(imageSize) / 1000000
+
+			err = images.Insert(imgTag, imageSizeInMB, baseImage)
+			if err != nil {
+				l.Log("Error on insert image", err.Error())
 			}
 
 			err = containers.Remove(containerID)

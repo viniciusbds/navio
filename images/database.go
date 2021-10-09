@@ -26,7 +26,8 @@ func readImagesDB() {
 	}
 
 	for selDB.Next() {
-		var name, base, version, size, url string
+		var name, base, version, url string
+		var size float64
 		var id int
 		err := selDB.Scan(&id, &name, &base, &version, &size, &url)
 		if err != nil {

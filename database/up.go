@@ -48,7 +48,7 @@ func main() {
 		"name varchar(30) NOT NULL," +
 		"base varchar(30) NOT NULL," +
 		"version varchar(10) NOT NULL," +
-		"size varchar(10) NOT NULL," +
+		"size float(10) NOT NULL," +
 		"url varchar(130) NOT NULL," +
 		"PRIMARY KEY (`id`) ) AUTO_INCREMENT=0 DEFAULT CHARSET=latin1")
 	if err != nil {
@@ -59,15 +59,15 @@ func main() {
 	if err != nil {
 		panic(err.Error())
 	}
-	_, err = insForm.Exec("alpine", "alpine", "v3.11", "2.7M", "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz")
+	_, err = insForm.Exec("alpine", "alpine", "v3.11", 2.7, "http://dl-cdn.alpinelinux.org/alpine/v3.11/releases/x86_64/alpine-minirootfs-3.11.6-x86_64.tar.gz")
 	if err != nil {
 		panic(err.Error())
 	}
-	_, err = insForm.Exec("busybox", "busybox", "v4.0", "1.5M", "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar")
+	_, err = insForm.Exec("busybox", "busybox", "v4.0", 1.5, "https://raw.githubusercontent.com/teddyking/ns-process/4.0/assets/busybox.tar")
 	if err != nil {
 		panic(err.Error())
 	}
-	_, err = insForm.Exec("ubuntu", "ubuntu", "v20.04", "90.0M", "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz")
+	_, err = insForm.Exec("ubuntu", "ubuntu", "v20.04", 90.0, "http://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz")
 	if err != nil {
 		panic(err.Error())
 	}

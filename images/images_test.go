@@ -84,7 +84,7 @@ func TestInsert(t *testing.T) {
 	imageName := "novaaply"
 	imageBase := "alpine"
 	AssertImageDontExists(imageName, t)
-	err := Insert(imageName, imageBase)
+	err := Insert(imageName, 2, imageBase)
 	if err != nil {
 		t.Errorf("Error: problem inserting image, %s", err)
 	}
