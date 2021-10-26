@@ -65,7 +65,7 @@ func TestRemoveAll(t *testing.T) {
 	<-done
 
 	if numbeOfContainers() != 0 {
-		t.Error("ERROR on Test RemoveAll: in begginer thes numbeofcontainers != 0")
+		t.Error("ERROR on Test RemoveAll: at the beginning numbeofcontainers != 0")
 	}
 
 	id1, id2, id3 := GenerateNewID(), GenerateNewID(), GenerateNewID()
@@ -110,7 +110,7 @@ func TestRemoveAll(t *testing.T) {
 	}
 
 	if numbeOfContainers() != 0 {
-		t.Error("ERROR on Test RemoveAll: in end the numbeofcontainers != 0")
+		t.Error("ERROR on Test RemoveAll: at end the numbeofcontainers != 0")
 	}
 }
 
@@ -198,7 +198,7 @@ func AssertContainerExists(ID string, t *testing.T) {
 		t.Errorf("ERROR: Container %s doesn't exists", ID)
 	}
 	if container := getContainer(ID); container == nil {
-		t.Errorf("ERROR: Container %s IS NILL", ID)
+		t.Errorf("ERROR: Container %s IS NIL", ID)
 	}
 }
 
@@ -207,7 +207,7 @@ func AssertContainerDontExists(ID string, t *testing.T) {
 		t.Errorf("ERROR: Container %s doesn't exists", ID)
 	}
 	if container := getContainer(ID); container != nil {
-		t.Errorf("ERROR: Container %s IS NILL", ID)
+		t.Errorf("ERROR: Container %s IS NIL", ID)
 	}
 }
 
